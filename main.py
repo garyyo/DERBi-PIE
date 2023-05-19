@@ -33,7 +33,6 @@ Concepts:
 import glob
 import json
 import numpy as np
-from simpledbf import Dbf5
 
 
 def combine_json():
