@@ -9,13 +9,17 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def extract_entries(roots):
+def extract_entries(root_urls):
     entries = []
     # get the web page for each root
-    for root in roots:
-        url = f"https://indo-european.info/pokorny-etymological-dictionary/{urllib.parse.quote(root)}.htm"
+    for root, url in root_urls:
+        # url = f"https://indo-european.info/pokorny-etymological-dictionary/{urllib.parse.quote(root)}.htm"
         response = requests.get(url)
-        # fixme: ensure that we are getting a 200 response every time rather than assuming
+
+        # if it does not give a 200 response code then we are either slamming them (and thus need to stop), your internet went out, or the site is down.
+        if response.status_code != 200:
+            print("Did not get OK response for", root, "at", url)
+            continue
 
         # it seems that everything is stored in paragraph tags, so we will just try to get all of those
         soup = BeautifulSoup(response.content, "html.parser")
@@ -47,31 +51,6 @@ def extract_entries(roots):
     return entries
 
 
-def main():
-    # todo: switch to using the actual page rather than relying on a downloaded copy
-    # contents_url = "https://indo-european.info/pokorny-etymological-dictionary/contents.htm"
-    # extract all the entries from the contents (a downloaded file)
-    with open('pokorny_db/contents.html', 'r', encoding="utf-8") as fp:
-        lines = fp.readlines()
-
-    # the entries are extract using some funky regex, seems to work.
-    # todo: replace this with bs4 parsing, not regex which is terrible
-    roots = []
-    for line in lines:
-        match = re.search('(?<=a href=")(.+?)(?=\.htm)', line)
-        if not match:
-            continue
-        roots.append(match.group(0))
-
-    # get all the entries (this function may take >10 minutes as it does web requests)
-    entries = extract_entries(roots)
-
-    with open("data_pokorny/pokorny_scraped.json", "w", encoding="utf-8") as fp:
-        json.dump(entries, fp)
-
-    pass
-
-
 def get_entry_urls():
     url_base = "https://indo-european.info/pokorny-etymological-dictionary/"
     contents_url = f"{url_base}contents.htm"
@@ -79,21 +58,36 @@ def get_entry_urls():
     response = requests.get(contents_url)
 
     soup = BeautifulSoup(response.content, "html.parser")
-    contents_paragraph = soup.find('p', string='Contents')
-    links = contents_paragraph.find_all_next('a')
+    paragraphs = soup.findAll("p", {"class": "Toc2"})
+    links = [p.find("a") for p in paragraphs]
 
-    urls = []
+    root_urls = []
     for link in links:
+        if "href" not in link.attrs or link["href"][0] == "#":
+            continue
+
         text = link.get_text()
         href = link["href"]
 
-        if href == "#":
-            continue
+        url = f"{url_base}{href}"
+        root_urls.append((text, url))
+    return root_urls
 
-        urls.append((text, href))
-    return urls
+
+def main():
+    # get the urls
+    root_urls = get_entry_urls()
+
+    # get all the entries (this function may take >10 minutes as it does web requests)
+    entries = extract_entries(root_urls)
+
+    # save it!
+    with open("data_pokorny/pokorny_scraped.json", "w", encoding="utf-8") as fp:
+        json.dump(entries, fp)
+
+    pass
 
 
 if __name__ == '__main__':
-    main2()
+    main()
     pass
