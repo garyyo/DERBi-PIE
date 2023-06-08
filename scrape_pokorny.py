@@ -9,6 +9,21 @@ import requests
 from bs4 import BeautifulSoup
 
 
+def mark_text_effects(p):
+    # Loop through each <i> tag
+    italic_tags = p.find_all("i")
+    for italic_tag in italic_tags:
+        # Replace <i> tags with "\\"
+        italic_tag.replace_with(r"\\" + italic_tag.text + r"\\")
+
+    # Loop through each <u> tag
+    underline_tags = p.find_all("u")
+    for underline_tag in underline_tags:
+        # Replace <i> tags with "\\"
+        underline_tag.replace_with(r"__" + underline_tag.text + r"__")
+    return p
+
+
 def extract_entries(root_urls):
     entries = []
     # get the web page for each root
@@ -29,6 +44,10 @@ def extract_entries(root_urls):
         entry["root"].append(root)
         last_label = None
         for p in paragraphs:
+            # if there are italic tags then we need to preserve that by replacing them with \\
+            # todo: figure out if we need to do this for other formatting.
+            p = mark_text_effects(p)
+
             # the p tags seem to be in form "label" + "\xa0"*n + "value"
             # n meaning some amount of that character (I think it's for spacing)
             # if there is nothing there then it's an empty line
