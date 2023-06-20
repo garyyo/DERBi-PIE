@@ -1,0 +1,38 @@
+23: interjection
+29: verb
+53: pronoun
+58: adjective
+71: verb
+122: noun
+131: pronoun
+136: verb
+151: adjective
+211: verb
+223: verb
+313: adjective; verb
+318: adjective
+324: verb; noun
+328: adjective
+357: adjective
+369: adjective
+386: verb; adjective
+400: verb
+402: noun; verb
+412: adjective; verb
+437: particle; adverb
+465: verb; noun
+473: adjective
+484: adjective
+493: noun; adjective
+511: verb; noun
+513: adjective; verb
+544: adjective; noun
+557: adjective; verb
+578: adjective; verb
+591: verb; noun
+601: verb; noun
+627: verb; noun
+631: verb; noun
+637: verb; adjective
+648: verb; noun
+651: verb; noun
