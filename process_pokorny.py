@@ -37,6 +37,8 @@ a = {
 
 
 def remove_non_english_chars(text, allowed_chars=""):
+    if "ə" not in allowed_chars:
+        text = text.replace("ə", "e")
     cleaned_text = unidecode(text)
     cleaned_text = ''.join([c for c in cleaned_text if c.isalpha() or c in allowed_chars])
     return cleaned_text
@@ -206,9 +208,29 @@ def pokorny_table():
                 "language": language,
                 "forms": extracted_forms
             })
-        breakpoint()
+
+        # print(entry["root"])
+        # print()
+        # for line in entry["Material"]:
+        #     print(line.replace("\\\\", "\\"))
+        # print()
+        #
+        # breakpoint()
+        pass
+
+
+def get_base_letters(alt_letters):
+    unique_letters = sorted(set([remove_non_english_chars(letter)[0].lower() for letter in alt_letters]))
+    base_letters = {
+        unique_letter:
+            [letter for letter in a if unique_letter == remove_non_english_chars(letter)[0].lower() and letter != unique_letter]
+        for unique_letter in unique_letters
+    }
+    return base_letters
 
 
 if __name__ == '__main__':
-    common()
+    # print(get_base_letters(["p", "pʰ", "b", "bʰ", "t", "tʰ", "d", "dʰ", "ḱ", "ḱʰ", "ǵ", "ǵʰ", "k", "kʰ", "g", "gʰ", "kʷ", "kʷʰ", "gʷ", "gʷʰ", "T", "K", "k(')", "ǵ(ʰ)", "g(')ʰ", "g(')", "k(ʷ)", "g(ʷ)ʰ", "g(ʷ)", "h₁", "h₂", "h₃", "H, hₓ", "s", "z", "F", "w, u̯", "y, i̯", "G", "r", "l", "L", "m", "n", "N", "r̥", "l̥", "m̥", "n̥", "i", "u", "a", "e", "o", "ā", "ē", "ō", "á", "é", "ó", "ā́", "ḗ", "ṓ", "í", "ī", "ī́", "ú", "ū", "ū́", "ə"]))
+    pokorny_table()
+    # common()
     pass

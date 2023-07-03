@@ -7,6 +7,7 @@ from collections import defaultdict
 
 import requests
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 
 
 def mark_text_effects(p):
@@ -19,15 +20,24 @@ def mark_text_effects(p):
     # Loop through each <u> tag
     underline_tags = p.find_all("u")
     for underline_tag in underline_tags:
-        # Replace <i> tags with "\\"
         underline_tag.replace_with(r"__" + underline_tag.text + r"__")
+
+    # loop through each sup tag
+    underline_tags = p.find_all("sup")
+    for underline_tag in underline_tags:
+        underline_tag.replace_with(r"^^" + underline_tag.text + r"^^")
+
+    # loop through each sub tag
+    underline_tags = p.find_all("sub")
+    for underline_tag in underline_tags:
+        underline_tag.replace_with(r"↓↓" + underline_tag.text + r"↓↓")
     return p
 
 
 def extract_entries(root_urls):
     entries = []
     # get the web page for each root
-    for root, url in root_urls:
+    for root, url in tqdm(root_urls, ncols=150):
         # url = f"https://indo-european.info/pokorny-etymological-dictionary/{urllib.parse.quote(root)}.htm"
         response = requests.get(url)
 
@@ -43,10 +53,15 @@ def extract_entries(root_urls):
         entry = defaultdict(list)
         entry["root"].append(root)
         last_label = None
-        for p in paragraphs:
+        for p_index, p in enumerate(paragraphs):
             # if there are italic tags then we need to preserve that by replacing them with \\
             # todo: figure out if we need to do this for other formatting.
             p = mark_text_effects(p)
+
+            # if it's the first line then it's the root
+            if p_index == 0:
+                entry["root"].append(p.get_text())
+                continue
 
             # the p tags seem to be in form "label" + "\xa0"*n + "value"
             # n meaning some amount of that character (I think it's for spacing)
@@ -107,6 +122,12 @@ def main():
     pass
 
 
+def test():
+    extract_entries([("baxb-_bhaxbh-_paxp", "https://indo-european.info/pokorny-etymological-dictionary/baxb-_bhaxbh-_paxp.htm")])
+    breakpoint()
+
+
 if __name__ == '__main__':
+    # test()
     main()
     pass
