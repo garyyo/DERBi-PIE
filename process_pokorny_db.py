@@ -10,6 +10,7 @@ import pyperclip
 from tqdm import tqdm
 
 from process_pokorny import remove_non_english_chars
+from query_gpt import query_gpt, process_gpt, query_gpt_fake, get_digest
 
 
 def remove_html_tags_from_text(text):
@@ -270,19 +271,24 @@ def find_missing_pokorny():
 
     # build a prompt for gpt for each
     output_dfs = []
-    for i, row in complete_entries.iterrows():
-        # find the corresponding entry in the scraped pokorny
-        material = "\n".join(scraped_pokorny[i]['Material'])
-        reflexes = get_reflex_entries(dfs, row.id)
+    for counter, (i, row) in enumerate(missing_entries.iterrows()):
+        # get some information
+        material = "\n".join(scraped_pokorny[i]['Material']).replace("`", "'")
+        # reflexes = get_reflex_entries(dfs, row.id)
         remove_html_tags_from_text(row.entry).strip("\n")
         root = remove_html_tags_from_text(row.entry).strip("\n")
         gloss = remove_html_tags_from_text(row.gloss)
+
+        # form prompt
         prompt = format_gpt_prompt(root, gloss, material)
-        pyperclip.copy(prompt)
-        print(root)
-        breakpoint()
-        gpt_out = pyperclip.paste().replace("|", "")
-        df = pd.read_csv(StringIO(gpt_out), encoding="utf-8", header=None, names=["abbr", "language", "reflex", "gloss"], quotechar='"', sep=',', skipinitialspace=True)
+
+        # ask gpt
+        print(f"{counter+1:5}|{root:40}", end=" | ")
+        if material.strip() == "":
+            print("missing material - SKIPPING")
+            continue
+        response = query_gpt_fake(prompt)
+        df = process_gpt(response)
         df["root"] = root
         output_dfs.append(df)
     combined_df = pd.concat(output_dfs)
@@ -300,12 +306,33 @@ def format_gpt_prompt(root, gloss, material):
     prompt += f'If the german meaning is missing fill that field with the meaning of the root (in this case "{gloss}"). '
     prompt += 'In comma separated format, give me the language abbreviation, the reflex, the extracted german meaning, and whatever notes you may have found in the text for that entry. '
     prompt += 'All of these are listed in the text block. '
-    prompt += ' \n\n'
+    prompt += ' \n \n'
     prompt += material
-    prompt += ' \n\n'
+    prompt += ' \n \n'
     prompt += 'Remember to give these in CSV format, without any other text. ' \
-              'The CSV should have columns for the language abbreviation, the reflex, the extracted german meaning (untranslated), and the notes for that entry. ' \
-              'Put quotes around each field to preserve commas, and remove any black slashes you find. '
+              'The CSV should have columns for the language abbreviation, the reflex, the untranslated german meaning, and the notes for that entry. ' \
+              'Put quotes around each field to preserve commas and remove any black slashes you find. '
+    # prompt += 'Here is an example'
+    return prompt
+
+
+def format_gpt_prompt2(root, gloss, material):
+    prompt = ""
+    prompt += f'I am going to give you a block of text from a german dictionary on Proto-Indo-European. ' \
+              f'This text is about the root "{root}" which in Proto-Indo-European means "{gloss}" and contains information about the words used to reconstruct this root (called reflexes). ' \
+              f'This information includes: an abbreviation of the language the reflex is from, the reflexes in that language, sometimes the meanings of those reflexes (other times the meaning is the same as the root meaning and thus is not included), and some notes and comments (such as the author stating that they are not sure, citing their sources, and other miscellaneous comments). ' \
+              f'There is generally only a single language abbreviation per line, but each line may have multiple reflexes (some of which may share a meaning). ' \
+              f'To help with this I have added backslashes around some of them, but not all of them. ' \
+              f'If a word is not in german it is likely to be a reflex. ' \
+              f'I need this information in a more organized format, in CSV format. ' \
+              f'Here is the header of the CSV containing the column names, please include it in your response, along with the information for each column:\n' \
+              f'\n' \
+              f'"Language Abbreviation","Reflex","German Meaning","Notes"\n' \
+              f'\n' \
+              f'Please extract this information for me. Remember to quote every field to preserve commas and to put each reflex on its own line. Here is the text:\n' \
+              f'\n' \
+              f'{material}'
+
     return prompt
 
 
