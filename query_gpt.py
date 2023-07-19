@@ -72,7 +72,7 @@ def process_gpt(completion):
     text = "\n".join([line.strip(",") for i, line in enumerate(text.replace("\r", "").split("\n"))])
     # number the lines
     # text = "\n".join([f"{i},{line}" for i, line in enumerate(text.split("\n"))])
-    df = pd.read_csv(StringIO(text), encoding="utf-8", header=None, names=["abbr", "reflex", "meaning", "notes"], quotechar='"', sep=',', skipinitialspace=True)
+    df = pd.read_csv(StringIO(text), encoding="utf-8", header=None, names=["language", "reflex", "meaning", "notes"], quotechar='"', sep=',', skipinitialspace=True)
     return df
 
 

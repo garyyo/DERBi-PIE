@@ -259,6 +259,20 @@ def main():
 def find_missing_pokorny():
     dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
 
+    abbreviation_data = pd.read_csv("data_pokorny/abbreviations.csv").dropna(axis=1, how='all').fillna("")
+
+    # remove parens
+    parens_rows = abbreviation_data[abbreviation_data['German abbreviation'].str.contains(r"[()]")].copy()
+    parens_rows['German abbreviation'] = parens_rows['German abbreviation'].str.replace(r'[()]', '', regex=True)
+    parens_rows['anton notes'] = "() removed"
+
+    # removes parens + inside
+    parens_rows2 = abbreviation_data[abbreviation_data['German abbreviation'].str.contains(r"[()]")].copy()
+    parens_rows2['German abbreviation'] = parens_rows2['German abbreviation'].apply(lambda x: re.sub(r'\([^()]*\)', '', x))
+    parens_rows2['anton notes'] = "(...) removed"
+
+    abbreviation_data = pd.concat([abbreviation_data, parens_rows, parens_rows2], ignore_index=True)
+
     # etyma_to_reflex = dfs['lex_etyma_reflex'].groupby("etyma_id")["reflex_id"].apply(list).to_dict()
 
     # figure out what entries do not have reflexes
@@ -279,6 +293,9 @@ def find_missing_pokorny():
         root = remove_html_tags_from_text(row.entry).strip("\n")
         gloss = remove_html_tags_from_text(row.gloss)
 
+        augment_material(root, material, abbreviation_data)
+        continue
+
         # form prompt
         prompt = format_gpt_prompt(root, gloss, material)
 
@@ -292,8 +309,32 @@ def find_missing_pokorny():
         df["root"] = root
         output_dfs.append(df)
     combined_df = pd.concat(output_dfs)
+    combined_df = combined_df[['root', 'abbr', 'reflex', 'meaning', 'notes']]
     combined_df.to_csv("sample.csv")
     pass
+
+
+def decap(word):
+    return word[:1].lower() + word[1:]
+
+
+def decap_isin(word, sequence):
+    return sequence.find(word) != -1 or sequence.find(decap(word)) != -1
+
+
+def augment_material(root, material, abbreviation_data):
+    # found_matches2 = abbreviation_data[abbreviation_data['German abbreviation'].apply(lambda x: decap_isin(x.strip(), material.replace("\\", "")))]
+    found_matches = abbreviation_data[abbreviation_data['German abbreviation'].apply(lambda x: x.strip().lower()).isin(re.split(r'[, \n()]', material.replace("\\", "").lower()))]
+    print("-"*80)
+    print(f"\t- Material: {root} -")
+    print(material.replace("\\", ""))
+    print()
+    print("\t- Found Entries -")
+    with pd.option_context('display.max_columns', None, 'display.max_rows', None, 'display.expand_frame_repr', False):
+        print(found_matches)
+
+    # If two matches are made for the exact same thing (when removing things like ",.()\n" then we may have to disambiguate
+    breakpoint()
 
 
 def format_gpt_prompt(root, gloss, material):
