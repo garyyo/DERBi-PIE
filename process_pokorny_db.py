@@ -280,6 +280,8 @@ def find_missing_pokorny():
     missing_entries = dfs['lex_etyma'][dfs['lex_etyma'].id.isin(missing_ids)]
     complete_entries = dfs['lex_etyma'][~dfs['lex_etyma'].id.isin(missing_ids)]
 
+    headers = ['abbr', 'reflex', 'meaning', 'notes']
+
     with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
         scraped_pokorny = json.load(fp)
 
@@ -301,11 +303,13 @@ def find_missing_pokorny():
 
         if i < 317:
             prompt = format_gpt_prompt_old(root, gloss, material)
-        else:
+        elif i < 766:
             prompt = format_gpt_prompt(root, gloss, material, abbreviations_used)
+        else:
+            prompt = format_gpt_prompt_new(root, gloss, material, abbreviations_used, headers)
 
         # ask gpt
-        print(f"{counter+1:5}|{root:40}", end=" | ")
+        print(f"{counter+1:5}|{root:20}", end=" | ")
         if material.strip() == "":
             print("missing material - SKIPPING")
             continue
@@ -317,11 +321,12 @@ def find_missing_pokorny():
             breakpoint()
         output_digests.add(output_digest)
 
-        df = process_gpt(response)
+        df = process_gpt(response, headers)
         df["root"] = root
         output_dfs.append(df)
-    combined_df = pd.concat(output_dfs)
-    combined_df = combined_df[['root', 'abbr', 'reflex', 'meaning', 'notes']]
+    # combined_df = pd.concat(output_dfs)
+    combined_df = pd.concat(output_dfs[170:])
+    combined_df = combined_df[['root'] + headers]
     combined_df.to_csv("sample.csv")
     pass
 
@@ -339,6 +344,35 @@ def augment_material(material, abbreviation_data):
     found_matches = abbreviation_data[abbreviation_data['German abbreviation'].apply(lambda x: x.strip().lower()).isin(re.split(r'[, \n()]', material.replace("\\", "").lower()))]
 
     return found_matches
+
+
+def format_gpt_prompt_new(root, gloss, material, abbreviations_used, headers):
+    headers_str = str(headers)[1:-1]
+    headers_str = headers_str.replace("'", '"')
+    aug_prompt = re.sub(r'\\\\+', r'\\', material)
+    aug_prompt = re.sub(r'__+', r'_', aug_prompt)
+    german_abbr = "\n".join([f'- {row["German abbreviation"]}: {row["German"]}' for i, row in abbreviations_used.iterrows()])
+    prompt = f'I will give you a mostly german block of text for the Proto-Indo-European reconstructed root "{root}" meaning "{gloss}". '
+    prompt += 'The text will generally contain a language abbreviation, a reflex, and a german meaning. '
+    prompt += 'The language abbreviation is in German, so if you recognize the text as other german text it is likely notes for that entry. ' \
+              'You may find that multiple languages listed for a single set of reflexes, when you see this you should split these into separate lines. ' \
+              'Each line should only have a single language. ' \
+              f'Here is a list of abbreviations and their German meaning that might be helpful.\n{german_abbr}\n'
+    prompt += 'A reflex is an attested word from which a root in the Proto-Indo-European is reconstructed from. ' \
+              'You may find that multiple reflexes exist per line for a given language abbreviation, you should treat these are separate entries. ' \
+              'You will never find a reflex that matches an abbreviation.'
+    prompt += 'Some of the reflexes are already surrounded by backslashes, which is used to indicate italic text, but others are not and you cannot rely on this. '
+    prompt += f'If the german meaning is missing fill that field with the meaning of the root (in this case "{gloss}"). '
+    prompt += 'In comma separated format, give me the language abbreviation, the reflex, the extracted german meaning, and whatever notes you may have found in the text for that entry. '
+    prompt += 'All of these are listed in the text block. '
+    prompt += ' \n \n'
+    prompt += aug_prompt
+    prompt += ' \n \n'
+    prompt += 'Remember to give these in CSV format, without any other text. ' \
+              'The CSV should have columns for the language abbreviation, the reflex, the untranslated german meaning, and the notes for that entry. ' \
+              'Put quotes around each field to preserve commas and remove any black slashes you find. '
+    prompt += f'Here are the headers, continue on from here: \n{headers_str}'
+    return prompt
 
 
 def format_gpt_prompt(root, gloss, material, abbreviations_used):
