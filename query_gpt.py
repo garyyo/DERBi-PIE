@@ -68,12 +68,17 @@ def query_gpt_fake(prompt):
 
 def process_gpt(completion):
     text = completion["choices"][0]["message"]["content"]
-    text = text.replace("|", "")
+    # remove end of line | (sometimes this helps) and triple quotes which I have spotted once!
+    text = text.replace("|", "").replace('"""', '""')
     text = "\n".join([line.strip(",") for i, line in enumerate(text.replace("\r", "").split("\n"))])
     # number the lines
     # text = "\n".join([f"{i},{line}" for i, line in enumerate(text.split("\n"))])
-    df = pd.read_csv(StringIO(text), encoding="utf-8", header=None, names=["language", "reflex", "meaning", "notes"], quotechar='"', sep=',', skipinitialspace=True)
+    df = pd.read_csv(StringIO(text), encoding="utf-8", header=None, names=["abbr", "reflex", "meaning", "notes"], quotechar='"', sep=',', skipinitialspace=True)
     return df
+
+
+def get_text_digest(completion):
+    return get_digest(completion["choices"][0]["message"]["content"])
 
 
 if __name__ == '__main__':

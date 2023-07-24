@@ -10,7 +10,7 @@ import pyperclip
 from tqdm import tqdm
 
 from process_pokorny import remove_non_english_chars
-from query_gpt import query_gpt, process_gpt, query_gpt_fake, get_digest
+from query_gpt import query_gpt, process_gpt, query_gpt_fake, get_digest, get_text_digest
 
 
 def remove_html_tags_from_text(text):
@@ -285,6 +285,7 @@ def find_missing_pokorny():
 
     # build a prompt for gpt for each
     output_dfs = []
+    output_digests = set()
     for counter, (i, row) in enumerate(missing_entries.iterrows()):
         # get some information
         material = "\n".join(scraped_pokorny[i]['Material']).replace("`", "'")
@@ -293,11 +294,15 @@ def find_missing_pokorny():
         root = remove_html_tags_from_text(row.entry).strip("\n")
         gloss = remove_html_tags_from_text(row.gloss)
 
-        augment_material(root, material, abbreviation_data)
-        continue
+        abbreviations_used = augment_material(material, abbreviation_data)
+        # continue
 
         # form prompt
-        prompt = format_gpt_prompt(root, gloss, material)
+
+        if i < 317:
+            prompt = format_gpt_prompt_old(root, gloss, material)
+        else:
+            prompt = format_gpt_prompt(root, gloss, material, abbreviations_used)
 
         # ask gpt
         print(f"{counter+1:5}|{root:40}", end=" | ")
@@ -305,6 +310,13 @@ def find_missing_pokorny():
             print("missing material - SKIPPING")
             continue
         response = query_gpt_fake(prompt)
+
+        # check if we made a mistake and double pasted or something
+        output_digest = get_text_digest(response)
+        if output_digest in output_digests:
+            breakpoint()
+        output_digests.add(output_digest)
+
         df = process_gpt(response)
         df["root"] = root
         output_dfs.append(df)
@@ -322,22 +334,36 @@ def decap_isin(word, sequence):
     return sequence.find(word) != -1 or sequence.find(decap(word)) != -1
 
 
-def augment_material(root, material, abbreviation_data):
+def augment_material(material, abbreviation_data):
     # found_matches2 = abbreviation_data[abbreviation_data['German abbreviation'].apply(lambda x: decap_isin(x.strip(), material.replace("\\", "")))]
     found_matches = abbreviation_data[abbreviation_data['German abbreviation'].apply(lambda x: x.strip().lower()).isin(re.split(r'[, \n()]', material.replace("\\", "").lower()))]
-    print("-"*80)
-    print(f"\t- Material: {root} -")
-    print(material.replace("\\", ""))
-    print()
-    print("\t- Found Entries -")
-    with pd.option_context('display.max_columns', None, 'display.max_rows', None, 'display.expand_frame_repr', False):
-        print(found_matches)
 
-    # If two matches are made for the exact same thing (when removing things like ",.()\n" then we may have to disambiguate
-    breakpoint()
+    return found_matches
 
 
-def format_gpt_prompt(root, gloss, material):
+def format_gpt_prompt(root, gloss, material, abbreviations_used):
+    german_abbr = "\n".join([f'- {row["German abbreviation"]}: {row["German"]}' for i, row in abbreviations_used.iterrows()])
+    prompt = f'I will give you a mostly german block of text for the Proto-Indo-European reconstructed root "{root}" meaning "{gloss}". '
+    prompt += 'The text will generally contain a language abbreviation, a reflex, and a german meaning. '
+    prompt += 'The language abbreviation is in German, so if you recognize the text as other german text it is likely notes for that entry. ' \
+              f'Here is a list of abbreviations and their German meaning that might be helpful.\n{german_abbr}\n'
+    prompt += 'A reflex is an attested word from which a root in the Proto-Indo-European is reconstructed from. ' \
+              'You may find that multiple reflexes exist per line for a given language abbreviation, you should treat these are separate entries. '
+    prompt += 'Some of the reflexes are already surrounded by backslashes, which is used to indicate italic text, but others are not and you cannot rely on this. '
+    prompt += f'If the german meaning is missing fill that field with the meaning of the root (in this case "{gloss}"). '
+    prompt += 'In comma separated format, give me the language abbreviation, the reflex, the extracted german meaning, and whatever notes you may have found in the text for that entry. '
+    prompt += 'All of these are listed in the text block. '
+    prompt += ' \n \n'
+    prompt += re.sub(r'\\\\+', r'\\', material)
+    prompt += ' \n \n'
+    prompt += 'Remember to give these in CSV format, without any other text. ' \
+              'The CSV should have columns for the language abbreviation, the reflex, the untranslated german meaning, and the notes for that entry. ' \
+              'Put quotes around each field to preserve commas and remove any black slashes you find. '
+    # prompt += 'Here is an example'
+    return prompt
+
+
+def format_gpt_prompt_old(root, gloss, material):
     prompt = f'I will give you a mostly german block of text for the Proto-Indo-European reconstructed root "{root}" meaning "{gloss}". '
     prompt += 'The text will generally contain a language abbreviation, a reflex, and a german meaning. '
     prompt += 'The language abbreviation is in German, so if you recognize the text as other german text it is likely notes for that entry. '
