@@ -39,7 +39,7 @@ def load_response(prompt):
 def query_gpt(prompt):
     completion, digest = load_response(prompt)
     if completion is None:
-        print("new query")
+        print("existing not found - NEW QUERY", digest[:20])
         openai.api_key = os.getenv("OPENAI_API_KEY")
         model = "gpt-3.5-turbo"
         # model = "gpt-4"
@@ -50,6 +50,8 @@ def query_gpt(prompt):
             ]
         )
         backup_response(prompt, completion)
+    else:
+        print("existing found - REUSING", digest[:20])
     return completion
 
 
