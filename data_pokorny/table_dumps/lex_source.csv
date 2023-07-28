@@ -1,0 +1,45 @@
+,id,code,display,created_at,updated_at,created_by,updated_by,lexicon_id
+0,45,KSW,"Gerhard Köbler: Altsächsisches Wörterbuch, 3rd ed. (2000)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+1,46,CGo,"MacDonald Stearns, Jr: Crimean Gothic (1978)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+2,47,CID,Cassell's Italian Dictionary (1958),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+3,48,NED,Einar Haugen: Norwegian-English Dictionary (1965),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+4,49,WE,"H. Meurig Evans and W.O. Thomas: Welsh-English, English-Welsh Dictionary (1969)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+5,50,HH,Heinrich Hübschmann: Armenische Grammatik (1897),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+6,51,EIE,"J.P. Mallory and D.Q. Adams, eds. Encyclopedia of Indo-European Culture (1997)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+7,52,DEO,Hermann Vinterberg and C.A. Bodelsen: Dansk-Engelsk Ordbog (1966),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+8,53,LD,Bronius Piesarskas and Bronius Svecevicius: Lithuanian Dictionary (1994),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+9,54,ELD,Charlton T. Lewis: An Elementary Latin Dictionary (1999),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+10,55,LS,"Liddell and Scott: Greek-English Lexicon, 7th-9th ed's (1882-1940), rev.",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+11,56,IOI,Ruth P.M. and Winfred P. Lehmann: An Introduction to Old Irish (1975),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+12,57,GED,Winfred P. Lehmann: A Gothic Etymological Dictionary (1986),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+13,58,SEO,"Norstedts Stora Svensk-Engelska Ordbok, 3rd ed. (2000)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+14,59,KDW,"Gerhard Köbler: Althochdeutsches Wörterbuch, 4th ed. (1993)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+15,60,ODE,C.T. Onions: The Oxford Dictionary of English Etymology (1966),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+16,61,RPN,Allan R. Bomhard: Reconstructing Proto-Nostratic (2002),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+17,62,TPE,Lee M. Hollander: The Poetic Edda (1962),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+18,63,R1,"Josette Rey-Debove and Alain Rey, eds. Le Nouveau Petit Robert (1993)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+19,64,CLD,"Cassell's Latin Dictionary (1959, rev. 1968)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+20,65,ASD,Joseph Bosworth and T. Northcote Toller: An Anglo-Saxon Dictionary (1898),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+21,66,ICE,Richard Cleasby and Gudbrand Vigfusson: An Icelandic-English Dictionary (1874),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+22,67,SAO,Swedish Academy: Svenska Akademiens Ordbok (2011),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+23,68,GE,Colin Mark: The Gaelic-English Dictionary (2003),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+24,69,KLW,"Gerhard Köbler: Altniederfränkisches Wörterbuch, 3rd ed. (2003)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+25,70,IEW,Julius Pokorny: Indogermanisches etymologisches Wörterbuch (1959),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+26,71,IEO,Arngrimur Sigurdsson: Íslenzk-Ensk Orðabók (1970),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+27,72,KNW,"Gerhard Köbler: Altnordisches Wörterbuch, 2nd ed. (2003)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+28,73,HGE,Vladimir E. Orel: A Handbook of Germanic Etymology (2003),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+29,74,IED,Patrick S. Dinneen: An Irish-English Dictionary (1927),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+30,75,TLL,Frederick Bodmer: The Loom of Language (1944),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+31,76,MED,"Robert E. Lewis et al., eds. Middle English Dictionary (1954-1999, 2001)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+32,77,LRC,"Linguistics Research Center, University of Texas, Austin",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+33,78,KGW,"Gerhard Köbler: Gotisches Wörterbuch, 2nd ed. (1989)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+34,79,AHD,"Calvert Watkins: The American Heritage Dictionary of Indo-European Roots, 2nd ed. (2000)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+35,80,CDC,W.D. Whitney and B.E. Smith: The Century Dictionary and Cyclopedia (1889-1911),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+36,81,Sal,Diccionario Salamanca de la Lengua Española (1996),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+37,82,W2I,"Webster's New International Dictionary of the English Language, 2nd ed. (1959)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+38,83,W7,Webster's Seventh New Collegiate Dictionary (1963),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+39,84,MEV,J.R.R. Tolkien: A Middle English Vocabulary (1922),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+40,85,AHW,Rudolf Schützeichel: Althochdeutsches Wörterbuch (1981),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+41,86,KEW,"Gerhard Köbler: Altenglisches Wörterbuch, 2nd ed. (2003)",2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+42,87,W9,Webster's Ninth New Collegiate Dictionary (1983),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1
+43,88,OED,James A.H. Murray et al: The Oxford English Dictionary (1933),2015-04-16 07:58:21,2015-04-16 07:58:21,loader,loader,1

@@ -1,0 +1,110 @@
+,id,code,display,created_at,updated_at,created_by,updated_by,lexicon_id
+0,1,ptc,participle,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+1,2,colq,colloquial,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+2,3,coll,collective,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+3,4,voc,vocative (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+4,5,priv,"privative (i.e., negative)",2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+5,6,adv,adverb(ial),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+6,7,imp,imperative (mood),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+7,8,pcl,particle,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+8,9,aux,auxiliary,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+9,10,adj,adjective,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+10,11,opt,optative (mood),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+11,12,ger,gerund(ive),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+12,13,dat,dative (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+13,14,neut,neuter (gender),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+14,15,du,dual (number),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+15,16,gen,genitive (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+16,17,mod,modal,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+17,18,dim,diminutive,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+18,19,inten,intensive,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+19,20,VII,class 7,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+20,21,supp,suppletive (form),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+21,22,art,article/determiner,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+22,23,nbr,number,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+23,24,emph,emphatic,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+24,25,past,past (tense),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+25,26,num,numeral,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+26,27,interj,interjection,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+27,28,pass,passive (voice),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+28,29,vulg,vulgar,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+29,30,dial,dialectal,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+30,31,irr,irregular,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+31,32,abl,ablative (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+32,33,prop,proper,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+33,34,pron,pronoun,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+34,35,3,3rd person,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+35,36,rel,relative,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+36,37,sup,superlative,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+37,38,impers,impersonal (verb),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+38,39,indec,indeclinable/anomalous,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+39,40,indef,indefinite,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+40,41,comp,comparative,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+41,42,wk,weak (inflection),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+42,43,stem,stem,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+43,44,comm,common (gender),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+44,45,freq,frequentative (aspect),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+45,46,poss,possessive (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+46,47,card,cardinal,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+47,48,acc,accusative (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+48,49,defc,defective,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+49,50,obl,oblique (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+50,51,obj,objective (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+51,52,anom,anomalous/indeclinable,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+52,53,pl,plural (number),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+53,54,act,active (voice),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+54,55,obs,obsolete,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+55,56,intrans,intransitive,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+56,57,subj,subjunctive (mood),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+57,58,post,postposition,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+58,59,loc,locative (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+59,60,ptpr,preterite-present (verb),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+60,61,perf,perfect (aspect),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+61,62,pred,predicative,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+62,63,fem,feminine (gender),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+63,64,pers,personal,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+64,65,2,2nd person,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+65,66,pret,preterite (tense),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+66,67,prep,preposition,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+67,68,pres,present (tense),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+68,69,V,class 5,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+69,70,pfx,prefix,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+70,71,excl,exclamation,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+71,72,fut,future (tense),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+72,73,attr,attributive,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+73,74,dep,deponent,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+74,75,n,noun,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+75,76,impf,imperfect (aspect),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+76,77,dem,demonstrative,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+77,78,str,strong (inflection),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+78,79,trans,transitive,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+79,80,ua,used as,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+80,81,def,definite,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+81,82,vb,verb,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+82,83,cont,contraction,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+83,84,nom,nominative (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+84,85,int,interrogative (mood),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+85,86,refl,reflexive,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+86,87,conj,conjunction,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+87,88,inf,infinitive,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+88,89,conn,connective,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+89,90,enc,enclitic,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+90,91,tit,title,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+91,92,mid,middle (voice),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+92,93,1,1st person,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+93,94,afx,affix,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+94,95,denom,denominative,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+95,96,III,class 3,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+96,97,sfx,suffix,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+97,98,I,class 1,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+98,99,VI,class 6,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+99,100,IV,class 4,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+100,101,II,class 2,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+101,102,inst,instrumental (case),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+102,103,aor,aorist (tense),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+103,104,arch,archaic,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+104,105,masc,masculine (gender),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+105,106,ord,ordinal,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+106,107,caus,causative,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+107,108,sl,slang,2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1
+108,109,sg,singular (number),2015-04-16 07:58:27,2015-04-16 07:58:27,loader,loader,1

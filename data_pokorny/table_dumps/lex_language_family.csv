@@ -1,0 +1,15 @@
+,id,name,order,created_at,updated_at,created_by,updated_by,lexicon_id
+0,14,Celtic,1,2015-04-16 07:58:32,2015-04-16 07:58:32,loader,loader,1
+1,15,English,2,2015-04-16 07:58:32,2015-04-16 07:58:32,loader,loader,1
+2,16,West Germanic,3,2015-04-16 07:58:33,2015-04-16 07:58:33,loader,loader,1
+3,17,North Germanic,4,2015-04-16 07:58:33,2015-04-16 07:58:33,loader,loader,1
+4,18,East Germanic,5,2015-04-16 07:58:33,2015-04-16 07:58:33,loader,loader,1
+5,19,Italic,6,2015-04-16 07:58:33,2015-04-16 07:58:33,loader,loader,1
+6,20,Balto-Slavic,7,2015-04-16 07:58:33,2015-04-16 07:58:33,loader,loader,1
+7,21,Paleo-Balkan,8,2015-04-16 07:58:34,2015-04-16 07:58:34,loader,loader,1
+8,22,Hellenic,9,2015-04-16 07:58:34,2015-04-16 07:58:34,loader,loader,1
+9,23,Anatolian,10,2015-04-16 07:58:34,2015-04-16 07:58:34,loader,loader,1
+10,24,Armenian,11,2015-04-16 07:58:34,2015-04-16 07:58:34,loader,loader,1
+11,25,Indo-Iranian,12,2015-04-16 07:58:34,2015-04-16 07:58:34,loader,loader,1
+12,26,Tocharian,13,2015-04-16 07:58:35,2015-04-16 07:58:35,loader,loader,1
+13,27,Semitic,1000,2022-10-04 09:41:19,2022-10-04 09:41:19,cp23772,cp23772,2
