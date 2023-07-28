@@ -1,9 +1,11 @@
+import difflib
 import glob
 import json
 import os
 import re
 
 import pandas as pd
+from unidecode import unidecode
 
 from process_pokorny_db import remove_html_tags_from_text
 from query_gpt import process_gpt, query_gpt_fake, get_text_digest
@@ -142,31 +144,55 @@ def find_missing_pokorny():
     # build a prompt for gpt for each
     output_dfs = []
     output_digests = set()
+
+    # some are out of order, so I have a dict to manually realign between UTexas and the pokorny site
+    reorder_dict = {}
+    manual_skips = [2007]
     for counter, (i, row) in enumerate(missing_entries.iterrows()):
+        old_i = i
+        if old_i in manual_skips:
+            continue
+
+        if counter >= 239:
+            i = old_i - 3
+        if counter >= 429:
+            i = old_i - 2
+        if counter >= 430:
+            i = old_i - 4
+        if counter >= 500:
+            i = old_i - 5
+
+        if counter >= 606:
+            i = old_i - 6
+
+        if counter >= 663:
+            i = old_i - 1
+
+        if old_i in reorder_dict:
+            i = reorder_dict[old_i]
+
         # get some information
         material = "\n".join(scraped_pokorny[i]['Material']).replace("`", "'")
-        # reflexes = get_reflex_entries(dfs, row.id)
-        remove_html_tags_from_text(row.entry).strip("\n")
-        root = remove_html_tags_from_text(row.entry).strip("\n")
+        web_root = scraped_pokorny[i]["root"]
+        texas_root = remove_html_tags_from_text(row.entry).strip("\n")
         gloss = remove_html_tags_from_text(row.gloss)
 
         abbreviations_used = augment_material(material, abbreviation_data)
-        # continue
 
-        # form prompt
-
+        # form prompt (which has changed over time and I do not want to invalidate the caches on work already done)
         if i < 317:
-            prompt = format_gpt_prompt_old(root, gloss, material)
+            prompt = format_gpt_prompt_old(texas_root, gloss, material)
         elif i < 766:
-            prompt = format_gpt_prompt(root, gloss, material, abbreviations_used)
+            prompt = format_gpt_prompt(texas_root, gloss, material, abbreviations_used)
         else:
-            prompt = format_gpt_prompt_new(root, gloss, material, abbreviations_used, headers)
+            prompt = format_gpt_prompt_new(texas_root, gloss, material, abbreviations_used, headers)
 
         # ask gpt
-        print(f"{counter+1:5}|{root:20}", end=" | ")
+        print(f"{counter+1:5}|{texas_root:20}", end=" | ")
         if material.strip() == "":
             print("missing material - SKIPPING")
             continue
+
         response = query_gpt_fake(prompt)
 
         # check if we made a mistake and double pasted or something
@@ -176,11 +202,12 @@ def find_missing_pokorny():
         output_digests.add(output_digest)
 
         df = process_gpt(response, headers)
-        df["root"] = root
+        df["root"] = texas_root
+        df["web_root"] = web_root[-1]
         output_dfs.append(df)
     # combined_df = pd.concat(output_dfs)
-    combined_df = pd.concat(output_dfs[170:])
-    combined_df = combined_df[['root'] + headers]
+    combined_df = pd.concat(output_dfs[210:])
+    combined_df = combined_df[['web_root', 'root'] + headers]
     combined_df.to_csv("sample.csv")
     pass
 

@@ -136,6 +136,7 @@ def get_reflex_entries(dfs, lrc_id):
     return entries
 
 
+# exploratory function :)
 def figure_out_language_overrides(dfs):
     # find all overrides, that are actually used in a reflex.
     override_df = dfs["lex_language"][~dfs["lex_language"].override_family.isna() & dfs["lex_language"].id.isin(dfs['lex_reflex'].language_id.unique().tolist())]
@@ -161,6 +162,32 @@ def figure_out_language_overrides(dfs):
         print(f"{sub_name:<10}\t{family_name:<10}\t{override_family_name:<10}\t{str_languages}")
 
     breakpoint()
+
+
+def expand_parenthesized_root(word):
+    # Step 1: Extract all parenthesized substrings and store them in replacements list
+    replacements = re.findall("\((.*?)\)", word)
+
+    # Step 2: Create a template string by replacing all parenthesized parts with curly braces "{}"
+    replace_str = re.sub("(\(.*?\))", "{}", word)
+
+    len_replacements = len(replacements)
+
+    # Step 3: Generate all combinations using binary counting
+    binary_strings = [format(i, f'0{len_replacements}b') for i in range(1 << len_replacements)]
+    combinations = [
+        replace_str.format(*["" if bit == "0" else paren_part for bit, paren_part in zip(binary_string, replacements)])
+        for binary_string in binary_strings
+    ]
+
+    return combinations
+
+
+def expand_hyphenated_root(word):
+    if "-" not in word:
+        return [word]
+    split_hyphen = word.split("-")
+    return ["".join(split_hyphen[:i+1]) for i in range(len(split_hyphen))]
 
 
 def main():
@@ -204,7 +231,9 @@ def main():
         reflex_entries = get_reflex_entries(dfs, lrc_id)
 
         # basic info
-        roots = row["entry"].strip("\n\t ").replace("<p>", "").replace("</p>", "")
+        # I have to replace the "or" and other short words carefully otherwise it might catch some real roots
+        roots = row["entry"].strip("\n\t ").replace("<p>", "").replace("</p>", "").replace(" or ", " ").replace(" it ", " ").replace(" on ", " ").replace(" to ", " ").replace(" of ", " ")
+        search_roots = [remove_html_tags_from_text(root).strip(" ,-") for root in re.split("(,|\s|:|\n)", roots)]
         gloss = row["gloss"].strip("\n\t ").replace("<p>", "").replace("</p>", "")
 
         # making the id
@@ -218,6 +247,22 @@ def main():
         cross = sorted(set(to_refs + from_refs))
         entry_to_entry[lrc_id] = cross
 
+        remove_words = ['Balto-Slavic', 'Celtic', 'Indo', 'Indo-Iranian', 'Iranian', 'ablative', 'accurately', 'adj.', 'also', 'and', 'base', 'based', 'better',
+                        'before', 'broken', 'case', 'chiefly', 'compare', 'etc.', 'extended', 'extension', 'fem.', 'from', 'form', 'genitive', 'genitive-ablative', 'grade',
+                        'heavy', 'heavy-base', 'lengthened', 'locative', 'masc.', 'more', 'n-stem', 'nasalized', 'nasals', 'oblique', 'occasionally', 'particle', 'plural',
+                        'possibly', 'presumably', 'probably', 'reduced', 'reduplicated', 'reduplication', 'root', 'simplified', 'suffixes', 'the', 'thematic',
+                        'weak', 'which', 'with', '(masc.)', '(fem.)', "(from"]
+        split_roots = [
+            root
+            for condensed_root in search_roots
+            if condensed_root.strip() not in remove_words
+            for expanded_root in expand_parenthesized_root(condensed_root)
+            for root in expand_hyphenated_root(expanded_root)
+            if root != ""
+            and not root.strip(". -").isnumeric()
+            and root.strip() not in remove_words
+        ]
+
         entry = {
             "entry_id": entry_id,
             "root": roots,
@@ -227,6 +272,7 @@ def main():
             "semantic": [],
             # this id is deleted on the second pass
             "lrc_id": lrc_id,
+            "searchable_roots": " ".join(split_roots)
         }
         pokorny_entries.append(entry)
         pokorny_by_id[entry_id] = entry
