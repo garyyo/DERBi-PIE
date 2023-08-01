@@ -2,12 +2,28 @@ import hashlib
 import json
 import os
 import re
+import time
 from io import StringIO
 
 import numpy as np
 import openai
 import pandas as pd
 import pyperclip
+
+
+"""
+author - anton vinogradov
+
+a collection of useful functions used to query gpt. Most are self explanatory, but note that query_gpt and query_gpt_fake are more or less interchangeable, but
+that the fake version requires the user to paste into chatgpt and copy its response. I also make use of breakpoint() for the fake version as the output for gpt
+often raises edge cases. Its literally oops all edge cases, you have been warned.
+
+Also I use a directory called gpt_caches to store the responses for gpt. This is so I can stop execution at any point and resume at a later date. These are
+cached on the prompt digest, so any change in prompt no matter how minor will make a new query. These caches are not included in the repo though, only the
+placeholder file.
+
+Godspeed.
+"""
 
 
 def get_digest(input_string):
@@ -50,8 +66,10 @@ def query_gpt(prompt):
             ]
         )
         backup_response(prompt, completion)
+        time.sleep(1)
     else:
         print("existing found - REUSING", digest[:20])
+
     return completion
 
 

@@ -12,6 +12,38 @@ from tqdm import tqdm
 from generate_pokorny_scraped_data_OLD import remove_non_english_chars
 
 
+"""
+author - anton vinogradov
+
+This script is a collection of methods used to generate 2 files for the database: table_pokorny.json and table_common.json.
+Currently the common table (these are called tables but are actually "collections" when in MongoDB) is mostly redundant, but is there to serve as a common point
+of reference between all specialized tables. I personally do not like this method of doing it, but this seems to be a compromise between ease of use with the
+linguistics users of this code and me the actual coder. These tables are very purpose built and thus contain a number of weird intricacies. Ideally once all the
+data is actually identified (pokorny, liv, etc.) and processed in a machine readable format, this entire system is redesigned with the needs now elucidated, but
+we all know that is not going to happen :)
+
+In lui of that I will take this space to attempt to explain and defend my (indefensible) design decisions. 
+1. why is it all in a single table per linguistics dictionary?
+Each linguistics dictionary has completely different requirements (so I am told, as of writing only a single one has been made) so each table is supposed to be
+purpose built for that dictionary. This does mean that each will also need a completely custom manner of implementing the search functionality on the web side,
+but this was planned from the start.
+
+2. why is the common built first and then the specialized one?
+I ran out of time, ideally the specialized ones are created first and then are combined together into a common one as there will be overlap between them. This
+combining is also going to be an issue going forward, so maybe better to use the common pokorny and then graft onto it with LIV and others.
+
+3. why not just reuse the LRC UTexas db.
+We settled on MongoDB early on, before reaching out to LRC. It is my preferred DB for small projects as it is easy to work with and easier to write queries for.
+Ideally if this gets too large this is redesigned to better fit the needs when they are known, but we all know that doesn't happen.
+
+Aside from that I have left comments where I could, use GPT to explain the rest, many many parts of the code are possible only due to it's insights though
+likely no code from GPT actually exists here because at the time of writing, its still pretty bad at writing very specific code without me needing to completely
+rewrite it. 
+
+My apologies and godspeed.
+"""
+
+
 def remove_html_tags_from_text(text):
     clean_text = re.sub(r'<.*?>', '', text)
     return clean_text

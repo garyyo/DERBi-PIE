@@ -8,6 +8,18 @@ import pyperclip
 from io import StringIO
 
 
+"""
+author - anton vinogradov
+
+The only purpose of this file is to process the scraped pokorny site: https://indo-european.info/pokorny-etymological-dictionary/
+
+Since that is not being used as a good source of pokorny data, this script should not be run and only exists to document what has been done. Seriously, don't 
+use this.
+
+Godspeed.
+"""
+
+
 def process_pos(processed_pokorny, pos_file):
     corrections = {
         "adv": "adverb",

@@ -4,6 +4,18 @@ import re
 import pandas as pd
 
 
+"""
+author - anton vinogradov
+
+The purpose of this script is to generate every individual sound that is used in the DERBi PIE website. These are distinct from characters as they may contain
+multiple characters, which considering that regex works on a character level usually, is necessary. These are generated from one csv file (see the main() 
+function for which one) and thus to add on more, that csv should be edited, not this code. As always I have left comments where I could, but these are just
+notes to myself and you may not find them enough to understand.
+
+Godspeed.
+"""
+
+
 def get_input_to_sounds(inventory):
     input_to_sounds = []
     for i, row in inventory.iterrows():
@@ -22,8 +34,8 @@ def get_input_to_sounds(inventory):
 
 def main():
     features = pd.read_csv("sound_processing/sound_features.csv").fillna(0)
-    inventory = pd.read_csv("sound_processing/sound_inventory.csv")
-    input_to_sounds = get_input_to_sounds(inventory)
+    # inventory = pd.read_csv("sound_processing/sound_inventory.csv")
+    # input_to_sounds = get_input_to_sounds(inventory)
 
     # for possible grouping, we need to find which sounds correspond to that group
     # all the positive features

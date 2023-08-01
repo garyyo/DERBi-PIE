@@ -9,6 +9,25 @@ from generate_pokorny_db_data import remove_html_tags_from_text
 from gpt_utils import process_gpt, query_gpt_fake, get_text_digest, get_digest
 
 
+"""
+author - anton vinogradov
+This script serves two purposes:
+1. identify all the missing pokorny forms that cannot be processed via gpt
+2. query gpt with the ones that can
+
+Querying gpt is unfortunately not possible automatically as I did not have gpt4 access when I created this script.
+Despite this I have a work around, but it requires the user to manually go to chatgpt and paste in the prompt (the script will load your clipboard for you) and
+manually copy GPT's output (the script will read the clipboard for you too). Ideally this script will never be rerun, but if this is being used as reference by
+someone other than me, I have left comments where I can. Ask ChatGPT to explain the rest of the code, it was written with its help after all.  
+
+If it is rerun, run it in the debugger. I make use of breakpoint() to pause execution to allow the user to paste and wait on GPT. Running this code often leads
+to edge cases so having a debugger at the ready helped with that, and if you run this code yourself expect that an error will occur and that you will need to
+write more code to handle that edge case. 
+
+Godspeed.
+"""
+
+
 # region prompts
 
 def format_gpt_prompt_new(root, gloss, material, abbreviations_used, headers):
@@ -151,6 +170,7 @@ def find_missing_pokorny():
         if old_i in manual_skips:
             continue
 
+        # Attempting to solve the misaligned entries issue by adding more and more offsets when I see them.
         if counter >= 239:
             i = old_i - 3
         if counter >= 429:
@@ -210,12 +230,61 @@ def find_missing_pokorny():
         df["web_root"] = web_root[-1]
         output_dfs.append(df)
     # combined_df = pd.concat(output_dfs)
-    combined_df = pd.concat(output_dfs[210:])
+    combined_df = pd.concat(output_dfs)
     combined_df = combined_df[['web_root', 'root'] + headers]
     combined_df.to_csv("data_pokorny/recovered_pokorny_reflexes.csv")
     pass
 
 
+def find_unrecoverable_pokorny():
+    dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
+    missing_ids = sorted(set(dfs["lex_etyma"].id.unique()) - set(dfs['lex_etyma_reflex'].etyma_id.unique()))
+    missing_entries = dfs['lex_etyma'][dfs['lex_etyma'].id.isin(missing_ids)]
+
+    with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
+        scraped_pokorny = json.load(fp)
+
+    reorder_dict = {}
+    manual_skips = [2007]
+
+    unrecoverable_entries = []
+
+    for counter, (i, row) in enumerate(missing_entries.iterrows()):
+        old_i = i
+        if old_i in manual_skips:
+            continue
+
+        if counter >= 239:
+            i = old_i - 3
+        if counter >= 429:
+            i = old_i - 2
+        if counter >= 430:
+            i = old_i - 4
+        if counter >= 500:
+            i = old_i - 5
+
+        if counter >= 606:
+            i = old_i - 6
+
+        if counter >= 663:
+            i = old_i - 1
+
+        if old_i in reorder_dict:
+            i = reorder_dict[old_i]
+
+        material = "\n".join(scraped_pokorny[i]['Material']).replace("`", "'")
+
+        if material.strip() == "":
+            unrecoverable_entries.append((row.entry, row.gloss))
+    print(unrecoverable_entries)
+    json_unrecoverable = dict(unrecoverable_entries)
+
+    with open("data_pokorny/unrecoverable_pokorny.json", "w") as fp:
+        json.dump(json_unrecoverable, fp, indent=2)
+    pass
+
+
 if __name__ == '__main__':
+    find_unrecoverable_pokorny()
     find_missing_pokorny()
     pass

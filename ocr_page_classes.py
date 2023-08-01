@@ -3,6 +3,13 @@ from dataclasses import dataclass
 from typing import List, Dict, Optional
 
 
+"""
+author - anton vinogradov
+
+these are mostly unused as we gave up on OCRing things pretty early on.
+"""
+
+
 @dataclass
 class OCRVector:
     x: float

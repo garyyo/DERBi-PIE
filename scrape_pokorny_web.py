@@ -10,6 +10,13 @@ from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 
+"""
+author - anton vinogradov
+
+It scrapes the pokorny website: https://indo-european.info/pokorny-etymological-dictionary/
+"""
+
+
 def mark_text_effects(p):
     # Loop through each <i> tag
     italic_tags = p.find_all("i")

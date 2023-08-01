@@ -1,4 +1,6 @@
 """
+author - anton vinogradov
+
 DERBi PIE. Not sure what it means, but it's a good name.
 
 The purpose of this project is to scan in and digitize PIE dictionaries.
