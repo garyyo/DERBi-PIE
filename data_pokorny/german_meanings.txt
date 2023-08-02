@@ -1,1449 +1,3088 @@
-Brust, Bruststück von geschlachteten Tieren
-Luftröhre, Schlund
-Kehlkopf, Schlund
-Hals
-Mund
-Mund
-lösen, retten, sich retten vor
-Reinigung
-aus Not befreiend
-Befreier
-retten, erlösen
-öffnen, lösen, losbinden
-heile, rette, befreie
-Heilung, Befreiung
-reinigt, kehrt aus
-freigelassen (von früheren Sklaven)
-PN
-PN
-PN
-PN
-PN
-ausfegen, auskehren
-Kehricht, Mist
-in Lauge kochen
-Lauge
-
-Faß, Weinfaß
-Faß, Weinfaß
-Faß, Weinfaß
-irdenes Gefäß, Topf
-Milchkübel
-Butterfaß
-Gefäß
-geflochtener Korb; Geldkorb, Kasse
+Schienbein, Wade
+Unterschenkel, Bein
+Unterschenkel, Bein
+brennt
+Glut
+versengt, ausgedörrt, vertrocknet
+brennend, ätzend
+macht brennen
+to burn
+to burn
+trocken
+wirft, schleudert
+schnell
+sich abwenden
+sich abwenden
+werfen
+schnell
+abschlagen
+sich irren
+schwankt, zittert
+schwankt, zittert
+schwankt, zittert
+schwankt, zittert
+setzt in Bewegung
+Schwanken, Erschütterung
+in Aufregung geraten
+in Aufregung geraten
+in Bewegung versetzen
+in Bewegung versetzen
+Verwirrung, Tumult
+schaukeln, hin und her bewegen
+behend, rasch
+zweifeln, unschlüssig sein
+Mangel, Fehler
+stampft, zermalmt'
+Stoß, Stampfen, Zermalmen; Mehl, Pulver, Puder'
+klein; niedrig, gemein'
+Stäubchen'
+klein; gering, schlecht'
+mager'
+to grind, stamp to little pieces
+Spieß, spitzer Pfahl; stechender Schmerz'
+Spieß, Dolch, Pfeil'
+culex'
+das selbe'
+Mücke'
+Stachel eines Insekts, Granne des Getreides'
+Nadel'
+Nadel'
+Ähre, Granne'
+Keil'
+wetzt, schärft'
+dirt, dung
+dirt, dung
+dirt, dung
+σπέρμα
+Mist, Kot
+Mist, Kot
+Schulter
+Schulter
+Schulter, Rücken
+Vorderschulterblat einer Kuh, eines Pferdes
+Vorderschulterblat einer Kuh, eines Pferdes
+Vorderschulterblat einer Kuh, eines Pferdes
+Schmutz, Kot, Unflat
+schmutzig, ekelhaft, unsittlich
+beschmutzen, besudeln
+stercus facere
+feminae menstruo tempore
+sumpfiges Feld
+in Ortsnamen
+agrostis, Gattungsname für mehrere steife Grasarten
+agrostis, dünner Grashalm
+agrostis, dünner Grashalm
+Ginster
+sich schmutzig machen
+beschmutzt
+Bodensatz gepreßter Trauben
+Molken
+Molken
+öffnet sich, tut sich auf
+das Aufklaffen, Lücke, Scherbe, Sichauftun
+Scharte
+Kamm
+Bürste, Striegel
+Scherbe
+Lücke, Scharte
+Borste, Bürste
+Borste, Bürste
+Bürste
+Borste
+feuchte, benetzte, bereitete Mörtel
+Lehm, Schlamm, Mörtel
+weich, sanft anzufassen
+Bündel, Ballen, Büschel
+Kissen, Polster
+eine aromatische Pflanze, wohl eine wermutartige
+Angelica silvestris
+Angelicasilvestris
+ds.
+arum maculatum
+eine Art Schilf, Typhalatifolia
+Wille, Begierde, Absicht, Aufforderung, Einladung
+Aufforderung, Einladung
+γυναικῶν ἐπιθυμίαι (?)
+krankhaftes Gelüst schwangerer Frauen
+krankhaftes Gelüst schwangerer Frauen
+Wille
+er will
+wollen
+einladen
+einladen
+Steineiche
+arborem grandem
+Baum
+Baum
+small wood, trees
+Gehölz
+Gehölz
+Gebüsch, Gehölz
+das selbe
+das selbe
+das selbe
+das selbe
+das selbe
+Raubvogelnest
+Reisig, Strauch
+small wood, trees
+Reisig, Strauch
+Eiche
+lacht
+Gelächter
+lache laut
+hellauf lachen
+Gelächter
+laut lachen
+laut lachen
+laut lachen
+das selbe
+kichern
+kichern
+schmähe
+spotten, höhnen
+lächerlich
+Spott
 geflochtener Korb
-Gründling
-Fischnamen
-Fischnamen
-Fischnamen
-Fischnamen
-Fischnamen
-Cyprinus
-Fischnamen
-starr und stier hinsehend
-hinstarren
-bleichen, verschießen, welken
-fahl, matt, welk
-Gleisse, Aethusa cynapium
-verschießen, verbleichen
-schwächlich
-mild, lau
-Schwächling, Feigling
-langsam, träge
-verzagen, traurig werden
-bleich, blaß'
+geflochtener Korb
+Körbchen, Wollkörbchen
+Korb
+Korb, Fischreuse; Hürde
+Hürde
+Korb, Brotsack
+meaning
+schlürft
+schlürft
+Partizip
+Trinkschale, Becher
+Schüssel
+das Essen
+trinken
+schlürfen
+faux, guttur
+Gaumen
+ds.
+zweifelhaft
+zweifelhaft
+verschlucken, verschlingen
+Speiseröhre, Schlund
+irgend
+irgend
+(particle: uncertainty, generalization)
+keineswegs
+irgendwo
+irgendwo
+irgendwo
+(particle: uncertainty, generalization)
+(particle: uncertainty, generalization)
+(particle: uncertainty, generalization)
+zerkaut, zermalmt
+feiner Staub, Mehl
+σιτῶδές τε
+μαγίδα
+Weizenbrot
+Weizenbrot
+Wurm, Made
+Wurm
+grub, worm, maggot
+grub, worm, maggot
+grub, worm, maggot
+Wurm
+grub, worm, maggot
+Wurm
+Wurm
+grub, worm, maggot
+grub, worm, maggot
+grub, worm, maggot
+grub, worm, maggot
+grub, worm, maggot
+Made
+Made
+grub, worm, maggot
+grub, worm, maggot
+Spulwurm
+Karbunkel, Fingerwurm
+Würmer im faulenden Fleisch
+Schlangenkraut
+Natternkraut
+rot
+rot
+feuerrot werden
+Regenwurm
+Wurm
+grub, worm, maggot
+grub, worm, maggot
+Wurm
+grub, worm, maggot
+Ameise
+Nacht
+Nacht
+Dunkelheit
+Dunkel
+Dunkel
+dunkel
+dunkel
+Dunkel
+Finsternis
+das selbe
+dunkel
+dunkelviolett
+Dunkel
+dunkel
 
-bleich, bleifarben'
-Blässe'
-nüchtern'
-nüchtern werden; sich aufklären, vom Himmel'
+grabe'
+Gartenkraut, Gemüse'
+Spaten'
+Lanze'
+Klinge'
+gemästet, fett
+Speck, gepökeltes Schweinefleisch
+Speck, gepökeltes Schweinefleisch
+reichlich, reichlich schenkend
+fett, üppig, fruchtbar, freudig, fröhlich
+düngen
+lecken
+leckend fressen
+leckend fressen
+lecken
+lecken
+Pfütze, Sumpf
+swamp, puddle
+Pfütze, Grube
+swamp, puddle
+Grube, Loch
+Kuh
+Vieh
+Kuh
+Kuh
+Kehle, Schlund
+die Wamme des Rindes
+schlucken, trinken
+schlucken, trinken
+schlucken
+kümmere mich um etwas
+das selbe
+besorge
+Beiwort des Todes, als 'schlimm für den Menschen sorgend'
+Beiwort des Todes, am besten als 'rücksichtslos' zu verstehen
+nachlässig, träge
+nachlässig, träge
+nachlässig, träge
+nachlässig, träge
+Haselstaude
+Haselstaude
+Stock, Haselstrauch
+Haselstrauch
+das selbe
+das selbe
+das selbe
+Speerschaft
+Haselstaude
+Haselstaude
+Stock
+Weinrebe, Schößling
+Weinrebe, Schößling
+feil sein, zum Verkauf ausgeboten werden, so und so hoch geschätzt werden
+es ist erlaubt
+auf etwas bieten
+(darbieten, sich anheischig machen) versprechen
+to offer for sale
+handelseins werden
+ds., einen Handel abschließen
+Vertrag
+begehren
+begehren
+begehren
+begehren
+Verlangen zu pissen
+Verlangen zu pissen
+befehlen
+befehlen
+befehlen
+Gebot
+begehren
+gebot
+Gebot
+Schuld, Fehler
+tadeln
+tadeln
+tadeln
+tadeln
+Laster, Verbrechen, Tadel
+Schande, Hohn
+Tadel, Schimpf, Fehler
+Tadel, Schimpf, Fehler
+Tadel, Schimpf, Fehler
+Fehler, Laster
+Schlund
+Erdschlund
+Menschenfresserin
+gefräßig, gierig
+Nachtgeister, Gespenster; Seelen der Abgeschiedenen
+Stimme
+schreien
+Geschrei, Klage
+lechzen
+schimpfen, schelten
+Mausefalle
+Teich
+Teich
+Quelle
+Teich
+Teich
+Welle
+sich hin und her bewegen
+biegsam
+Vertiefung
+Vertiefung
+schweben, sich hin und her bewegen
+Stange zum Aufhangen der Wiege
+Feldweihe
+schweben, sich hin und her bewegen
+schaukeln, singen
+Jubelruf bei den Johannisfeiern
+schwanken, schaukeln
+Vertiefung
+Vertiefung
+biegsam
+biegsam
+biegen, krümmen
+δρυμός
+Hain, Röhricht
+grasiger Sumpf
+Lausitz
+schaukeln, schwanken
+beschimpfe, tadle, überführe
+Vorwurf, Schimpf, Schande
+schwören
+Scham, Betrug, Verrat
+schimpfen, mit Spitznamen belegen
+schwatzt, flüstert, wehklagt, redet
+das selbe
+rede, spreche, sage
+rede, spreche, sage
+Schmeichelei
+Schmeichelei
+(onomatopoeic root)
+(onomatopoeic root)
+stammeln, schwatzen, lallen
+stammelnd, stotternd
+plätschern, lärmen, klatschen
+flattern
+benehme mich übermütig
+Aufschneider, Prahler
+Sturmwind
+kahler Fels, Stein
+felsig
+Stein
+Sitz
+Sitz
+rock, stone
+abspalten
+rock, stone
+convulsio partium in posteriora
+mit dem Oberkörper nach vorwärts gekrümmt
+nach vorwärts gebogen sein
+nach vorwärts gebogen sein
+lahm am Fuß
+lahm am Fuß
+lahmer Fuß
+betrügen
+ds.
+scherzen
+stammeln
+link
+link
+krumm?
+nhd. Lortzing.
+eben, glatt, poliert, schlüpfrig
+glatt, unbehaart
+Abhaug, Weg, Ebene
+Weide
+Pfad, Spur
+Spur
+even, smooth, slippery
+Spur, Schar, Nachkommenschaft
+Spur, Schar, Nachkommenschaft
+Spur
+Spur
+even, smooth, slippery
+even, smooth, slippery
+schwach
+schwach werden
+schwach, zerstört
+schwach, elend
+schlaff, matt
+schlaff, matt
+müde
+in bulg. loš 'schlecht, übel, schlimm, häßlich'
+unglücklich, schlecht
+schlaff niederhängender Fetzen
+Lumpen
+Lumpen
+Lappen, Fetzen
+Lappen, Fetzen
+Lumpen, Lappen
+Stück, Lappen
+Weiche
+Schmerz
+das selbe
+Zorn
+Zorn
+das selbe
+Brunst
+das selbe
+Lärm, Schmerz
+Wunde
+Lärm, Schmerz
+Brunst
+befruchten
+Gelegenheit
+preisgeben, verraten
+ds.
+verraten
+aufhören
+zulassen, erlauben
+sich hingeben
+sterben
+Leiche
+lose, biegsam, böse
+böse
+nachlassen, nachgeben
+locker, lose
+lindern, mäßigen
+wohlfeil
+Tod
+losschießen, loslassen
+ἤρεμος
+sachte
+dunkel, finster
+dunkel
+(wobei Dunkel ist =) schattengebend
+überschatte, bedecke
+Sumpf
+Sumpf
+Lache, Pfütze, Sumpf
+Morast
+Morast
+blackish; swamp
+blackish; swamp
+Rabe
+Eid, Schwur
+Eid, Schwur
+Eid, Schwur
+heiraten
+Ehe
+Krieg
+Schwur
+Schwur
+Schwur
+heiraten
+ira, iracundia
+gewalttätig, grausam, schrecklich
+wehe! δεινῶς, valde
+saevire
+angry, raging, wrathful
+rod, twig
+rod, twig
+τ(ὴν) μύρτον
+Weinrebe; Schößling bes. vom Weinstock
+Rute, Gerte; Reis, Stamm, Weide
+Keule, Knüttel, Penis
+Keule, Knüttel, Penis
+Schienbein
 
-grüne'
-blaß, bleich'
-pale, light
-Lärm
+Keule
+Fuß der Harfe
+Stab
+Deichsel
+Knüttel
+das selbe
+Tölpel
+mythischer Riese
+mythischer Riese
+zusammenschnüren, quälen
+Stange, Spindel
+Verwandlung, Truggestalt, Betrug, Illusion
+zeige an, verrate
+berühre, untersuche
+Verfehlung
+mit der Hand winken, ein Zeichen geben
+mit der Hand winken, ein Zeichen geben
+mit der Hand winken
+Gaukelei treiben
+Gaukelbilder
+locken
+schwenken, schwingen
+schwenken, schwingen
+winken
+zuwinken
+zuwinken
+zuwinken
+durch Zeichen anzeigen, betrügen
+locken
+anlocken, täuschen
+Gemütsbewegung
+ventilare
+anlocken
+als Gespenst spuken
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Mohn
+Stechfliege, Mücke
+Mücke
+Roßfliege
+plagen, zudringlich anbetteln
+wimmeln (wie ein Mückenschwarm)
+ein Kind zeugen
+Fliege
+Fliege
+Fliege, Mücke
+Kriebelmücke
+munter, lustig, ausgelassen
+geil; uppig (von Weibern); in wilder Lust tobend
+Pferdestall
+Haus, Gemach
+Pferch, Stall, Hürde
+Riegel
+Garbenband
+pen/hurdle of plaited rods/twigs
+pen/hurdle of plaited rods/twigs
 
+schwach; nebelhaft; blind
+entkräfte, schwäche, verdunkle
+mürbe
+dunkelgrau
+dunkle Wolke
+sich trüben, sauer sehen
+sich trüben, sauer sehen
+dunkel, schwer zu erkennen, schwach
+verdunkle, schwäche
+Undeutlichkeit, Schwäche
+schwach werden
+schwach werden
+blökt, brüllt, schreit
+brüllte, blökte
+brüllte, blökte
+das Blöken, Brüllen
+Roß
+Pfau
+undeutlich durch die Nase sprechend
+wiehere
+das Wiehern
+(onomatopoeic: high thin sound)
+wimmernd
+winsle
+zwitschere, girre
+pfeifen, piepen, von der Maus
+stammeln
+stammeln
+beobachten (*hinblinzeln)
+beachten
+einschlafen
+das Selbe
+eingeschlafen
+entschlief
+die Augen schließen
+to flicker, twinkle; mist
+Schlaf
+Schlaf
+schlafen
+schlafen
+to flicker, twinkle; mist
+to flicker, twinkle; mist
+Augen schließen
+to flicker, twinkle; mist
+blinzelnd
+Wolke
+Nebel, wässeriger Niederschlag
+Wolke
+Nebel
+Wolke, Nebel
+staubregnen
+trübes Wetter
+Nebel
+das Selbe
+Nebel
+Schneegestöber, kalter Nebel
+Nebel
+staubregnen, nebeln
+to flicker, twinkle; mist
+sich zuckend bewegen, funkeln
+leuchtend
+verachten
+verachte
+Vision, Spuk, Schimmer
+blinzeln, blinken
+schlägt die Augen auf
 
-klappern
-klappern, rasseln
-
-Geruch
-Geruch
-Geruch
-dunstige schwüle Luft, Höhenrauch, Dürre
-dunstige schwüle Luft, Höhenrauch, Dürre
-caligo
-heftig, zornig; herb, bitter, scharf von Geschmack
-töricht
-töricht
-roh, unwissend
-streng, hart, unfreudlich, unbarmherzig
-eigensinniger unfreundlicher Mensch
-rauh, barsch
-Sieg
-die Siegreiche
+das Blinzeln, Schließen des Auges
+Betrug, Täuschung
+leise
+schließt die Augen
+nebliges Wetter
+fein regnen
+Staub regnen
+Staub regnen
+turpis quaestus
 Gewinn
-siegreich
-siegreich
-Siegeskämpferin
-Brutbiene, Drohne
+sich irren
+Aufenthaltsort für Menschen und Götter, Wohnung, Haus
+weilt, wohnt, bleibt
+sich nähren
+Lebensunterhalt
+nähren
+Nahrung
+Aas
+Aas
+nährt
+Aufenthalt und Nahrung geben
+wohnen, sich aufhalten, seine Nahrung haben
+meckert
+Bock
+Schaf
+meckern, blöken
+meckern
+meckern
+(onomatopoeic: to bleat)
+Ziegenbock
+meckern, stammeln
+meckern, blöken
+Zotte, Flocke
+Tuch
+grobes Tuch
+ds.
+Perle
+(runder) Wassertopf
+gehen, kommen
+to appear, come forth
+to appear, come forth
+to appear, come forth
+Überlaufer
+Auslauf eines Berges, Flusses
+beschneide die Pflanzenschößlinge
+Maltein
+to appear, come forth
+Berg
+Spitze, Gipfel
+Wald
+hochgelegener Ort
+Alpenwirtschaft
+to appear, come forth
+Augenwimper
+Klumpen, Hügel
+großer Ball
+Kugel, Klumpen
+Gipfel, Scheitel
+to appear, come forth
+to appear, come forth
+Mull
+Rand, Ufer, Gegend
+Höhe des Randes
+hervorzeigen
+hervorzeigen
+hinstrecken, hinhalten
+ragen, hervorragen
+mit Zäpfchen an der Wamme (von Kuh und Ziege)
+Galle
+Bauch
+Riese
+Riese
+schwellen, schwären
+schwellen, schwären
+streichen, streicheln, liebkosen, besänftigen
+Hēliotropium (Pflanze mit giftlindernder Wirkung)
+Anmut
+Streiche versetzen
+übel zurichten, mißhandeln
+Kopf
+Kopf daēvischer Wesen
+hoch aufschießend, hoch gewachsen
+Sproß, Trieb
+Stubendecke, Dach
+the top of the head
 
-Bremse
-Bremse
+zuerst
+Geschmack
+Geschmack
+Geschmack
+Geschmack
+saugen, nagen
+lecken, naschen
+Leckerbissen
+tadle
+Tadel, Vorwurf
+verspotten, verhöhnen
+Schande
+Verrat
+das selbe
+das selbe
+aus -mbl-??
+Gerber'
+tretende'
+Denom. von einem mn̥-tós 'getreten'
+mit Füßen treten'
+das selbe
+('gestampfter) 'Weg'
 ON
-VN
-FlN
-FlN
-ON
-hüpfen
-hüpfen
-waten
+Mehl, Staub'
+treten, Flachs brechen, Felle gerben'
+treten, gerben'
+zusammendrücken'
+brechen (Flachs oder Hanf), kneten, treten (Lehm), zerknittern, zerknüllen'
+Moos, Meergras'
+weicher Flaum'
+Hes.
+Flachsseide, Filzgras'
+säuge, sauge
+säuge
+Füllen
+junger Stier, Tierjunges
+junge Kuh
+Stute
 
-waten
-waten
-waten
-Furt (kotige)
-Furt (kotige)
-Schlamm
-Fischfang
-das Waten, Gang ins Wasser
-fortgesetzt umherwaten
-waten; mit Füßen treten; Albernes sprechen
-waten; mit Füßen treten; Albernes sprechen
-waten; mit Füßen treten; Albernes sprechen
-waten; mit Füßen treten; Albernes sprechen
+kleines Pferd
+kleines gall. Pferd
+Gott, dem Pferde geopfert wurden
+Füllen, Rind
+Füllen
+junge Kuh
+unfruchtbare Kuh
+
+mulus
+
+junges Tier, Kalb, Füllen
+Kälbchen, Böcklein, Hirschlein
+
+Zicklein
+kid
+haedus
+junges Tier
+Zicklein
+
+
+
+Zitze, Euter
+
+
+schon, lieblich
+gutes Omen, Glück
+Betrug
+Zaubermittel, Kriegsmaschine
+Maschine
+Hanfbreche
+Wurfmaschine
+Wäscherolle
+betrugerischer Händler
+betrüge
+Trug, List
+verräterisch
+to make pretty, beautiful
+Hure
+ungezogene Person
+Schuld, Fehler
+Faden
+wickle zusammen, wickle auf
+Faden, Schnur
+Fisch-Reuse
+Fisch-Reuse
+Strick, Schlinge, Masche
+Gefangener
+Geländer
+Laken, Fischernetz
+Netz, Schlinge
+Netzsack, Beutelnetz
+Netz
+σκοτεινός
+(rauch)geschwärzt
+Schimmel
+schmieren, verleumden
+Fleck, Mal
+aschfarbig gestreiftes Rind
+schwarz gestreift
+Schmutzfink
+bunt gestreift
+schmutziggelb
+to blacken; dark color, dirt spot
+Dunkel, Nebel, Wolke; finster, dunkel
+dicker Dampf, Dunkel
+besudle
+wasche, sudle
+siede, brause auf, worfle
+siede, brause auf, worfle
+siede, brause auf, worfle
+siede, brause auf, worfle
+das Sieden
+aufsprudeln
+Sprudel
+hineinstoßend versenken
+wischen, abstreifen
+wischen, abstreifen
+scaccio, espello
+streife ab (Blätter, Früchte)
+ausdrückend
+mulsche Masse der ausgepreßten Oliven
+wische ab; drücke aus
+Mähgabel
+Garbe
+welk, schlaff sein
+welk, schlaff
+Welkheit, Morschheit, Schlaffheit
+Getreideart zur Malzbereitung
+Malz, d. i. 'eingeweichtes, gequollenes Getreide'
+Malz, d. i. 'eingeweichtes, gequollenes Getreide'
+Morast
+Sumpfgras
+Sumpf
+
+eingetunkter Bissen
+morsch, faul
+morsch, faul
+Brot in Wein oder Wasser eintunken
+Brot in Wein oder Wasser eintunken
+(Flachs) einweichen
+im Wasser liegen
+einweichen
+Flachsröste
+
+Feuchtigkeit
+tunken
+Morast
+
+fröstle, schauere
+starker Frost
+Rost
+runzlig
+Rauhheit
+feucht, träge
+Brakwasser
+hebesco
+morsch, welk
+morsch, mürbe von Fäulnis
+morsch werden
+Faulheit
+βδελύττεσθαι
+ekeln
+Moorboden, Sumpf
+
+
+frieren
+Frost
+
+Ärger, Kummer
+souci, malheur
+Brummen, Knurren
+verdrossen, verdrießlich
+verdrießlich
+verdrießlich machen
+langweilig
+der Falschspieler beim Würfelspiel
+Wegelagerer, Straßenräuber
+Wegelagerer, Straßenräuber
+heimlich lauern, anfallen
+heimlich auf die Seite schaffen
+to lie in wait, take by surprise; wily
+to lie in wait, take by surprise; wily
+heimlich
+Grille
+versteckt liegen
+Dieb
+versteckt sein, stehlen
+αἱ ἀκίδες τῶν βελῶν, παρὰ τὸ ἀμύσσειν Hes.
+ritze, zerkratze
+ritze, zerkratze
+Riß, Schramme
+scharfe Spitze, Speer, Schwert
+plagen, entstellen
+schlagen
+Faust
+Faust
+Widder
+Schaffell
+Widder, Schaf
+Korb
+Gepäck
+Tonne
+Schlauch
+Fell, Schlauch; Sack
+Heunetz u. dgl.
+Sack
+Blasebalg
+Schreckgespenst
+Schreckgespenst
+Furcht
+Schreckbild
+setze in Furcht
+setze in Furcht
+φόβος Hes.
+das Volk der Schreckgespenster
+das Grausen, peinigende Furcht; bes. religiöse Ehrfurcht
+diss. aus *morm- (wie bei formīca : μύρμηξ)
+Wurzel
+Zauberei mit Wurzeln
+ein fabelhaftes Wunderkraut (Hom.)
+Knoblauchart
+stumpfsinnig, blöde, dumm
+dumm, töricht
+dumm, töricht
+närrisch, albern
+junges Rind, Kalb
+Demin. zu μόσχος m. 'junger Stier, Kalb', f. 'junge Kuh, Mädchen'
+Pflanzentrieb, Schößling
+σωρός θημών Hes.
+Steinhaufe
+Haufen, Menge
+Haufen, Menge
+(Korn-)Haufen
+das selbe
+zusammenhäufen
+Maulwurf
+heap, etc.
+heap, etc.
+heap, etc.
+Auswuchs, Fußgeschwulst der Pferde
+Auswuchs, Fußgeschwulst der Pferde
+Auswuchs an Rebholz, unordentlicher Haufe
+Haufen, Menge
+Klumpen, Brocken
+Zuchtsau
+große Menge
+fest, stark
+bescheiden
+Scham
+fürchten, sichfürchten
+sich fürchten
+nüchtern
+bin nüchtern
+bin nüchtern
+wolliges Fell, Vlies
+wolliges Fell, Vlies
+Schaffell
+Hes.
+weiches Leder wie z. B. Hirschleder
+Leder
+Himmelsgewölbe
+birst
+die äußere Birkenrinde
+tönt, brüllt, rauscht
+Brüller, Stier, Fluß
+Fluß, Flut
+to roar, sound, bellow
+Meer
+schmähen
+to roar, sound, bellow
+to roar, sound, bellow
+to roar, sound, bellow
+to roar, sound, bellow
+vermutlich 'Schilfrohr'
+Schilf
+Schilf
+Pfeil
+Schilfrohr
+Schilfrohr
+Schilf
+Wunde
+stecke hinein
+Infin.
+hineinstechen
+Messer
+Stange
+führt
+führt
+führt
+führen, treiben
+Führung, Weg
+Führer
+Führer
+das selbe
+das selbe
+Führung, Auge
+Krieger, Held
+Krieger, Held
+Gen. Sg. urir.
+*nei-t-os; s. auch _nei-2_
+lenken, führen
+schmähen, tadeln, verachten
+schmähen, tadeln, verachten
+nicht zu schmähen
+Schmähung, Tadel, Verachtung
+schmähen
+schmähen
+fluche
+fluche
+Vorwurf, Schmach
+schmähe
+schmähen
+Lästerung
+quälen, plagen
+verachten
+verachten
+Haß, Feindschaft
+fließt, strömt
+Nidda und Nied
+
+Neath
+
+
+Neide
+handhabe die Getreideschwinge
+der das Getreide schwingt
+Getreideschwinge
+roter Weizen
+worfeln
+worfeln
+Getreide durch Schwingen reinigen
+Getreide durch Schwingen reinigen
+ds.
+Worfschaufel
+(unter)tauchen, durchschwimmen, fliehen, einschlüpfen
+Biber
+Taucherente
+Zelle der Bienenkönigin
+untertauchen
+eindringen
+untertauchen
+tauchen
+φωλεός, latibulum
+Loch, Höhle, Grube
+Erdwurm
+Taucher
+
+se immergere
+janua
+
+
+Narenta
+
+Nehrung
+zum Bug
+Begierde
+mit Verlangen, mit Eifer
+to lust, desire, yearn for
+Verlangen, Begier
+Wunsch, Sehnsucht, Eifer
+Wunsch, Sehnsucht, Eifer
+to lust, desire, yearn for
+to lust, desire, yearn for
+wonach Gelüste haben, sich wonach sehnen
+wonach Gelüste haben, sich wonach sehnen
+wonach Gelüste haben, sich wonach sehnen
+qui propter oculorum vitium parum videret
+blinzelnd; blödsichtig; einäugig
+geblendet
+nachtblind
+nachtblind
+dunkel emporragen
+dröhnen, dumpf tönen
+dröhnen, dumpf tönen
+sich bewölken
+das selbe
+dunkelfarbig, schwarz
+dunkelfarbig, schwarz
+Schlamm (eines Flusses)
+schlammig
+Rohrstab, Stengel
+Stengel, Stiel; Schwanz
+Schweif
+bedrängt, versichert eindringlich, schwört
+sie geloben
+plagt, schädigt
+Drangsal, Leiden, Krankheit
+bedrängt
+fest
+ungestüm, kräftig
+Andrang, Ungestüm
+schädigt; ist schadhaft, krank
+Krankheit
+Leid, Drangsal
+schwöre
+
+plagend, leidvoll
+Kummer
+plagen, belästigen
+Anstoß nehmen, Unwillen fühlen, sich womit abplagen
+Plage
+rastlose Arbeit, Anstrengung
+unaufhörliche, bes. erfolglose Beschäftigung mit einer Sache
+sich abmühen, arbeiten, bes. ohne Erfolg
+
+
+
+beständig, fortwährend
+beständig, beharrlich
+
+Unzufriedenheit
+schlecht
+Stein, bes. zum Somaschlagen gebrauchter; Fels, Berg
+rock, stone
+Stein, Fels
+Stein, Fels
+Stein, Fels
+Kohle
+das selbe
+Licht, Feuer
+Kohle
+Kohle
+Kohle
+das selbe
+das selbe
+das selbe
+das selbe
+schelte, tadle
+getadelt, tadelnswert
+schelte, tadle
+ἀτιμάζεται. μέμφεται
+ἀτιμάζεται. μέμφεται
+Schande
+Makel, Fehler
+mendae
+Makel, Fehler
+Makel, Fehler
+schmähende, lästernde
+tadeln
+tadelnswert
+Darm
+Schmer, Fett, bes. zwischen Haut und Eingeweiden
+entrails
+Rebe
+Weinstock
+kalt
+cold
+kalt
+ds.
+Kälte
+Kälte
+kalt
+kalt werden
+abkühlen
+abkühlen
+cold
+Kälte
+kalt
+Kälte
+Ast
+Zweig, Knospe
+Zweig, Schößling
+Zweig, Schößling
+Zweig, Schößling
+gekrümmt, gebogen, geschweift
+biegen, krümmen
+biegen, krümmen
+zurückgebeugt, zurückgebogen
+entzündliche Geschwulst, Büschel der Hirse
+to swell
+Pflanze mit einem Büschel
+ἕλκος κτήνους ἐπὶ τραχηλίου Gloss.
+Wanst, Gedärme
+inflāri
+mare
+Knospe
+Bündel
+Bündel, Büschel, Strauß
+Blähung
+corymbus
+globulus
+dämonische Buhlerin
+concubine
+Peri
+Konkubine
+vedischer Gott, Hüter und Mehrer der Herden und des menschlichen Besitzes überhaupt
+(name of a deity)
+(name of a deity)
+(name of a deity)
+(name of a deity)
+gedeiht, wächst zu, macht gedeihen, ernährt
+gedeiht, wächst zu, macht gedeihen, ernährt
+gedeiht, wächst zu, macht gedeihen, ernährt
+Gedeihen, Wachstum
+eine Art Geschirr
+Melkeimer
+Almosentopf, ein bestimmtes Hohlmaß
+Kochtopf
+ein bestimmtes Hohlmaß
+ein Sack für Getreide
+Becken, Schüssel
+Helm
+Melkeimer
+Schüssel, Becken
+Becher
+Becher
+Becher
+Becher
+Becher
+Becher
+Bank oder Wägelchen für Krüppel und Fußlahme
+Haus ('Bretterbude')
+Brettergerüst als Bühne oder Tribüne
+Stange, Stock
+Riegel, Verschluß
+Riegel, Verschluß
+Fischerkahn
+Schwelle
+Schwelle, Haus, Wohnung
+Schwelle, Haus, Wohnung
+Dielen, Bänke
+Vorsprung, Vorbau an einem Hause; Vorraum, Weinlaube
+füllt, gibt reichlich; mengt, mischt
+füllt, gibt reichlich; mengt, mischt
+füllt, gibt reichlich; mengt, mischt
+gemischt, erfüllt, voll von
+to fill up
+die Handmühle drehend
+in Berührung stehend
+viel, reichlich
+fülle
+Asche mit glühenden Funken
+ds.
+ds.
+glühende Kohle
+Kohlenglut
+glühende Asche
+glühende Asche
+ds.
+ds.
+glühende Kohlen unter der Asche
+Rippe, gebogenes Messer
+Rippengegend, Seite
+Rippe
+Rippe, Seite
+Seite, Strich, Gegend
+Bruste
+Brust des Pferdes
+Tropfen
+Tropfen
+gesprenkelt, scheckig, bunt
+gesprenkelt, scheckig, bunt
+scheckige Kuh, gefleckte Antilope
+vom Wasser
+Wasserfall
+Wasserfall
+Schaumspeichel
+Schaumspeichel
+wie eine Katze prusten, schnarchen
+Flocke
+das selbe
+prusten
+Staub
+das selbe
+χοῦς
+Staub, Asche
+streuen, stieben
+das selbe
+besprengen
+das selbe
+spritzen, sprengen
+Weinstock, Rebe
+Schößling
+Stange
+das selbe
+Staub, Sand
+Staub, Sand
+Staub, Sand
+Sand
+Knoten
+Erd- und Lehmklumpen
+Erd- und Lehmklumpen
+Schneeballen
+Stab, Stock, Keule
+Sparre, Balken, Brett, Schreibtafel, Gemalde
+Holzhaufen
+Holzhaufen
+Baumstamm, -strunk
+Baumstamm, -strunk
+kahl, nackt
+entblößt, kahlköpfig werden
+eben, bloß, kahlköpfig
+kahle Ebene
+kahlköpfig
+Kahlkopf, nackte Ebene
+Glatze
+kahlköpfig werden
+entblößt, kahl
+Kahlheit
+kahl
+Glatze
+grinsen, lachen, kichern
+Gesicht
+kichern, lachen
+Spott
+bald, bare, naked
+längliches Viereck
+sich breit machen, prahlen
+breit werden
+breit werden
+breit werden
+klatsche, schlage, klatsche Beifall
+Beifall
+breit, platt, plattfüßig
+to broaden, show off
+to broaden, show off
+prosternito
+flache Hand
+Schirmdach, Wandbrett, Zwischenwand
+Steg am Bienenstock
+Wandbrett
+die Bänke an der Wand der Badestube
+Dachsparren
+Querbalken an einem Schlitten
+gegen, entgegen, zu, auf, bei; an; für, um; von - aus; an - hin, in
+gegen, entgegen, zu, auf, bei; an; für, um; von - aus; an - hin, in
+gegen - hin, gegen, gegenüber; an, zu', 'an - hin, von-'
+gegen - hin, gegen, gegenüber; an, zu', 'an - hin, von-'
+gegen - hin, gegen, gegenüber; an, zu', 'an - hin, von-'
+jungfräulich
+Jungfräulichkeit
+lauter, bloß, einfach
+durchsäge, knirsche mit den Zähnen
+durchsäge, knirsche mit den Zähnen
+durchsäge, knirsche mit den Zähnen
+Säge
+das Gesägte, Sägespäne; dreiseitige Säule
+verderbe, zerbreche, zerstöre
+Lauch
+Lauch
+Lauch
+Stirnband
+Stirnband
+fest, dicht, verständig, sorgfältig
+verständig
+dicht, fest, tüchtig
+mache fest, umhülle dicht
+küsse
+dunkelfarbig, schwarz
+Dunkel, Nacht
+Nacht
+Schmutz, Ruß
+Schmutz, Ruß
+schmutzig
+schmutzig, rußig
+schmutzig, rußig
+schmutzig, rußig
+rußig
+scurf on the head, dandruff
+Nacht
+grau, graugelb
+gehen
+angreifen, kämpfen
+schnell
+Spiel, Tücke
+Kinderspiel
+ich spiele
+in heftiger Bewegung sein
+sich bewegen, rühren
+munter
+lärmen
+träumen, verwirrt sein
+unsinnig reden, denken
+hin und her taumeln
+knarren, knistern, murmeln; schreien
+dröhnen, poltern, tosen
+dröhnen, poltern, tosen
+lehne an, unterstütze, dränge, strenge mich an
+Stütze
+Strebepfeiler, Stütze
+ein durch Spalten größerer Pflöcke gewonnener Weinpfahl?
+Stange zum Trocknen des Getreides
+Pfahl, Stange
+lange dünne Stange
+lange dünne Stange
+waagrechtes Gestell, Stange
+waagrechtes Gestell, Stange
+to stretch oneself; pole
+Riegel, Reeling
+Riegel, Reeling
+Riegel
+Riegel
+Steifheit
+steif
+den Körper aufrichten, sich anspannen
+Muskeln am Rückgrat
+(hin und her) bewegen, zum Wanken bringen
+(hin und her) bewegen, zum Wanken bringen
+schwanken
+erschüttern
+bewegen, rücken
+hin und her bewegen, wackeln
+gerinnen, fest werden
+gerinnen, fest werden
+Bug, Schulter von Tieren
+Oberschenkel, Lende
+Bein
+podex
+podex
+Strick, Riemen, Gürtel
+Strang, Riemen, Zügel
+Heck-Band
+Heck-Band
+Stropp zum Festhalten der Rahe
+das selbe
+Kette, Fessel
+Kette, Fessel
+to bind
+to bind
+to bind
+sorry
+Steiß
+Steiß
+Steiß
+Rumpf
+Rumpf
+Narbe
+umsäumen
+Narben bekommen
+Kerbe
+m. in serb.
+Saum
+Kante, Saum
+hacken, einsäumen
+ds. usw.
+Habe, Besitz, Gut
+Sache
+mit allem versehen
+betula alnus, alnus glutinosa
+elm (tree)
+elm (tree)
+elm (tree)
+Eingeweide des Rindes
+Gedärme, Eingeweide
+Gedärme, Eingeweide
+Eingeweide, Bauch
+Eingeweide, Bauch
+Tiermagen
+Labmagen
+Blättermagen
+Labmagen
+Fessel
+Fessel
+Kötengelenk des Pferdes
+fetlock; tether
+gesund, heil
+heilen
+wavy
+Feldfrucht
+Getreide
+Roggen
+hordeum
+orge
+Nahrung, Speise, Kraut, Gras, Saatfeld
+Saat
+Saat
+Göttin des Säens
+prolis
+Same
+Same
+Same
+säen
+ich säe
+kommt zum Ziel, bringt zum Ziel, in Ordnung
+to aim at, strive for
+gerade, tüchtig
+lenkend
+lenkend
+Verlangen nachErreichung des Zieles
+erfolgreich
+kommt zum Ziel
+to aim at, strive for
+to aim at, strive for
+erfolgreich
+to aim at, strive for
+Ort, Ziel
+gerade (auf ein Ziel gerichtet), Adv. geradeaus
+Angriff, Unternehmung
+dringe vor
+mache gerade
+sogleich
+gerade
+nicht versiegend
+nicht versiegend
+eine nicht Milch gebende (versiegte) Kuh
+stockte, versiegte
+fallen (vom Wasserstand)
+fallen (vom Wasserstand)
+abfließen, trocken werden
+seicht
+seichte Stelle, Sandbank
+seichte Stelle, Sandbank
+seicht
+versiegen
+versiegen
+absickern lassen
+absickern lassen
+durchseihe
+durchseihe
+Iter.
+Saft
+versiegen (vom Wasser)
+abnehmen
+trocken
+trocken, unfruchtbar
+trocken, unfruchtbar
+trocken
+Sumpf, Moor
+trocken, unfruchtbar
+ds., 'von einer Kuh ohne Kalb und Milch'
+tarir
+ds.
+a dry cow
+Adj., von einer Kuh, die in dem Jahre kein Kalb gehabt hat
+dürr, verschrumpft, schmächtig
+schleicht, schleicht heran, beschleicht
+schleichend, anschleichend
+serpo, repo, delabor, trahor
+humi serpens, repens
+schleppfüßig
+Beiwort der Quecke, 'die sich schleichweise ausdehnende'
+Schlange, Natter
+Schildkröte, Schnecke
+Schildkröte, Schnecke
+schleicht, kriecht
+Schnecke
+schleichen, leise auftreten
+schleichen, leise auftreten
+sammle
+Wassereimer
+Nachttopf
+Opferschale
+Garbe
+Haufen, Schiffsraum, Kielwasser
+to draw, pour, scoop
+Kielwasser, Schiffsjauche
+schöpfe das Wasser aus, habe meine Not
+ausgießen
+Ausgießen
+Zeugung, Schöpfung
+austum
+schöpfen, ausleeren
+schöpfen
+Schöpflöffel
+schöpfen
+setzt in Bewegung, erregt, belebt
+veranlaßt, angetrieben
+in Bewegung gebracht, angetrieben, entsendet
+von Männern angetrieben
+Regung
+Antrieb, Anregung, Befehl, Belebung; der Anreger, Befehlende
+auf Antrieb, auf Geheiß
+Antreiber, Erreger; der Gott Savitar
+in Bewegung setzen
+verschafft, sucht zu verschaffen
+wir suchen zu verschaffen
+sie lenken ab
+vom Geist getrieben
+der höchste, beste; älteste
+dreht, kehrt
+mißlingen
+Strick, Schnur
+schmal, eng
+stoßen, drängen
+Molken, Käsewasser
+Molken
+ds.
+drehen, wenden
+beweglich, flink
+Türangel
+entwischen
+Drehkrankheit
+zwirnen, zusammendrehen, aufwickeln
+drehen
+zwirnen, zusammendrehen, aufwickeln
+lasse
+
+
+to leave behind?
+to leave behind?
+to leave behind?
+link
+link
+ds.
+ds.
+Bruder der Frau
+brother-in-law
+brother-in-law
+brother-in-law
+brother-in-law
+unbelegt
+bedeckt, verbirgt
+Schirm
+Decke, Dach
+ein Kleidungsstück
+to put on, wear
+Rock, Kleidung
+Rock, Kleidung
+Kleider
+schief
+das selbe
+das selbe
+das selbe
+das selbe
+schief
+quer
+lahm
+hinken
+schief, link
+das selbe
+biesen
+biesen
+durchgehen
+schief zur Seite fliegen
+Heuschrecke
+ein bestimmtes Insekt
+Frosch
+springend, auffahrend, aufgebracht
+springend, zornig, wild
+Schellhengst ('Bespringer')
+bespringen
+Bockhirsch
+Furcht als '*erschreckt auffahrend'
+Diener, vermutet man eine Grundbed. 'Springer, Laufbursche' und Dissimil. aus *skal-[s]kas-
+Galopp
+Schritt
+stolpert, schwankt, geht fehl
+taumelnd fehlgegangen; woran etwas fehlt, zu wenig
+strauchle, irre, sündige, verfehle; werde verfehlt, vermißt, hinfällig; tue eine Fehlgeburt
+strauchle, irre, sündige, verfehle; werde verfehlt, vermißt, hinfällig; tue eine Fehlgeburt
+Fehler, Irrtum, Mangel; fehlerhaft, mangelnd, zu wenig
+taumelnd (im Rausch)
+Decke, Hülle, Schutzdach
+Decke, Schutz, Schirm
+bedecke, verhülle, schütze
+bedecke, verhülle, schütze
+bedecke, verhülle, schütze
+Mütze
+Mütze, Hut; Bedeckung der Kornhaufen auf dem Felde
+Haube
+hart gefrorene Kruste auf dem Schnee
+Haut, Tierhaut
+gefrorene Kruste
+durch Kälte hart werden
+Schwächling
+gebrechlich, kränklich
+verkrüppeltes Wesen
+Kobold, Faun
+verschrumpfen
+trocken
+dürr, mager
+dürr, mager
+zauberisches Wesen, Wichtlein
+Eskimos
+erbärmlich
+schrumpfen
+schrumpfen
+Stück dürren Leders usw.
+mager werden
+Kobold
+larvae, lares mali, pilosus
+larvae, lares mali, pilosus
+monstrum, Zauberer
+Kobold, Gespenst
+Kobold
+Kobold
+im Wachstum zurückgebliebener Mensch
+dürr, mager, unfruchtbar
+Schwächling
+dünn, mager, kümmerlich
+sich mit einer trockenen Kruste beziehen
+Fuchs
+Wolf
+Greis
+Teufel
+Teufel
+gebrechlich, mürbe
+Schorf
+Schorf
+Raude, Räude
+geschrumpfte Haut
+brüchig, rauh
+rauh werden
+gerinnen
+gerinnen
+Überbleibsel, Froschlaich
+verkürzt, verstümmelt, klein, mangelhaft
+nicht verkürzt, nicht kärglich
+νεανίσκος
+μεῖραξ, ἔφηβος
+junger Mensch
+μειράκιον
+verkümmern, im Wachstum zurückbleiben
+verkümmern, im Wachstum zurückbleiben
+verkümmern, im Wachstum zurückbleiben
+im Wachstum verkümmert
+aufsässig, widerspenstig
+schief, in die Quere
+schief, in die Quere
+schief, in die Quere
+über
+über
+über
+über
+quer, zwerch
+quer
+quer
+durch, über - hinaus
+durch, über - hinaus
+Zwerchfell, Quere des Körpers
+Gerät, Rüstung'
+Rüstung, Kleidung, Tracht'
+bereite, richte an; putze aus; bewaffne; stifte an'
+ausführen'
+ausführen'
+zieren, schmücken'
+zechen, sich mit Klatsch befassen, toben'
+machinari'
+treiben, schäkern'
+treiben, schäkern'
+niest
+das Niesen
+niesen
+niesen
+niesen
+
+
+Niesen
+Niesen
+Niesen
+Niesen
+Niesen
+Niesen
+Niesen
+Nießwurz
+Niesen
+Niesen
+schnoben, wittern
+schnoben, wittern
+schnupfen
+zürne, grolle
+zürne, grolle
+mürrisch, unwillig, traurig
+das selbe
+bin unwillig
+zu schmerzen, zu ermüden anfangen
+zu schmerzen, zu ermüden anfangen
+zu schmerzen, zu ermüden anfangen
+Anklage
+Schmerz
+Mitleid
+sich beklagen
+sich beklagen
+mißgünstig, neidisch sein, zürnen
+mißgünstig, neidisch sein, zürnen
+schmerzhaft, verdrießlich, heftig
+es schmerzt
+neidisch sein, schädigen
+neidisch sein, schädigen
+das selbe
+Geschwür
+kleiner, eingeschrumpfter Mensch
+kleiner, eingeschrumpfter Mensch
+gerinnen
+einschrumpfen
+geronnene Milch
+geronnene Milch
+einschrumpfen
+einschrumpfen
+verschrumpft, vertrocknet
+verkümmern
+abmagern
+abmagern
+abmagern
+zusammengeschrumpft
+Nässe (von Regen)
+benetzt
+feucht
+Sumpf
+schlackiges, regnerisches Wetter
+ds.
+Schneequatsch
+große und schwere Tropfen
+verschütten, sudeln
+beklecken
+Morast
+ds.
+Tropfen, Fleck, Kleck
+mehrfach spritzen, sprengen
+tröpfeln
+spritzen
+Anfeuchtung
+naßmachen, besprengen, fein regnen
+eiserne Pfanne
+eiserne Pfanne
+eiserne Pfanne
+Tiegel, Pfanne, Herd
+Tiegel, Pfanne, Herd
+Tiegel, Pfanne, Herd
+Tiegel, Pfanne, Herd
+Tiegel, Pfanne, Herd
+Blech, Weißblech
+Blech, Weißblech
+spinae
+mit einem spitzen Werkzeug bohrend stechen
+mit einem spitzen Werkzeug bohrend stechen
+das selbe
+das selbe
+stechen, bohren, prickeln
+stechen, bohren, prickeln
+Hagedorn
+Hagedorn
+das selbe
+Brombeerstrauch, Dorngestrüpp
+Stachelbeeren
+Tannennadel und -zapfen
+Tannenreisig
+Nadeln und Zweige der Nadelhölzer
+Nadeln und Zweige der Nadelhölzer
+penis
+schimpfliche Behandlung, Schmach, Mißhandlung, Schaden, Verderben'
+behandle schimpflich, mißhandle, verstümmle, frevle, schädige'
+Plage, Landplage'
+Schaden, Beschwerde'
+beschwerlich'
+plagen'
+Hölzer zum Beschweren eingeweichten Flachses'
+Klotz, Stein, Last'
+Klotz, Stein, Last'
+beschweren, niederpressen, prügeln'
+ds.
+bedrücken, pressen'
+schließen' (*'zudrücken')
+Presse, Kelter'
+Presse, Kelter'
+Schloß'
+Bürde'
+Hacke
+Hacke
+Spur, Abschnitt, Nachkommenschaft
+Schläger, Hammer
+Schlag
+Schlag
+Schlund
+schlemmen, fressen
+Schlemmer
+Schlund
+schlucken
+Schluck, Mundvoll
+Schluck, Mundvoll
+in großen Zügen schlürfen
+in großen Zügen schlürfen
+nachlässig gehen
+alter Lappen
+lumpig einhergehen
+Fetzen, Lappen
+schleppend gehen
+schleifend gehen
+Bart, Schnurrbart
+Bart
+Kinn, Bart
+Kinnbacke, Kinnlade
+Kinn
+Lippen
+Lippenblütler
+Lippenblütler
+Кlее
+Кlее
+Кlее
+Kinn
+Kinn
+Kinn, Gaumen
+Bart
+Mühe, Anstrengung
+mühselig
+strenge mich an
+kaum
+Anstrengung, Mühe
+sich abmühen
+mühselig
+Hebebaum, Hebel
+bewege fort
+schwer zu tragen oder zu ziehen
+schwer von Gewicht, lastend
+schwer von Gewicht, lastend
+schnitzen, schneiden
+Schnitt, Hieb
+to chip, to cut
+Krummaxt
+Krummaxt
+Queraxt
+ds.
+ds.
+Strieme, Wundmal
+Strieme, Wundmal
+Einschnitt
+Einschnitt
+schnitzen
+Grenze
+Wundmal, Grenze
+Stachel, Pfeil
+eng, schmal, dünn u. dgl.
+eng; schnell
+schmal, eng
+rasch, flink
+schnell, flink
+rasch
+rasch, flink
+rasch, flink
+rasch, flink
+munter, frisch, nüchtern
+munter, frisch, nüchtern
+thin, narrow
+Strohseile
+vitta
+kleine Kette
+δέσμη, fasciculus, ἐπίδεσμος, ligatura
+Garbe
+Beine ohne Waden
+Teil eines Opfertieres, Wade
+Wade
+Regentropfen, Krümchen
+Regentropfen, Krümchen
+tröpfle
+neugeborenes Tier
+Tropfen, Pünktchen
+langes Stück Holz oder Stoff
+Speiler
+Span, Holzschiene
+Span, Holzschiene
+Splitter
+bersten, spalten
+schienen
+schienen
+Holzsplitter
+to split, splinter
+dünn im Stroh (vom Korn), im Wachstum zurückgeblieben
+Gefäß
+Bettstelle
+Pfosten, Pfeiler
+stößt, drückt
+Stock
+Eimer
+Eimer
+Holzeimer
+Holzeimer
+hölzernes Henkelgefäß
+modius
+Speisekammer
+Schrank
+zuckt, schlägt aus
+Zucken, Bewegung
+Pulsschlag
+zuckend
+Schleuder
+zucke, zapple, bewege mich heftig
+Wirbel an der Spindel, usw.
+heftig, eifrig
+Krampf
+Geschwulst am Pferdefuß
+zucken, zappeln
+erglänzen
+glänzen
+wiedererglänzen
+glänzen, leuchten
+glänzend, hell, leuchtend
+glänzend, durchsichtig, rein
+Zitze
+uvula
+Zitze, Brustwarze
+ds.
+Brustwarze
+entwöhnen
+Brust, Muttermilch
+Brustwarze
+Brustwarze
+Brustwarze
+Brustwarze
+Zitze, Zäpfchen im Halse, Ohrläppchen
+Zitze
+weibliche Brust
+weibliche Brust
+ds., Brustwarze, Knoten
+der hochbusigen
+Brust, bes. weibliche
+weibliche Brust
+Hesychius
+abgerissenes Stück
+Fetzen, abgerissener Streifen Tuch
+zerreiße, zerre
+zerreiße, zerre
+abgerissenes Stück
+das Zerren, Reißen; Krampf
+lacerare
+lacerare
+Mistkügelchen von Ziegen und Schafen
+Mistkügelchen von Ziegen und Schafen
+Mistkügelchen von Ziegen und Schafen
+Kügelchen, Pille überhaupt
+Kügelchen, Pille überhaupt
+Schafmistkügelchen
+Mistkügelchen der Schafe, Ziegen, Hasen; große graue Erbsen
+Schafmist
+balls of goat/sheep excrement
+Schafmist
+Ziegenmist
+Eile
+Lauf
+spute mich, eile; bin emsig, strebe, strenge mich an
+Eile, Eifer, Bestrebung
+eilig, eifrig, fleißig
+spute mich, betreibe mit Eifer
+Arbeit, Geschäft
+mästet, verstärkt
+gedeihen
+Kampfspieß
+
+Spieß
+Spieß
+Pflock
+antreiben
+hitzige Person, Narr
+drücken
+
+Presse
+eilen, fliehen
+sich abmühen
+geht, bewegt sich
+schreite aus
+klaffe auseinander (von Wunden)
+die Spreize, Stelle zwischen den Schenkeln
+offenstehender Mund
+Schenkel
+springt
+strotze, schwelle, bin in voller Lebenskraft, bin begierig, lüstern
+strotzende Fülle
+ausspannen, spreizen, entspannt sein, strotzen, schwellen
+ausspannen
+Zacke, Ecke
+Ecke, Seite
+Ecke, Seite
+φάραγγες
+ds.
+bewegt sich mühsam, kriecht
+bewegt sich mühsam, kriecht
+mühselig mit Handen und Füßen emporklettern
+mühselig mit Handen und Füßen emporklettern
+der äußere Teil des Oberschenkels, Oberschenkel
+Schenkel
+Schenkel
+die Lenden, das Kreuz
+triefen, abtriefen von; triefregnen
+triefen, abtriefen von; triefregnen
+Träne, Weinen
+dropped
+besprengen
+Tropfen
+tröpfeln
+spritzen
+Schmutz, Unreinlichkeit
+beflecke
+beflecke
+schmutzig
+bin schmutzig
+Molken
+reinige
+Wunde
+Gift, Eiter
+Schorf
+Ausschlag bei Kindern
+Grind, Kruste
+Rauheit, Härte
+lahm
+Lahmheit
+lahm
+hält aus, duldet
+geduldiges Ertragen, Ausdauer, Geduld
+Geduld
+to endure, wait patiently
+rinnen lassen; triefen, tropfen
+Tropfen
+das Tröpfeln, Tropfen
+σταλάσσω
+Pfütze, Sumpf, Schlamm, Mörtel
+Harn
+harnen
+Harn der Pferde
+harnen
+Harn
+Harn
+einweichen, eingießen
+aufweichen
+feucht werden
+geschwollen, dick
+ds.
+dick
+Einhalt tun
+Einhalt tun
+Einhalt tun
+ungestüm
+sanft, still
+stammelnd
+behindert, beraubt
+stammelnd
+stammelnd
+stammeln
+stammeln
+stammelnd
+das selbe
+stammeln
+stemmen, dämmen, hindern
+das selbe
+stehen machen, steif machen; Intr. (vom Wasser) gestaut werden
+stolpern
+stolpern
+stolpern
+das selbe
+stumm
+stumm
+stumm
+stammeln, stolpern, stehen bleiben, sich bäumen, zaudern
+stoßen
+stoßen, schieben
+stoßen, schieben
+stoßen, schieben
+stoßen
+Schmalz, Tropfen'
+mit einem breiten Zopfe'
+Zotte, Flocke'
+Zotte, Flocke'
+Klümpchen, rundliches Ding'
+Wickelkind'
+Kind, Tierjunges'
+Haarschopf'
+Haarschopf'
+Werg'
+Werg'
+ziehe zusammen, mache dicht, hart, schmecke herb'
+zusammenziehendes Mittel'
+dasZusammenziehen, Beizen'
+zusammenziehend'
+herb, zusammenziehend'
+fest, kompakt'
+durchdringender Frost, Eiseskälte'
+(*Schauder) Abscheu, Haß'
+hasse, verabscheue, fürchte'
+Kälte'
+Kälte'
+erkalten'
+sich schämen'
+gefrieren'
+gefrieren'
+alt, ehrwürdig
+antiquam
+Greis
+patruus
+amita
+good, well
+good, well
+good, well
+starkes Holz
+glücklich, beglückend
+gutes Eheglück gewährend
+gesund
+good, well
+liebenswürdig
+good, well
+good, well
+good, well
+good, well
+ewig
+Evangelium
+good, well
+Schwarzamsel ('die ganz Schwarze')
+geil, üppig
+ὑγιής
+good, well
+good, well
+Besitztum
+good, well
+sausen
+ds.
+ds.
+ds.
+sausen, pfeifen
+Zieselmaus, Hausratte
+ds.
+zische
+Spitzmaus
+Haselmaus
+Erzeuger
+Großvater
+Urgroßvater
+Großmutter
+höhnisch, spöttisch
+hohnlachen
+lachen
+lachen
+lachen
+wird feucht
+wird feucht
+Milch
+schmieren
+das selbe
+Butter
+das selbe
+süß, angenehm
+to smell (good)
+to smell (good)
+Geschmack
+riechen, stinken, hervorquellen
+odores
+odores
+Geruch, Duft
+Geschmack, Geruch, Duft
+Geschmack, Geruch, Duft
+riechen
+Schwiegervater
+Schwiegervater
+Schwiegermutter
+Schwiegermutter
+Schwiegermutter
+Schwiegervater
+Schwiegervater, u. zw. der Vater des Ehemanns
+Schwiegermutter
+Schwiegervater
+Schwiegermutter
+Schwiegervater
+Schwiegermutter
+Schwiegermutter
+Schwiegermutter
+Schwiegervater
+Schwiegervater
+Schwäher
+Schwäher
+Schwiegermutter
+Schwiegermutter
+Schwiegermutter
+Schwiegermutter
+Schwiegervater
+Schwiegervater
+Schwiegervater
+Schwiegermutter
+Schwiegervater
+zum Schwiegervater gehörig
+Schwager (*Sohn des Schwiegervaters), auch 'Schwiegervater, Schwiegersohn'
+das selbe
+das selbe
+das selbe
+das selbe
+Schwager
+schwinden, abmagern, welken, bewußtlos werden
+verschwinden
+abnehmen, schwinden
+schwinden machen, ausreuten
+durch Verbrennen des Grases urbar machen
+to dwindle, disappear
+to dwindle, disappear
+to dwindle, disappear
+welken
+räuchen
+denique, postremo
+to dwindle, disappear
+Pfahl, Doppelpfosten, langes Holzstück
+Stütze
+Bettpfosten
+bepfählen
+Uferpfahl
+Pfahl
+Pfosten, Säule
+Pfosten, Säule
+Hals, Schiffsschnabel
+Hals
+Hals
+Zweig, Pfahl
+
+
+Wade, Wadenbein
+mit Vorbedacht, geflissentlich
+geeignet
+betreibe geflissentlich
+to act purposefully
+tauche ein
+Feuchtigkeit, Nässe, Regen
+immergere
+immergi
+Tümpel
+Vertiefung im Flusse
+geschützte Bucht
+beruhigt sich, ist zufrieden
+befriedigt, zufrieden
+still, schweigend
+beschwichtigt, stellt zufrieden, erfreut
+stillschweigend
+wer stillschweigend dasitzt
+still, schweigend
+silentium
+schweige!
+Schweigen; schweigend
+schweigend
+Schweigen; still!
+Gl. zu dem als 'schweigendes Wachen' mißverstandenen lat. silicernium
+compescuit
+schweigen
+schweigend, stumm, still
+still
+er schweige
+sich legen (vom Winde)
+beruhigen
+löschen, auslöschen
+ermutigen
+in russ. túchnutь' erlöschen'
+still werden, verlöschen
+Flußname
+sich freuen
+Bratpfanne, Tiegel
+Bratpfanne, Tiegel
+brennen
+Fackel
+lodern
+schläft
+schläft
+Schlaf
+schweigen
+schweigen
+schweigend werden
+schweigend werden
+schweigend werden
+schweigend werden
+schweigen machen
+schweigen machen
+schweigsam
+vermodern, vergehen
+vermodern, vergehen
+einschlummern wollen
+einschlummern wollen
+beruhigen
+placare
+zerschmettern, zermalmen
+zerschmettern, zermalmen
+zerschmettern, zermalmen
+zerschmettern, zermalmen
+durchprügeln
+prügeln
+prügeln, werfen
+durchprügeln
+durchprügeln
+gewaltig durchprügeln
+gewaltig durchprügeln
+schwatzen
+Schwätzer
+Lager, Ruhesitz
+Lager, Ruhesitz
+es ist Raum, Möglichkeit vorhanden für etwas
+es ist Raum, Möglichkeit vorhanden für etwas
+Raum haben
+Raum haben
+ausreichender Raum
+Raum schaffen
+Raum schaffen
+Raum haben
+Raum haben
+Kramkammer
+to have room; spacious
+to have room; spacious
+to have room; spacious
+Haufe, Schar
+gehen, hinübergehen, erlöst werden
+wird betäubt, wird ohnmächtig, ermattet
+Partiz. Perf. Pass.
+erstickt (trans.), beraubt der Luft
+erstickt (intr.), wirdunbeweglich, wird hart
+beklemmend, betäubend
+unbeweglich
+werde betäubt
+berauschendes Getränk, Met, Wein
+berauscht
+nüchtern
+Krankheit, Ohnmacht, Tod
+stirbt
+Tod
+betäubt, benommenen Geistes
+betäubt, benommenen Geistes
+ersticken
+quälen; bedrücken; ermüden
 Furt
-Weile, kurze Zeit
-des Teufels Durchfahrt
-nasser Kot
-Seename
-durch eine Furt waten
-durch eine Furt waten
-langsam gehen, mit dem Zugnetz fischen
-langsam gehen, mit dem Zugnetz fischen
-Unsinn schwatzen, phantasieren
-Weide
-Weide
-Furt
-waten
-langsam gehen, schleichen, umherschweifen; gären
-waten
-fällt, stürzt
-fällt, stürzt
-Fall, Verlust
-Fall, Verlust
+Tiefe zwischen zwei Untiefen
+ziehen, Bogen spannen
+ziehen, Bogen spannen
+ziehen, Bogen spannen
+ziehen, Bogen spannen
+Bogen (als Schußwaffe)
+Bogen (als Schußwaffe)
+ausdehnen
+dicht, dick
+dicht, dick
+Deichsel
+ziehen
+distrahere
+straff, fest, stark, schwer
+das selbe
+συνοχή, περίστασις
+Trägheit, Schwermut
+βαρεῖν
+βαρύς
+βάρος
+das selbe
+emaceratus, tabidus
+tabescere
+Rechtsstreit
+träge
+träge, unlustig sein
+träge, unlustig sein
+träge werden
+träge werden
+träge werden
+schwer
+Bürde, Last
+beschweren
+Unannehmlichkeit, Verlegenheit
+Kummer, Bedrängnis
+Deichsel
+Deichsel
+Deichsel
+hindern
+hindern
+zitternd, zuckend, unstet
+zapple
+Bohrwurm'
+Holzwurm'
+Holzwurm'
+Holzwurm'
+termes, lendix'
+(boring/gnawing insect)
+cimex'
+ver de viande'
+ver de viande'
+Milbe'
+Milbe'
+Milbe'
+durchbohren, spalten
+durchbohren, spalten
+durchbohren, spalten
+durchbohren, spalten
+Loch, Öffnung
+ein Insekt
+löcherig, durchbohrt
+der (durch Bohren) eröffnet
+von Motten, Würmern zerfressen werden
+Made, Holzwurm
+Made, Holzwurm
+Moder
+verwittern, faulen
+Durchfall
+Art Krankheit, δυσεντερία
+Zunder
+bohren
+Zitterich am Gesicht
+Rebhuhn
+Rebhuhn
+Rebhuhn
+Turteltaube
+Fasan
+Auerhahn
+Perlhuhn
+(onomatopoeic: to quack)
+(onomatopoeic: to quack)
+ein Vogel
+(onomatopoeic: to quack)
+Krähe
+Auerhahn
+Birkhuhn
+das selbe
+(onomatopoeic: to quack)
+Birkhahn, Auerhahn
+Birkhenne
+φασιανούς
+Auerhahn
+das selbe
+Birkhahn
+gackere, gluckse (von der Henne)
+schnattern (von Enten)
+Turteltaube
+girre
+Turteltaube
+zirpe
+Kinder, Nachkommenschaft
+das selbe
+Nachkommenschaft, Kinder
+junger Halm, Schößling
+Same, Keim
+Familie, Same, Keim
+Same
+Same
+Same
+Enkel
+macht los, läßt los
+sie verlieren die Fassung
+verlassen werden
+verlassen werden
+leer, öde, nichtig
+leer, öde, nichtig
+leer
+Einöden
+Dünger
+das selbe
+κενός
+leer; mager, hager
+Sieb, Getreideschwinge
+siebe
+siebe
+siebe
+Sieb
+siebe
+Mehlsieb
+siebe
+Parra jacana
+Wasserläufer
+Wasserläufer
+Brachhuhn, Schnepfe
+Brachhuhn, Schnepfe
+Brachhuhn, Schnepfe
+gackern (vom Rebhuhn, der Schwalbe)
+zwitschern, vom Sperling
+singen
+verläßt, steht von etwas zurück
+verscheuchen, verdrängen
+hinaustreiben, verjagen
 
 
-nicht erliegend'
-
-Lüge
-ἔλαφον
-Hirschkopf
-Hirschkopf; Kurzform (neben Brenda) zum ON Brundisium, älter Βρεντέσιον 'Brindisi', illyr. VN Βρέντιοι
-Brenta
-
-Horn, Geweih
-Tragkorb
-männliches Elentier
-männliches Elentier
-Männchen vom Renntier
-Еlеn, Rothirsch
-Vielleicht zu bhren- 'hervorstehen, Kante'; anders Specht Dekl. 120.
-Rand, Ufer
-Rand, Ufer
-Kante
-wetzen
-Wetzstein
-scharf (von Waffen)
-scharf (von Waffen)
-Kante, Rand, Gesims
-Kante, Rand, Gesims
-sauer werden
-sauer werden
-herber Geschmack
-unangenehmer, herber Geschmack; üble Laune
-sich ekeln
-bitterer Geschmack
-bitter, herbe
+macht zurücktreten
+Verlassenheit
+Hingabe, Freigebigkeit
+(die Götter) scheuen
+(die Götter)verehren, ehren
+ehrwürdig, heilig
+fromme Scheu, Ehrfurcht
+Heiligkeit, Majestät
+scheute ehrfürchtig
+verehrungswürdig, erhaben, heilig; gravitätisch, einherstolzierend, prunkend
+tue etwas von mir weg, entferne schnell, verjage
+rasch, schnell; hochfahrend, prunkend
+heftig, eitel
+Pferdeschwanz
+Verlassenheit
+Verlassenheit
+tapfer, stark
+Komparativ, Superlativ
+Komparativ, Superlativ
+Kampf
+Stärke, Tapferkeit
+Stärke, Tapferkeit
+ausdauernd
+drängen, drücken
+Unterdrückung, Gewalt, Ermüdung
+Drängen, Macht, Gewalt
+Druck, Andrang, Gewalt
+Kummer
+Kraft, Ausdauer
+Anstrengung; drückend
+berühren
+Stoß
+finster gelaunt, traurig; widerlich oder herbe von Geschmack
+dreist
+dreist
+dreist
+baden
+das selbe
+mergere, balneare
+waschen
+waschen
+hat aufgezogen, unterhalten
+zur Reife, Vollendung, Vollkommenheit gelangen oder bringen
+(Reife)Vollendung, Ende
+excellet, pollet, floret
+pubescere, crescere
+aufgewachsen, erwachsen
+zunehmen, gedeihen, reifen
+Frucht
+gedeihen, zunehmen
+ds.
+Kraft
+ds.
+(reif, vollwüchsig) kräftig
+Stärke
+stark werden
+also a river name
+Lake in Libya
+Nickname of Athena
+ἄμπελος ἐν Kρήτῃ
+Pfropfreis, Schößling
+Weinrebe, Rohr
+Stock der Pflanze
+Weinstock
+Weinstock
+Aussatz
+Schuppen
+Moos
+roh
+Aussatz
+Aussatz
+reibe auf
+modern
 
 Binse
-juncus, scirpus
-juncus, scirpus
-Zweig, Busch
-Baumzweig, Kleestengel, Himbeerstrauch
-schräg, schief
-schief
-schief
-die Schwankende
-schaukelt, schwankt
-schwingt, wirbelt auf
-schwankend, in Schwingung versetzt
-säumen, zögern
-schlendern, faulenzen
-eine kleinere Schildkröte ('watschelnd')
-unsicher, schwankend
-schwanken, wackeln, unsicher sein
-vornüberfallen
-wanken, wackeln, schaukeln
-leise, wie auf Zehen, treten
-mit kleinen, unsicheren Schritten gehen, wie Kinder
-Paßgänger
-Paßgänger
-Paßgänger
-Paßgänger
-Paßgänger
-Haematopus ostralegus, Austernfischer ('der Stapfer')
-lose hangen
-trippeln
-βδέλλαι
-βδέλλαι
-Raupe
-Fleischmade
-Fleischmade
-werde finden
-εὖρεν
-antreffen
-befinde mich
-antreffen
-finden
-finden
-finden, begegnen
-feindet an, befehdet
-dumpfes Geräusch, Getöse; Schall der Fußtritte
-gehe einen dumpfen oder rasselnden Ton von mir
-laut donnernd
-laut donnernd
-... μεγαλόηχον
-mit Getöse schlagen
-auf etwas Hohles schlagen, dumpf rauschen
-(onomotopoeic: dull thud)
-gebe einem Roß die Sporen
-dumpf schallen
-ertönen lassen, verkünden
-
-
-
-Schafbock, Herde von Großvieh
-Opfergabe
-Opfertier
-Opfertier
-Opfertier
-unreines, nicht zum Opfern taugliches Tier
-unreines, nicht zum Opfern taugliches Tier
-unreines, nicht zum Opfern taugliches Tier
-Zugtier
-Vorderarm, Arm, unterer Teil des Vorderfußes bei Tieren'
-Oberarm, Schulter'
-Schulter'
-Arm'
-
-Achselhöhle; Busen des Kleides'
-Achselhöhle'
-Achselhöhle'
-Achselhöhle'
-Achselhöhle'
-κόλπος'
-Trauer, Widerwille
-Trauer, Hindernis
-unwillig, ungeneigt
-betrübt
-Trauer, Leiden
-Schmerz
-leid sein
-den Mut verlieren
-betrüben
-ausdauernd, fest
-zähe Faser, Sehne, harte Haut
-unermüdlich
-träge, langsam, verdrossen
-schlecht
-Leiden, Übel
-Trägheit, Verdruß
-Trägheit, Verdruß
-matt, schlaff werden
-schlaff machen
-
-Weintraube
-Dorn
-Schlehdorn
-Dornstrauch
-Dornstrauch
-cornea silva
-cornus
-cornus
-Kornelkirsche
-Kornelkirsche
-schwarzes Bilsenkraut
-schwarzes Bilsenkraut
-Hartriegel, Kornelkirsche
-Hartriegel, Kornelkirsche
-Hartriegel, Kornelkirsche
-Berberitze
-Dornen
-Dorn
-junges Gebüsch
-junges Gebüsch
-junges Gebüsch
-glänzend weiß
-macht blank, reinigt, spült
-rieb sich (reinigend) ab
-λαμπρός
-λαμπρῦναι
-to shine brightly
-καθαρόν. καὶ θωλέον
-Mahlstein
-zerquetsche, zermalme
-
-
-drücken
-to press, squeeze; squash?
-Schneide, Schärfe, Klinge
-Schneide, Schärfe, Klinge
-mit scharfer Schneide
-scharf, spitz
-ich schärfte, spitzte
-Spieß, Wurfspieß
-Spieß
-Spieß
-Spieß
-verletzen, kränken
-verletzen, kränken
-schaden, verletzen
-schaden, verletzen
-schaden, verletzen
-Schade, Verletzung
-Verletzung
-Strick, Schnur, Band, Sehne des Bogens' (setzt *θω-μο- oder -μᾱ voraus)
-Seil, Strick, Tau'
-sich vereinigen' (??)
-sich vereinigen' (??)
-sich vereinigen' (??)
-trocken
-Fieber; Schmetterling
-kaltes Fieber; Fieber
-nach Futter wiehern ('*sich schütteln')
-Rohr
-zusammensinken, sich mindern
-zittern
-zittern
-zittern, beben; zappeln, zucken
-zittern, beben
-zittern, beben
-
-zittern, beben
-σείειν
-ἡ τοὺς σεισμοὺς ποιοῦσα
-zittern, (sich) schütteln, einschrumpfen
-zittern, (sich) schütteln, einschrumpfen
-Haar, Borste'
-ein Fisch mit feinen Gräten'
-
-Borste'
-Lota lota'
-lang gestreckt'
-`ausdehnen, ausziehen (einen Faden)'
-in langen Fäden herabhängen
-Stamm
-stämmig
-Stange'
-Blumenverzierungen in Gewändern (bei den alexandrin. Dichtern für φάρμακα, Zauber-, Heilkräuter gebraucht), bunte Gewänder, bunte Tiere'
-Hirsch
-Hirsch'
-ἔλαφος
-Stickerei'
-Stickerei
-beschädigt
-beschädigt
-beschädigt
-Täuschung, Verführung
-
-eine Art weiblicher Dämonen
-bringt durch Täuschung zu Fall, beschädigt
-betrügerisch, m. Betrüger
-listige Beschädigung
-Betrug, hinterlistige Täuschung, Schaden, Strafe
-to harm by trickery/deception
-fraudātum
-irrtümlich, vergeblich
-täusche, hintergehe
-
-ich brach
-
-
-
-
-
-
-
-
-
-
-
-Präfix 'auf - zu'
-Präp. mit Akk. 'zu'
-als Präp. m. Akk. `zu - hin', mit Lok. `über, in betreff von'
-als Präp. m. Akk. `zu - hin', mit Lok. `über, in betreff von'
-als Präp. m. Akk. `zu - hin', mit Lok. `über, in betreff von'
-als Präp. m. Akk. `zu - hin', mit Lok. `über, in betreff von'
-als Präfix 'zu, be-', als Präp. m. Akk. 'zu - hin', mit Lok. 'über, in betreff von'
-instead of; on account of, for the sake of, for; right before
-auf - hin, in Beziehung auf, über' mit Akk.; `an, bei' mit Dat. (Lok.), auch mit Instr., Präfix `be-'
-auf, in Beziehung auf, über' mit Akk.; `an, bei' mit Dat. (Lok.), auch mit Instr., Präfix `be-'
-auf, in Beziehung auf, über' mit Akk.; `an, bei' mit Dat. (Lok.), auch mit Instr., Präfix `be-'
-als Präverb 'um-, be-'
-als Präverb 'um-, be-'
-als Präverb 'um-, be-'
-Niederholunder, Attich
-Niederholunder, Attich
-Attich
-Attich
-Attich
-Attich
-Attich
-Tanne
-Tanne
-Tanne
-Tanne
-Tanne
-sticken
-stricken
-tip, point
-tip, point
-tip, point
-Igel
-Igel
-Igel
-Igel
-Igel
-Igel
-Igel
-Igel
-Igel
-Seeigel
-Igel
-Igel
-Igel
-Barsch
-Kaulbarsch
-Kaulbarsch
-Kaulbarsch
-Kaulbarsch
-Kaulbarsch
-Barsch
-Kaulbarsch
-Kaulbarsch
-Kaulbarsch
-Ausruf der Anrede, des Sichbesinnens
-Ausruf der Anrede, des Sichbesinnens
-vor dem Vokativ
-vor dem Vokativ
-wohlan!
-ach!
-ach!
-schreie auf
-oh weh!
-Ausruf der Freude und des Schmerzes
-O (vocative particle)
-O (vocative particle)
-O (vocative particle)
-Ausruf der Warnung
-hei!
-ei!
-ei!
-ei!
-ruhen
-steht still, kommt zur Ruhe
-ruhelos, rastlos
-träge, müde, stumpf
-Müdigkeit
-müde werden
-müde werden
-ruhen
-ruhen
-Ausruhen
-ruhe, raste, bin unwirksam, zögere, höre auf
-verschimmelt, von Ekel erfüllt
-ranzig
-verfault (von Holz)
-
-
-Gift
-Gift
-klebrig, glatt, schlüpfrig
-Seegras, Seetang
-eitern, ekeln, anfangen zu faulen, Schimmel, anhaftender Schleim; widerwärtiges, unreinliches Weib
-cottus
-Froschfisch
-ekeln, Übelkeit empfinden
-sich erbrechen wollen
-*alhian
-sudeln, sauen
-in unreinen Sachen rühren, in Schmutz treten
-sudeln
-
-unrein, verdorben
-Schilfgras, Seegras
-Lache
-Schmutz, Unreinigkeit
-feuchte Niederung
-schimmeln
-Schmutzkrume
-Moderduft
-schimmeln
-Fäulnis, bes. im Holz
-von Fäulnis angefressen
+Binse
+Schilfrohr
+Schilfrohr
+Schilfrohr
+Schilfrohr
+Rohrspan oder Baststreifen
+Rohrspan oder Baststreifen
+Rohrspan oder Baststreifen
+wer mit nichts fertig wird
+wer mit nichts fertig wird
+säumen, langsam sein, zögernd an die Arbeit gehen; schwatzen
+säumen, langsam sein, zögernd an die Arbeit gehen; schwatzen
+säumen, langsam sein, zögernd an die Arbeit gehen; schwatzen
+Festsetzung
+beim Sprechen stocken
+anhaltender ermattender Ritt
+cunctabundus
+schwer arbeiten
+zögern
 ds.
-die aus der Leiche fließende Flüssigkeit
-Dreck
-armselig, dürftig, gering, schlecht
-Hunger
-betteln
-Bettler
-
-Stechmücke
-Bienenschwarm, Bienenstock
-
-Bienenschwarm, Bienenstock
-Bienenschwarm
-Bienenschwarm
-siehe da!
-siehe da!
-siehe da!
-schreie, brülle
-Rohrdommel
-ächze, seufze, klage
-ächze, seufze, klage
-vom Naturlaut des Bären
-gemitus
-seufzen
-seufzen
-μογιλάλος, aegre loquens
-stöhnen, klagend rufen
-Stöhnen, Seufzer, Wehklage
-Krähe
-scurrilitas
-stöhnen, seufzen
-Gewimmer, Seufzen, Kummer, Reue
-Klage, Beschwerde
-bemitleiden, bedauern, beklagen
-bemitleiden, bedauern, beklagen
-nach ihrem kläglichen Ruf
-wimmern wie ein Hund
-Gewand, Mantel
-Oberkleid, Mantel
-Oberkleid, Mantel
-webe, zettle das Gewebe an
-webe, zettle das Gewebe an
-webe
-webe
-Kettenfaden
-Kettenfaden
-Kettenfaden
-Kettenfaden
-bekleidet
-Kleidung
-Haut, Schlauch
-Kettenfaden
-Kettenfaden
-Eber
-Eber
-Schweine
-Schweine
-Schweine
-Schweine
-Schweine
-Schweine
-vom Eber
-PN
-Eber
-Fürst
-Eber
-wild boar
-wild boar
-wild boar
-Eber
-wild boar
-wild boar
-wild boar
-Eber
-ON
-ON
-Bock
-Freund, Bundesgenosse
-Freundschaft, Genossenschaft
-freundlich, mild; beistehend
-nahe hinzu, ἐπί
-heile
-Wiedehopf
-Wiedehopf
-Ruf des Wiedehopfs
-Wiedehopf
-ἀλεκτρυόνα ἄγριον
-ἔποψ, τὸ ὄρνεον
-Wiedehopf
-a kind of exclamation
-
-
-
-hüpfen
-Wiedehopf
-Wiedehopf
-Wiedehopf
-wie ein Wiedehopf schreien
-schreien
-sich rühmen
-koche
-koche
-agnus, agna
-δάμαλις, vitula, iuvenca, bos
-Böcklein, junge Ziege
-Widder, Mauerbrecher
-arietem
-dama, capra
-Kuh
-Kuh
-Rotwild, Kuh
-Reh
-Widder
-Lämmchen
-Lamm
-Lamm
-Lammfleisch
-Bock
-Stricknadel
-Pflöckchen, Griffel
-mit dem Pfriemen ein Loch machen
-bohren
-Pfriemen, Griffel
-aushöhlen
-Hohlmesser
-Kerbe, Einschnitt, Falz, Mangel, Zwistigkeit
-to drill, make holes, hollow out
-fließt (in Kompositis), zerstiebt, löst sich auf; beunruhigt
-fließt (in Kompositis), zerstiebt, löst sich auf; beunruhigt
-macht fließen, löst auf, bedrängt, quält, tötet
-feucht, naß
-Feuchtigkeit
-Name eines mythischen Flusses, meist als weibliche Gottheit gedacht
-Schmutz
-schmutzig
-
-FlN
-FlN
-Nisse, Lausei
-ein sich in die Haut von Schafen, Hunden oder Rindvieh einbohrendes Ungeziefer, Zecke
-Zecke, Schaflaus
-Kuhmilbe, böse Person
-Nisse, Lausei
-ringworm, itching, erysipelas
-kleine Laus
-geschunden, kahlgerieben
-kahl
-Spitze, Dorn
-Schlitz
-Schlitz
-to tear, cut, split
-aufstochern
-aufstochern
-Splitter, Dorn
-stößt, sticht
-Speer
-Speer
-Dornpflanze
-Gänsedistel
-Wunde
-Narbe
-Narbe
-Narbe
-Narbe
-Narbe
-strahlt; lobsingt, begrüßt, ehrt
-Strahl, Blitzstrahl, Sonne, Feuer; Lied, Sänger
-Glanz; Gedicht, Vers
-
-lobpreisend, jubelnd
-Lied
-Himmel
-angenehm, schön, strahlend
-Verehrung
-Verehrung
-ich betete
-Brei von Hülsenfrüchten
-Кеrn
-unhusked ear of corn
-Kern, Korn
-versteht, begreift
-regt geistig an, macht verstehen
-ist mit einer Sache vertraut
-sie begreife
-fühlen
-fühlen
-fühlen
-Gefühl
-gefühlvoll, zart
-forschend fragen
-fühlen
-fühlen
-
-
-juble'
-Ausrufe bacchantischer Lust
-Ausrufe bacchantischer Lust
-Ausrufe bacchantischer Lust
-frohlocken, jubeln; einen siegreichen Einzug halten'
-
-in Schallworten
-starren, gaffen
-beobachten, ausschauen nach, sorgen für, schützen
-aufblicken
-eminere
-gaffen, schauen
-gaffen, schauen
-schauen, spähen
-Ort, von dem manausschaut, Gipfel
-aufschauen
-Sorge
-sich sorgen machen, sich bekümmern
-Gefäß
-Henkelgefäß, Schüssel (poet.)
-Henkelschale
-Schlitten
-Schlitten, älter dän. auch 'Boot'
-Boot
-kleines Boot, Kahn
-Art Boot
-Kanne
-Kanne
-Kanne
-Kanne
-Kanne
-Kanne
-Kanne
-Hohlmaß
-Kanne
-Kanne
-Kanne
-Kanne
-hart
-ich fürchte, glaube
-Furcht erregend, grausig, wild
-Schreckgespenst
-wild werden (von Pferden, d. i. sich erschrecken)
-schrecklich blickend
-rauh, wild
-rauh, wild
-Häßlichkeit, Ekel, Scheu
-häßlich
-Trauer, Kummer; abscheulich
-bedrohen
-bedrohen
-grollen, eigensinnig sein
-drohen
-Graus, Schauder
-grim, grievous, dreadful
-das selbe
-Drohung, Strenge, Unwetter
-drohen
-drohen
-drohen
-drohen
-schrecklich, grausam
-abgeschnittenes Stück
-Kabel, Holzstück, Knebel
-Runenstab
-Stück Holz (zum Losen)
-verlosen
-Anteil, Los
-Anteil, Los
-Ast, Reisig, Zaum
-Rute
-dürrer Ast
-aufzäumen
-aufzäumen
-Zügel
-Knebel
-Pflugschar
-dem Tier einen Knebel ins Maul stecken
-niedriger Busch
-Baumstumpf (daraus engl. \cag 'Stumpf')
-Kohlstengel, Stumpf
-Keil
-Keil
-Pfahl, Pflock, Nagel
-Fäßchen, Tönnchen
-Schandpfahl, Pranger
-Kufe
-Schlittenkufe
-Schlittenkufe
-dürrer Zweig, Pl. 'Reisig, Gebüsch'
-Pflug
-Zaun
-Reisig
-loses Laub
-Schlüssel, Lösung
-Schlüssel, Lösung
-Schlüssel, Lösung
-Schlüssel, Lösung
-Erhöhung, Gipfel, Ende
-singt
-singt
-Gesang
-Gesang
-gesungen
-Gesang, Vers
-Lied religiösen Inbalts
-krähen
-krähen
-Dohlengekrächze, Geschrei
-ächzen, krächzen
-
-singen, krähen
-singen, krähen
-singen, krähen
-singen
-singen
-zu singen, zu krähen anfangen
-zu singen, zu krähen anfangen
-zu singen, zu krähen anfangen
-Hahn
-Kirchenlied
-Lied
-Hahn
-er rief
-er rief
-to cry, sing
-seit kurzem saugend (von Tierjungen)
-PN
-PN
-PN
-sauge
-sauge
-gären
-kalt werden, frieren
-stechen, beißen
-bitter, ranzig
-scharf, sauer
-sauer werden
-ranzig, bitter, mürrisch
-bitter werden
-Ziger, Käse
-Kies
-Kies
-Kies
-Kiesel, Steinchen
-Kiesel, Steinchen
-Kiesel, Steinchen
-Kiesel, Steinchen
-Kiesel, Steinchen
-Kiesel, Steinchen
-Sand
-Kies, Korn
-Kies, grober Sand
-Kies, grober Sand
-Kies, grober Sand
-Stein
-Maus
-Maus
-Wiesel, Marder
-Lederhelm; Haube auf dem Kopf afrikanischer Hühner'
-Pelzkappe, Perücke'
-Taubnessel', eigentlich 'Wieselauge'
-Taubnessel
-Taubnessel', eigentlich 'Wieselauge'
-Taubnessel
-Haselmaus, Bilchmaus, Siebenschläfer'
-
-mouse
-mouse
-mouse
-Auswuchs am Stamm von Ölbäumen; Meeraal
-angeschwollene Halsdrüse
-μωρός 'feist und dumm?'
-rund
-Rübe
-eine Art Rübe
-Zahnfleisch
-Ball
-Wassereimer
-Windung bei einem Tau
-Windung bei einem Tau
-kleine Biegung, verächtliche Bewegung des Kopfes
-gewundenes Schneckenhaus
-Drehung, Knoten im Faden, Unwilligkeit
-Wirbel, Mahlstrom
-Buckel, Ball, Klumpen
-Ball
-sich krümmen
-langsam gehen, von einem gekrümmt gehenden Menschen
-
-Kropf bei Vögeln, Adamsapfel, Kopf des Oberschenkelknochens; Kohlkopf'
-sich zusammenballen, einmummeln; sich zur Erde setzen (vom Huhn, das die Flügel ausbreitet)'
-Lager, Nest eines Huhns, einer Gans'
-Beule'
-
-Hinterbacke'
-das dicke Ende der Garbe, eines Balkens'
-Steiß, Sterz, Bürzel'
-tuber'
-sich krümmen
-dick, dicht
-dick, dicht
-dick, dicht
-dick, dicht
-
-
-Brustschmuck, Brosche
-Bucht, Biegung, Haken
-Spinne
-Spinne
-Spinne
-Spinne
-Gewebe
-herabhängender schlanker Zweig
-lebhaft, erregt
-Bündel
-Beerenbüschel
-Bündel
-Klumpen
-vimen
-Riemen
-vimen, Flechte aus schlanken Reisern, Bauwinde
-Kummetriemen, Seil
-
-lederne Kappe am Dreschflegel
-erwacht
-wacht
-
-munter, eifrig
-aufmerksam, wach, munter
-den wachenden
-
-wach, wachsam
-weckt
-erwachend
-erweckt
-erweckt
-erwache
-Erwecker
-wecke
-
-
-für ε-γη-γορα - vgl. ai. jā-gā́ra
-Med. (spät)
-wache
-hebe auf, errichte, wecke, spanne ein Gewehr
-hebe auf, errichte, wecke, spanne ein Gewehr
-hebe auf, errichte, wecke, spanne ein Gewehr
-frisch, lebhaft
-frisch, munter
-frisch, munter
-weich, biegsam, nachgiebig, sentimental
-weich werden, Mutlosigkeit oder Trauer zeigen, stöhnen
-erschrecken
-erschrecken
-wimmern
-weich machen
-schmelzen
-zart, schwach, mager
-zart, weich, schlapp
-zart, weich, schlapp
-weich, schlaff, welk werden
-weich, schlaff, welk werden
-weich, schlaff, welk werden
-soft, tender
-verziehe, verzärtele
-verziehe, verzärtele
-Verderbtheit, Ungezogenheit
-stürmt an, läuft an
-Ungestüm, Lauf, Flußlauf
-weit laufend
-See, Meer
-See, Meer
-See, Meer
-See, Meer
-über weite Wasserflächen sich erstreckend
-Höhle, Schlupfwinkel oder Lager wilder Tiere
-Höhle, Grube
-ein Wurf von Tierjungen, ein Nestvoll Eier, Kinder aus derselben Ehe (eigtl. demselben Bette)
-ein Wurf von Tierjungen, ein Nestvoll Eier, Kinder aus derselben Ehe (eigtl. demselben Bette)
-ein Wurf von Tierjungen, ein Nestvoll Eier, Kinder aus derselben Ehe (eigtl. demselben Bette)
-Lager, Schlafstatt
-Lager, Nest
-sichlegen, zu Bette gehen
-
-sich schlafen legen
-liegen
-liegen
-Lager, Schlafstelle
-Tierlager
-Tierlager
-liegend
-liegend
-liegend
-liegend
-gulsčiu kartẽlų tvorà
-Ast, Zweig
-Zweig
-tönt
-lasse laut ertönen, spreche laut aus
-laut singend
-stößt Freudenschreie aus
-Klage
-wehklage
-Zauberer (incantator)
-Möwe
-nennen, heißen
-rufen
-Wehklage
-mit Mühe
-kaum
-(*kläglich, klagend) schwach, gebrechlich
-schwach, krank
-matt
-fein, schön
-Jammer
-das Vieh mit Rufen locken
-Dohle
-cornix
-Dohle
-Rohrdommel
-
-Eule
-zanken
-schwatzen
-
-Rudel von Hunden, Wölfen
-dumpf tönen
-trösten, reflex. 'sich beklagen'
-wehmütig
-Klage
-jammern
-jauchzen
-
-κιθαρίζειν
-spielen
-spielen; dumpf schallen
-geigen, musizieren
-Lärm
-lärmen
-Wasserblase
-Lärm, Geräusch
-reden, plaudern
-Krähe
-Kiebitz
-Unterhaltung, Scherzrede
-Fackel' ('Eichenholz'?)
-ON
-VN
-PN
-PN
-GN 'Eichengott'
-
-
-Bett' (*aus Eichenholz)
-Bett' (*aus Eichenholz)
-
-Weißbuche'
-Spindelbaum'
-ON
-
-
-Weißbuche'
-Weißbuche'
-zur Buche gehörig'
-ritzen'
-knirschen
-das Knirschen
-Zähne knirschen; quetschen
-Krachbein
-Krachbein
-furfur
-Kleie
-to crush, crumble, crackle
-Knorpel
-knirschend zerbeißen
-`knirschen, knistern, vom Sand'
-krachen (von der Kanone), mit Krachen schlagen; durch Schlagen enthülsen
-stoßen, enthülsen
-Steingerölle
-grober Sand
-mit Geräusch zusammenstürzen
-dürres Holz, Fackel
-dürres Holz, Fackel
-ON Stadt in der Äolis
-ON Stadt in der Äolis
-schwelen, glimmen
-schwelen, glimmen
-schwelen, glimmen
-schwelen, glimmen
-Hagel
-Hagel
-hartgefrorener Straßenkot, Steinfrost, Frost ohne Schnee; Mauke
-Hagel
-Hagel
-Hagel
-Hagel
-junges Tier, bes. junges Huhn
-Junge eines Tieres, bes. eines Vogels, Nestling
-Vogel, junger Vogel
-Vogel, junger Vogel
-Kraushaar, Lockenhaar
-herabhängende Haare, Locken
-kraushaarig, lockenhaarig; (beim Kamel:) zottelhaarig
-Lockenhaar, frei herabwallendes Haar; Mähne (von Pferden, Löwen); Baumbart
-PN
-steifes Haar, Borste
-Krankheit, Kummer
-luctus, planctus
-luctus, planctus
-Makel, Fehler, Schaden
-Schaden, Verletzung
-bösartig, schädlich
-Schaden, Verletzung am Körper
-Schaden, Verletzung am Körper
-die schmerzhafteste Stelle einer Wunde
-Gram, Kummer, Ärger
-schlecht
-schlecht
-gähnen, klaffen
-gähnen, klaffen
-gähnen, klaffen
-das Gähnen
-weit geöffnet, weit ausgedehnt
-spreche mit offenem Munde
-
-in vollen Zügen
-das Gähnen
-Schlund, Rachen
-aufklaffen, (Mund oder Augen nach etwas aufsperren:) begehren, glotzen
-Spötter
-
-Begriffsnegation 'nicht'
-Unrichtiges, Lüge'
-Unrichtiges, Lüge'
-Unrichtiges, Lüge'
-falsches Zeugnis'
-falsch', Subst. 'Lüge'
-falsch', Subst. 'Lüge'
-falsch', Subst. 'Lüge'
-falsch', Subst. 'Lüge'
-schuldig'
-schuldig'
-Höhlung, Schoß, Busen, Bauch usw., als Adjektiv 'hohl, konkav'
-aushöhlen
-umarmen, pflegen
-zurückgebogen
-mit zurückgebogenem Hals
-sich strecken
-Widerrist des Pferdes
-Iltis (oder 'Igel'?)
-Iltis
-
-
-Branntwein
-ungemischter Wein
-ungemischter Wein
-
-οἶνος.  ̓Αμερίας
-ist gierig, verlangt heftig
-gierig
-gierig; Geier
-Begierde
-Begierde
-
-desiderare
-verlangen, sich sehnen nach
-
-Hunger
-Hunger
-Hunger
-Hunger
-Drüsen
-Drüsen, Kropf
-Drüsen, Kropf
-Drüsen, Kropf
-
-Drüse
-Drüse
-Drüse
-Drüse
-Drüse
-Drüse
-Eingeweide, Gedärm
-Eingeweide, Gedärm
-Magen
-Magen
-Magen
-Magen
-Magen
-Hirse, Kot
-geröstete Gerste
-Geröll, Kies
-Geröll, Kies
-Kiesel, Schleuderstein
-der Balg, die Hülse des Getreides und der Hülsenfrüchte; die Kleie
-
-reibt
-gerieben
-Erbse
-Bohne, Erbse
-Sünder, Frevler
-habe Abscheu vor
-bitter
-Hunger
-verdorben, ranzig
-verdorben, ranzig
-verdorben, ranzig
-verdorben, ranzig
-Bitterkeit
-reizen, verbittern
-Drohung, Strenge
-drohend, ekelhaft
-drohen, abgewöhnen
-
-überdrüssig werden
-
-drohen
-
-drohen
-drohen
-Giersch, Aegopodium Podagraria
-Giersch, Aegopodium Podagraria
-Giersch, Aegopodium Podagraria
-Angelica Archangelica
-Angelica Archangelica
-Giersch
-Giersch
-Giersch
-Giersch
-Trespe (Bromus)
-Trespen
-Rahm, Butter, Schmelzbutter
-
-
-
-Milch
-zusammengesunken sitzen
-Gartenerdbeere
-Kehlkopf, Brust
-kleiner Heuhaufen
-krumm, listig
-
-Steiß
-Steiß
-Steiß
-Steiß
-clunes, cloxae
-Steiß
-auf undnieder hüpfen, schaukeln
-auf undnieder hüpfen, schaukeln
-auf undnieder hüpfen, schaukeln
-sich bücken, einsinken
-Haufe
-sich verflechten
-überdecken, umhüllen, wölben
-sich krümmen
-Heuhaufen, Haufen stehender Garben
-geschickt, gewandt, kundig
-zwiefach
-zwiefach
-falten
-biegen, krümmen
-biegen, krümmen
-neigen
-bewegen, rühren
-bewegen, rühren
-unbewegt
-Biegung
-Biegestelle, Gelenk
-doppelt
-doppelt
-Bucht
-Falte
-Gelenk, Krümmung
-zugrunde gehen
-beugen
-verderben, umkommen
-biegen
-bewegen, wiegen
-zugrunde gehen, verkommen
-bewegen, treiben
-zugrunde richten
-verderben
-verderben
-verderben, vertilgen
-verlieren, verderben
-Verderben
-versteckt
-Versteck, Höhle
-Versteck, Lager
-verbergen, verstecken
-wenn du verbirgst
-Unholdin, Riesin
-ein Unterirdischer
-Mörder, Räuber
-beschützen, auch brüten, warm zudecken
-Blindekuhspiel
-Brutnest
-heidnische Reisegöttin
-Storch
-Höhle, Schlupfwinkel
-Höhle, Schlupfwinkel
-Grube, Höhle
-unterirdische Kammern
-tönt
-Getön, Geräusch
-Kettenpanzer ('rasselnd, klirrend')
-Panzer
-rausche, brause
-klatsche, plätschere
-ich rede an
-
-Höhlenstall
-Schafstall
-Krippe
-Erdhütte
-Viehhütte
-Haufe von Ziegelsteinen, die zum Trocknenaufgesetzt werden
-essen, verzehren
-
-
-
-
-
-ungegessenes essend
-
-gemeinschaftliches Mahl
-
-gefräßig
-das Verzehren
-Nahrung
-essen, fressen (von daēvischen Wesen)
-Opfertier, Opfer
-vergelten
-Schmaus
-ertönt, verkündet laut, hört
-findet Erhörung bei (Akk.)
-Getön, Geschrei, Ruf, Lärm
-Pferdeohr
-Gelbohr
-hören
-sein Wort zu Gehör bringend
-hören, horchen, lauschen
-hören
-hören, horchen, lauschen
-horchen, gehorchen
-to sound, hear
-Ohr
-Ohr
-EN 'mit dem Kriegswagen rasselnd'
-mit gelben Ohren
-he, holla, höre
-στέγη
-Dachstuhl
-Gitterwerk, Gittertür, Hafen
-Riegel
-Riegel
-Riegel, Pflugbaum
-Querholz, Riegel, Pflugbaum
-Querholz, Riegel, Pflugbaum
-Dielenbrett
-Dielenbrett
-Dielenbrett
-Bretterbelag, gedielter Fußboden
-mit Brettern belegen
-mit Brettern belegen
-mit Brettern belegen
-Brückenbohle
-Fußboden, Diele
-Fußboden, Diele
-Bohlen, Balken
-Bohle
-Mann
-
-Bett, Reihe
-Balken
-Stange, Balken, Gerüst
-Stange, Furche, Beet
-Stange
-Stange
-
-Wange
-Wange
-maxilla
-Busen
-eingefriedeter Bezirk
-eingefriedeter Bezirk
-Pferch, enge eingefriedete Passage
-einpferchen
-lederner Sack
-Schlauch
+zögern, zaudern, nicht fertig werden, langsam sein
+zieht sich zusammen
+ausrüsten, bewaffnen; anfüllen, feststopfen
+ausrüsten, bewaffnen; anfüllen, feststopfen
+vollgestopft
+Rüstung, Geschirr, Sattel, Kleidung
+Decke, Saumsattel; Kleidung, Überzug
+Fischernetz
+γυργάθιον Poll.
+πήρα
+Arzt
+to bind, close up, pull together
+Hürde, Stall, heiliger Ort
+pferche ein, sperre ein
+Hürde, Stall, heiliger Ort
+in der Schäferei aufgezogenes Lamm
+Sklavin
+wiege
+Gewicht; Gegenwert, Belohnung
+kräftig, stark
+bin stark, habe Kraft
+gedrängt, zahlreich
+Haut
 Haut, Fell
+Schild
+Schildträger
+Körper, Person, selbst
+schneiden, abschneiden
+Span
+Querhieb, Einschnitt
+hauen, stoßen
+gewaltig anklopfen
+to hack, hew, cut down, hit sharply
+Scherzwort für 'tüchtig prügeln'
+Scherzwort für 'tüchtig prügeln'
+Abzugsröhre, Weinheber, Feuerspritze, Weinschlauch'
+Maulwurf' ('röhrenförmige Gänge wühlend')
+hohl'
+hohl, gebrechlich, lahm'
+verderben'
+Schienbeinknochen; gerade Pfeife, Flöte'
+Köcher
+Köcher
+Flöte
+Köcher
+Rinne, Röhre, Kanal
+Röhre am unteren Ende der Lanze
+ein über das untere Lanzenende gestülptes, röhrenartiges Stück
+τὸ ἀνδρεῖον αἰδοῖον ('*Röhre'), in der Koine 'Speer, Spieß'
+Nachahmung des Eulenrufes
+Eule
+Eule
+Eule
+Eule
+Eule
+Eule
+Vogelfalle (mit Lockeule)
+Eule
+Eule
+Eule
+Eule
+Eule
+Eule
+(onomatopoeic: owl's hoot, etc.)
+(onomatopoeic: owl's hoot, etc.)
+(onomatopoeic: owl's hoot, etc.)
+(onomatopoeic: owl's hoot, etc.)
+(onomatopoeic: owl's hoot, etc.)
+Uhu
+schreien (von Eulen und Tauben)
+Echo
+Rohrdommel
+Möwe
+Rohrdommel
+Rohrdommel
+girren, von Tauben
+Turteltaube
+schreiend
+Kauz
+wehe! und 'Seufzer'
+wehe! und 'Seufzer'
+wehe! und 'Seufzer'
+lärmen
+Lärm, Getümmel
+Sturmwind
+Greif
+Nachteule
+jauchzen
+hu rufen
+Geschrei
+hält nieder, drückt zusammen
+wird niedergedrückt (auf der Wage)
+zur Eile drängen
+schaden, verletzen
+verwunde
+verwunde
+unverwundet
+unverwundet
+Wunde
+Wunde
 
-Stock, Rohrstab
-Spieß
-uerua
-ueribus
-Speer, Spieß
-Speer, Spieß
-Speer, Spieß
-Speer, Spieß
-Pfahl, Stachel
-sprosse, strotze
-Moos, Kätzchen
-das Neugeborene
 
-Kraut
-Kraut
-Kraut
-Schwamm am Ahornbaum
-kleine, abgehauene Zweige
-kleine, abgehauene Zweige
-Blatt
-Laub, Zweig
-Laubbüschel, Sprengwedel, Besen
-Laubbüschel, Sprengwedel, Besen
-Laubbüschel, Sprengwedel, Besen
-Laubbüschel
-Laubbüschel, Reisbesen
-Laubbüschel, Reisbesen
-Laubbüschel, Reisbesen
-Laubbüschel, Reisbesen
-Wald
-Bergwald
-dichter Wald
-Haarlocke, Geringel
-verflochten, verschlungen
-dichtes Gesträuch
-Quast, Wedel
-Quast, Wedel
-Quast, Wedel
-Sehne, bes. des Bogens
-Bogensehne (in Kompositis auch Sehne des Fleisches)
-Bogensehne
-Faden
-Sehne
-Finger
-Finger
-Finger
-Finger
-Eiszapfen
-PN 'Fingerchen'?
-Zweig
-Zweig
-Zweig, Gabel, Arm eines Flusses
-gabelförmiger Gegenstand, Zweig
-Baumharz, mastix
-Pechföhre, Lärche
-Pech
-Harz
-Harz
-Der Zusammenhang mit 'kauen' ist zweifelhaft, aber nicht unmöglich
-Geier
-geieräugig
-mit furchtbaren Augen, gräßlich blickend
-Geier
-Geier
+Wunde
+offenes Geschwür
+to hit, wound
+Ton, Ruf
+lärmend
+Getöse
+schreie, wimmere
+schreie, wimmere
+Widerhall
+wimmern, schreien
+Querbalken
+ridgepole, rooftree, summit
+Rohr
+das Balkenlose
+schwatzen, plappern
+schwatzen, plappern
+schwatzen, plappern
+schwatzen, plappern
+schwatzen, plappern
+schwatzen, plappern
+schwatzen, plappern
+weit, ungeheuer groß, unförmlich
+Länge
+Länge
+lang
+long, wide
+long, wide
+long, wide
+bewegen, schwingen
+sich tummeln
+schwanken
 
-Geier
+in unsteter Bewegung sein
+in unsteter Bewegung sein
+in unsteter Bewegung sein
+hin und her schwanken
+wackelnd, z. B. von Gallertigem
+sich bewegen
+
+wanken, schwanken
+wackeln
+sich unstet hin und zurück bewegen, wabern
+
+schweben, baumeln
+unstet, flackernd
+wimmeln, sich verwirren, durcheinander bewegen
+wimmeln, sich verwirren, durcheinander bewegen
+Käfer, Kornwurm
+
+
+Kornwurm
+
+Roßkäfer
+Käfer
+
+Mistkäfer
+Käfer
+Käfer
+
+Mistkäfer
+Mistkäfer
+Schulterjoch zum Tragen von Lasten, Tragholz, Proviant
+Lederriemen
+Hes.
+Gespann, Geschirr
+Joch
+beschädigen
+
+ds.
+Joch
+Saite, Band
+verbinden
+binden, ins Joch spannen, verbinden
+Ochsenleine, Zügel
+bauen
+bauen
+schweife umher, breite mich aus
+umherschweifend
+Abhang, Höhlung; schräg, abschlüssig
+Niederung, Wiese
+Niederung, Wiese
+Sumpfland
+Sumpfland
+Sumpfland
+Sumpfland
+Sumpfland
+Büschel starken Grases, besenförmig gebunden, zum Fegen usw.
+biege mich, krümme mich
+geflochtener Korb
+flechten
+Tracht, Anzug
+umwindet, umkleidet
+umhüllt, bekleidet
+Schlinge, Binde
+to bend, turn
+Wacholder
+Büschel, zusammengedrehter Knoten
+Alge, Tang
+Alge, Tang
+Myrte
+Myrtenbaum
+Alge, Tang
+Wasserschlingpflanze
+Wirbelwind
+Wirbelwind
+erschüttern, bewegen
+Schnürbrust
+einwickeln
+einwickeln
+Bündel
+Wisch, Strohwisch; Schankzeichen
+Wisch, Strohwisch; Schankzeichen
+Zweig zum Bezeichnen des Wegs, Absteckpfahl
+Haarbüschel
+Büschel (Heu)
+Schlinge zum Erwürgen
+Bündel aus Stroh oder Schilf
+kleiner Besen
+Wisch, Strohwisch
+eine Hürde aus Ruten flechten
+Eingeweide
+beben
+beben
+rasche Bewegung, Husch
+sich hin- und herbewegen
+unzuverlässiger Mensch
+unzuverlässiger Mensch
+Quaste, Büschel
+dünner Zweig, Reis, Rute
+Mädchen, Jungfrau
+zittern
+zittern
+schwanken
+geht krumm oder schief
+schwingt sich, fliegt
+gebogen, krumm
+fliegend
+Rippe
+Flußkrümmung
+Flußkrümmung
+Leisten, Weiche
+Bauch, Weichen, Flußbett
+gekrümmt
+crispus, flexus
+gewölbt, gekrümmt
+schräg aufwärts führend
+bückt sich
+wendet sich gegen, beginnt zu
+Flußname
+germanisiert
+Waal
+Waal
+Flußname
+in ai. vaṅka-, got. unwāhs 'untadelhaft', ags. wōh 'krumm, verkehrt', as. wāh n. 'Übel', aisl. vā f. (*u̯onkō) 'Winkel, Unheil'
+untadelhaft
+krumm, verkehrt
+Übel
+Winkel, Unheil
+betrügen
+betrügen
+verraten
+Betrug, List
+sie verrieten
+vergeblich
+unnütz
+to deceive
+Betrug
+Nachlässigkeit
+Mangel
+schlecht
+locken, äffen, zum besten haben
+betrüge, verletze
+trügerisch
+Hitze
+sich wärmen
+lauwarm machen
+ziehen, schleppen
+ziehe, schleppe
+to pull, drag
+ziehe, schleppe
+to pull, drag
+to pull, drag
+Furche
+Furche
+Pflug
+marcescere, torrefieri
+marcescere, torrefieri
+welken
+welken
+jucken
+Brandgeruch, Gestank
+Haarwurzel, junger Bart, Gesichtsausschlag
+zottig
+Haupthaar
+hair, beard
+das selbe
+Sumpfgras
+das selbe
+Schamhaar, Haar
+Wimper
+der erste Bart
+barba, mystax
+barba, mystax
+länglicher Teich
+water
+Ousance (Orléans)
+Gap
+Fluß
+Wolke
+See
+Flußufer, Wadi
+wirft, streut (den Samen)
+Aufwurf (von Erde), Erdwall
+Feuerstätte
+Schnee' (eigentl. [*Schnee]wehe?)
+Schnee' (eigentl. [*Schnee]wehe?)
+Schnee' (eigentl. [*Schnee]wehe?)
+Eber (als 'der Befruchter')
+Eber (als 'der Befruchter')
+Dornstrauch
+macht wehen
+weht
+Dampf, Hitze
+Dampf, Hitze
+kahmiger Wein
+kahmiger Wein
+ums Leben gebracht
+das Ermorden, Töten
+schneidetrings ab, aus
+schindet
+Ähre
+Spitze, Ecke usw.
+Stelle
+Spitze, Anfang
+Spitze
+
+Distel, Hagedorn
+Distel
+Distel
+Laus
+Grasbüschel
+Genick
+Kopfbinde
+Laubbündel
+verwickeln, faseln
+Laubbündel
+verwickeln, faseln
+sich verwickeln
+Bündel
+Bündel
+Kaufpreis
+Lohn
+feilscht
+Kaufpreis
+Kaufpreis
+
+Kauf
+kaufe
+verkaufen
+Verkauf
+verkaufen
+verkauft werden
+pecuniam venaliciam (?)
+Mitgift
+verkaufen
+Lerche
+juble, stimme einen Sieges- oder Lobgesang an, bin fröhlich
+wiehern
+muttire
+dialektisch
+(onomatopoeic root)
+(onomatopoeic root)
+Gewinsel
+winseln
+Ulmus campestris
+Ulmus campestris
+Ulmus campestris
+Ulmus campestris
+ds.
+ds.
+Ulme
+Ulme
+Ulme
+Ulme
+Ulme
+Ulme
+eine Art Ulme
+schwankt, taumelt, geht schief, kommt zu Falle, zuckt, weicht
+schwankend, mangelhaft
+schütteln
+
+Meteor
+Meteor
+to light, shine; fiery
+to light, shine; fiery
+glänzend, Sonne
+Mischung von Gold und Silber, Bernstein
+Gestalt, Erscheinung
+dorniges Reis, Dornstrauch, Dornenhecke
+dorniges Reis, Dornstrauch, Dornenhecke
+Rückgrat, Berggrat
+(zerbreche das Rückgrat, daher allg.:) zerhaue, zerstücke
+Nadel
+dürres Reis, Stoppel, Besenstumpf, Gabelzinke
+Zinke
+dreizinkig
+schlage, stampfe
+Meeresbrandung, Flut; umbrandete Stelle
+abschüssig
+Meeresbrandung, Flut; umbrandete Stelle
+percutere
+Mahl
+Schlag
+bespritze, besprenge (mit Wasser oder Staub)
+Tropfen
+Tropfen, Staubkörnchen
+besprenge, streue aus
+
+
+
+
+Hengst
+Hengst
+Hengst
+Hengst
+Hengst
+besprengen
+Stütze
+stützen
+stützen
+eine Stütze bilden
+befreundet; Freund

@@ -137,6 +137,17 @@ def get_reflex_source(dfs, reflex_id):
     }
 
 
+def get_semantic(dfs, lrc_id):
+    try:
+        semantic_id = dfs["lex_etyma_semantic_field"][dfs["lex_etyma_semantic_field"].etyma_id == lrc_id].iloc[0].semantic_field_id
+        semantic_row = dfs["lex_semantic_field"][dfs["lex_semantic_field"].id == semantic_id].iloc[0]
+        category_row = dfs["lex_semantic_category"][dfs["lex_semantic_category"].id == semantic_row.semantic_category_id].iloc[0]
+        return [item.strip(", ") for item in semantic_row.text.split(",") + [category_row.text]]
+    except IndexError:
+        return []
+
+
+
 def get_reflex_entries(dfs, lrc_id):
     reflex_ids = dfs['lex_etyma_reflex'][dfs['lex_etyma_reflex']['etyma_id'] == lrc_id]["reflex_id"].tolist()
     reflex_df = dfs["lex_reflex"][dfs["lex_reflex"].id.isin(reflex_ids)]
@@ -261,6 +272,9 @@ def main():
         # link to reflexes
         reflex_entries = get_reflex_entries(dfs, lrc_id)
 
+        # get semantic info
+        semantic = get_semantic(dfs, lrc_id)
+
         # basic info
         # I have to replace the "or" and other short words carefully otherwise it might catch some real roots
         roots = row["entry"].strip("\n\t ").replace("<p>", "").replace("</p>", "").replace(" or ", " ").replace(" it ", " ").replace(" on ", " ").replace(" to ", " ").replace(" of ", " ")
@@ -299,8 +313,9 @@ def main():
             "root": roots,
             "meaning": gloss,
             "reflexes": reflex_entries,
+            # todo: part of speech
             "pos": [],
-            "semantic": [],
+            "semantic": semantic,
             # this id is deleted on the second pass
             "lrc_id": lrc_id,
             "searchable_roots": " ".join(split_roots)
@@ -334,6 +349,6 @@ def main():
 
 
 if __name__ == '__main__':
-    common()
-    # main()
+    # common()
+    main()
     pass
