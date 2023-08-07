@@ -57,7 +57,7 @@ def main():
         english_meaning = output["choices"][0]["message"]["content"].split("|")[1].strip(' "')
         print("\t", english_meaning)
         for line_num in line_to_index[german_meaning]:
-            entry_match[line_num] = english_meaning
+            entry_match[line_num] = english_meaning.strip(" \n")
         # time.sleep(1)
 
     with open("data_pokorny/english_meanings.txt", "w", encoding="utf-8") as fp:

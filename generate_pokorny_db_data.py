@@ -147,7 +147,6 @@ def get_semantic(dfs, lrc_id):
         return []
 
 
-
 def get_reflex_entries(dfs, lrc_id):
     reflex_ids = dfs['lex_etyma_reflex'][dfs['lex_etyma_reflex']['etyma_id'] == lrc_id]["reflex_id"].tolist()
     reflex_df = dfs["lex_reflex"][dfs["lex_reflex"].id.isin(reflex_ids)]
@@ -232,6 +231,16 @@ def expand_hyphenated_root(word):
     return ["".join(split_hyphen[:i+1]) for i in range(len(split_hyphen))]
 
 
+def root_conditioning(roots):
+    roots = roots.replace("<sup>u̯</sup>", "ʷ").replace("h", "ʰ").replace("k̑", "ḱ").replace("g̑", "ǵ")
+    return roots
+
+
+def root_troubling_stop_words(roots):
+    roots.replace(" or ", " ").replace(" it ", " ").replace(" on ", " ").replace(" to ", " ").replace(" of ", " ")
+    return roots
+
+
 def main():
     dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
     # figure_out_language_overrides(dfs)
@@ -277,8 +286,13 @@ def main():
 
         # basic info
         # I have to replace the "or" and other short words carefully otherwise it might catch some real roots
-        roots = row["entry"].strip("\n\t ").replace("<p>", "").replace("</p>", "").replace(" or ", " ").replace(" it ", " ").replace(" on ", " ").replace(" to ", " ").replace(" of ", " ")
-        search_roots = [remove_html_tags_from_text(root).strip(" ,-") for root in re.split("(,|\s|:|\n)", roots)]
+        roots = row["entry"].strip("\n\t ").replace("<p>", "").replace("</p>", "")
+        # condition the roots (some very specific patterns need to be replaced)
+        roots = root_conditioning(roots)
+        # remove the troubling stop words
+        search_roots = root_troubling_stop_words(roots)
+        # turn into an actual list (while removing html and striping some chars)
+        search_roots = [remove_html_tags_from_text(root).strip(" ,-") for root in re.split("(,|\s|:|\n)", search_roots)]
         gloss = row["gloss"].strip("\n\t ").replace("<p>", "").replace("</p>", "")
 
         # making the id
