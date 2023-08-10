@@ -52,6 +52,13 @@ def load_response(prompt):
     return None, digest
 
 
+def delete_response(prompt):
+    digest = get_digest(prompt)
+    if os.path.exists(f"gpt_chaches/{digest}.json"):
+        os.remove(f"gpt_chaches/{digest}.json")
+    return
+
+
 def query_gpt(prompt):
     completion, digest = load_response(prompt)
     if completion is None:

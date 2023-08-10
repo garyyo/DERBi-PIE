@@ -3,8 +3,7 @@ from collections import defaultdict
 
 import openai
 
-from gpt_utils import query_gpt_fake, query_gpt
-
+from gpt_utils import query_gpt_fake, query_gpt, delete_response
 
 """
 author - anton vinogradov
@@ -36,25 +35,21 @@ def main():
 
     entry_match = [""] * len(lines)
     for i, german_meaning in enumerate(sorted_entries):
-        prompt = f'Translate to English from German: "{german_meaning}"\n' \
-                 f'Reply with a single line in the following format: Original Text | English translation'
-        print(f"{i:>3}/{len(sorted_entries)} | {german_meaning:<60}"[:60], end=" | ")
 
-        # only reattempt 50 times as to not be mean to openai
-        output = None
-        for _ in range(10):
-            try:
-                # output = query_gpt_fake(prompt)
-                output = query_gpt(prompt)
-                break
-            except openai.error.ServiceUnavailableError as err:
-                print("---===>>> Could not connect, waiting 15 seconds and trying again...")
-                time.sleep(15)
-                continue
+        output, prompt = try_gpt_translate(german_meaning, sorted_entries, i)
+        message_content = output["choices"][0]["message"]["content"]
+        try:
+            english_meaning = message_content.split("|")[1].strip(' "')
+        except Exception as err:
+            print("Got exception, removing last attempt and trying a second time", err)
+            delete_response(prompt)
+            # try a second time, but if this fails we just let it crash.
+            output, prompt = try_gpt_translate(german_meaning, sorted_entries, i)
+            message_content = output["choices"][0]["message"]["content"]
+            english_meaning = message_content.split("|")[1].strip(' "')
+            # if you want to try a third time just rerun the script, it will remove the bad response and query once more
+            pass
 
-        assert output is not None
-
-        english_meaning = output["choices"][0]["message"]["content"].split("|")[1].strip(' "')
         print("\t", english_meaning)
         for line_num in line_to_index[german_meaning]:
             entry_match[line_num] = english_meaning.strip(" \n")
@@ -62,6 +57,32 @@ def main():
 
     with open("data_pokorny/english_meanings.txt", "w", encoding="utf-8") as fp:
         fp.write("\n".join(entry_match))
+
+
+def try_gpt_translate(german_meaning, sorted_entries, i):
+    prompt = f'Translate to English from German: "{german_meaning}"\n' \
+             f'Reply with a single line in the following format: Original Text | English translation\n' \
+             f'Only translate the german, if you see text in any other language (such as greek or english), leave that in its original form and translate only the words around it. If there is no german, or you cannot translate it, just repeat the original text followed by \"[UNKNOWN]\". ' \
+             f"For example: \"Machek (Slavia 16, 174) nimmt als ursprüngl. Bedeutung 'mager' an, das er somit zu ai. \kṣudhyati\ 'hungert', \kṣōdh-uka-\ 'hungrig' stellen möchte.\" translates to \"Machek (Slavia 16, 174) nimmt als ursprüngl. Bedeutung 'mager' an, das er somit zu ai. \kṣudhyati\ 'hungert', \kṣōdh-uka-\ 'hungrig' stellen möchte. | Machek (Slavia 16, 174) assumes 'mager' as the original meaning, which he thus relates to Sanskrit \kṣudhyati\ 'hungers', \kṣōdh-uka-\ 'hungry'.\"\n" \
+             f"For example: \"aus *sulak'\" translates to \"aus *sulak' | from *sulak'\"\n" \
+             f"For example: \"*k̂u̯oinā\" translates to \"*k̂u̯oinā | *k̂u̯oinā [UNKNOWN]\", note here how I need the original repeated as well as the \"[UNKNOWN]\" marker.\n" \
+             f"For example: \"refl.\" translates to \"refl. | refl. [UNKNOWN]\", note here how I need the original repeated as well as the \"[UNKNOWN]\" marker.\n" \
+             f"For example: \"*skuftu-; m.\" translates to \"*skuftu-; m. | *skuftu-; masculine.\"\n" \
+             f"Remember to stick to the format of \"Original Text | Translation\", the \"|\" character is necessary."
+    print(f"{i:>3}/{len(sorted_entries)} | {german_meaning:<60}"[:60], end=" | ")
+    # only reattempt 10 times as to not be mean to openai
+    output = None
+    for _ in range(10):
+        try:
+            # output = query_gpt_fake(prompt)
+            output = query_gpt(prompt)
+            break
+        except openai.error.ServiceUnavailableError as err:
+            print("---===>>> Could not connect, waiting 15 seconds and trying again... <<<===---")
+            time.sleep(15)
+            continue
+    assert output is not None
+    return output, prompt
 
 
 if __name__ == '__main__':
