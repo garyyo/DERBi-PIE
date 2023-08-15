@@ -357,7 +357,7 @@ def main():
         pokorny_entries_new.append(entry)
 
     with open("data_pokorny/table_pokorny.json", "w", encoding="utf-8") as fp:
-        json.dump(pokorny_entries_new, fp)
+        json.dump(pokorny_entries_new, fp, indent=2)
     # breakpoint()
     pass
 
