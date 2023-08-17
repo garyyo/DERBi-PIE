@@ -9,10 +9,7 @@ author - anton vinogradov
 
 The purpose of this script is to generate every individual sound that is used in the DERBi PIE website. These are distinct from characters as they may contain
 multiple characters, which considering that regex works on a character level usually, is necessary. These are generated from one csv file (see the main() 
-function for which one) and thus to add on more, that csv should be edited, not this code. As always I have left comments where I could, but these are just
-notes to myself and you may not find them enough to understand.
-
-Godspeed.
+function for which one) and thus to add on more, that csv should be edited, not this code. 
 """
 
 

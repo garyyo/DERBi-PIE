@@ -17,30 +17,7 @@ author - anton vinogradov
 
 This script is a collection of methods used to generate 2 files for the database: table_pokorny.json and table_common.json.
 Currently the common table (these are called tables but are actually "collections" when in MongoDB) is mostly redundant, but is there to serve as a common point
-of reference between all specialized tables. I personally do not like this method of doing it, but this seems to be a compromise between ease of use with the
-linguistics users of this code and me the actual coder. These tables are very purpose built and thus contain a number of weird intricacies. Ideally once all the
-data is actually identified (pokorny, liv, etc.) and processed in a machine readable format, this entire system is redesigned with the needs now elucidated, but
-we all know that is not going to happen :)
-
-In lui of that I will take this space to attempt to explain and defend my (indefensible) design decisions. 
-1. why is it all in a single table per linguistics dictionary?
-Each linguistics dictionary has completely different requirements (so I am told, as of writing only a single one has been made) so each table is supposed to be
-purpose built for that dictionary. This does mean that each will also need a completely custom manner of implementing the search functionality on the web side,
-but this was planned from the start.
-
-2. why is the common built first and then the specialized one?
-I ran out of time, ideally the specialized ones are created first and then are combined together into a common one as there will be overlap between them. This
-combining is also going to be an issue going forward, so maybe better to use the common pokorny and then graft onto it with LIV and others.
-
-3. why not just reuse the LRC UTexas db.
-We settled on MongoDB early on, before reaching out to LRC. It is my preferred DB for small projects as it is easy to work with and easier to write queries for.
-Ideally if this gets too large this is redesigned to better fit the needs when they are known, but we all know that doesn't happen.
-
-Aside from that I have left comments where I could, use GPT to explain the rest, many many parts of the code are possible only due to it's insights though
-likely no code from GPT actually exists here because at the time of writing, its still pretty bad at writing very specific code without me needing to completely
-rewrite it. 
-
-My apologies and godspeed.
+of reference between all specialized tables. 
 """
 
 
@@ -53,38 +30,6 @@ def find_html_tags(text):
     pattern = r"<([a-zA-Z0-9]+)[^>]*>"
     matches = re.findall(pattern, text)
     return matches
-
-
-def common():
-    dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
-
-    # create entries for each word
-    master_entries = []
-    for i, row in dfs["lex_etyma"].iterrows():
-        reflex_ids = dfs['lex_etyma_reflex'][dfs['lex_etyma_reflex']['etyma_id'] == row["id"]]["reflex_id"].tolist()
-        reflex_pos = dfs['lex_reflex_part_of_speech'][dfs['lex_reflex_part_of_speech'].id.isin(reflex_ids)].text.tolist()
-        reflex_pos = sorted(set(reflex_pos))
-
-        roots = row["entry"].strip("\n\t ").replace("<p>", "").replace("</p>", "")
-        gloss = row["gloss"].strip("\n\t ").replace("<p>", "").replace("</p>", "")
-
-        filtered_root = remove_non_english_chars(remove_html_tags_from_text(roots))
-        filtered_gloss = remove_non_english_chars(remove_html_tags_from_text(gloss), " ").replace(" ", "_").strip("() <>\\/.[]{}")
-
-        entry_id = f'{filtered_root}_{filtered_gloss}'
-
-        entry = {
-            "entry_id": entry_id,
-            "root": roots,
-            "meaning": gloss,
-            "pos": reflex_pos,
-        }
-        master_entries.append(entry)
-
-    with open("data_pokorny/table_common.json", "w") as fp:
-        json.dump(master_entries, fp)
-
-    pass
 
 
 def get_reflex_language(dfs, language_id):
@@ -270,6 +215,7 @@ def main():
 
     # the actual entries
     pokorny_entries = []
+    common_entries = []
     pokorny_by_id = {}
     # for storing the entries in a way that can be easily cross_referenced
     lrc_to_pokorny_id = {}
@@ -338,6 +284,14 @@ def main():
         pokorny_by_id[entry_id] = entry
         lrc_to_pokorny_id[lrc_id] = entry_id
 
+        common_entry = {
+            "entry_id": entry_id,
+            "root": roots,
+            "meaning": gloss,
+            "pos": None,
+        }
+        common_entries.append(common_entry)
+
     # breakpoint()
 
     # second pass to link cross-references
@@ -358,11 +312,12 @@ def main():
 
     with open("data_pokorny/table_pokorny.json", "w", encoding="utf-8") as fp:
         json.dump(pokorny_entries_new, fp, indent=2)
-    # breakpoint()
+
+    with open("data_pokorny/table_common.json", "w") as fp:
+        json.dump(common_entries, fp)
     pass
 
 
 if __name__ == '__main__':
-    # common()
     main()
     pass

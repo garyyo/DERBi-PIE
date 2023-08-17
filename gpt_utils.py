@@ -21,8 +21,6 @@ often raises edge cases. Its literally oops all edge cases, you have been warned
 Also I use a directory called gpt_caches to store the responses for gpt. This is so I can stop execution at any point and resume at a later date. These are
 cached on the prompt digest, so any change in prompt no matter how minor will make a new query. These caches are not included in the repo though, only the
 placeholder file.
-
-Godspeed.
 """
 
 

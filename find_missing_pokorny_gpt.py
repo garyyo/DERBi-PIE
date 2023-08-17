@@ -20,11 +20,9 @@ Despite this I have a work around, but it requires the user to manually go to ch
 manually copy GPT's output (the script will read the clipboard for you too). Ideally this script will never be rerun, but if this is being used as reference by
 someone other than me, I have left comments where I can. Ask ChatGPT to explain the rest of the code, it was written with its help after all.  
 
-If it is rerun, run it in the debugger. I make use of breakpoint() to pause execution to allow the user to paste and wait on GPT. Running this code often leads
+If it is rerun, run it in a debugger. I make use of breakpoint() to pause execution to allow the user to paste and wait on GPT. Running this code often leads
 to edge cases so having a debugger at the ready helped with that, and if you run this code yourself expect that an error will occur and that you will need to
 write more code to handle that edge case. 
-
-Godspeed.
 """
 
 
