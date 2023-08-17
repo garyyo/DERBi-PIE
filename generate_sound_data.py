@@ -30,7 +30,7 @@ def get_input_to_sounds(inventory):
 
 
 def main():
-    features = pd.read_csv("sound_processing/sound_features.csv").fillna(0)
+    features = pd.read_csv("sound_processing/sound_features.csv", dtype=str).fillna("0")
     # inventory = pd.read_csv("sound_processing/sound_inventory.csv")
     # input_to_sounds = get_input_to_sounds(inventory)
 
@@ -38,11 +38,11 @@ def main():
     # all the positive features
     plus_groups = {f"[+{group}]": features[features[group].astype(bool)]["Sound"].to_list() for group in features.columns[2:27]}
     # negative features
-    minus_groups = {f"[-{group}]": features[~features[group].astype(bool)]["Sound"].to_list() for group in features.columns[2:27]}
+    minus_groups = {f"[-{group}]": features[(features[group] == "0")]["Sound"].to_list() for group in features.columns[2:27]}
     # cover letters (capital letters that stand for a few different sounds)
-    cover_groups = {group: features[features[group].astype(bool)]["Sound"].to_list() for group in features.columns[-9:]}
+    cover_groups = {group: features[(features[group] == "1")]["Sound"].to_list() for group in features.columns[-9:]}
     # the rest, mostly things that use parens that are expanded out, but also the interchangeable pairs
-    paren_alt_groups = {group: features[features[group].astype(bool)]["Sound"].to_list() for group in features.columns[27:-9]}
+    paren_alt_groups = {group: features[(features[group] == "1")]["Sound"].to_list() for group in features.columns[27:-9]}
     # corresponds to the - (dash) symbol, so needs to be separated out
     dash_group = features["Sound"].to_list()
 
