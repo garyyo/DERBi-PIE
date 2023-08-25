@@ -19,9 +19,9 @@ even if some are empty.
 """
 
 
-def main():
+def main(in_file="data_pokorny/german_meanings.txt", out_file="data_pokorny/english_meanings.txt"):
     # Open the file and read all lines into a list, stripping whitespace
-    with open("data_pokorny/german_meanings.txt", "r", encoding="utf-8") as fp:
+    with open(in_file, "r", encoding="utf-8") as fp:
         lines = [line.strip() for line in fp.readlines()]
 
     line_to_index = defaultdict(list)
@@ -55,7 +55,7 @@ def main():
             entry_match[line_num] = english_meaning.strip(" \n")
         # time.sleep(1)
 
-    with open("data_pokorny/english_meanings.txt", "w", encoding="utf-8") as fp:
+    with open(out_file, "w", encoding="utf-8") as fp:
         fp.write("\n".join(entry_match))
 
 
@@ -69,7 +69,7 @@ def try_gpt_translate(german_meaning, sorted_entries, i):
              f"For example: \"refl.\" translates to \"refl. | refl. [UNKNOWN]\", note here how I need the original repeated as well as the \"[UNKNOWN]\" marker.\n" \
              f"For example: \"*skuftu-; m.\" translates to \"*skuftu-; m. | *skuftu-; masculine.\"\n" \
              f"Remember to stick to the format of \"Original Text | Translation\", the \"|\" character is necessary."
-    print(f"{i:>3}/{len(sorted_entries)} | {german_meaning:<60}"[:60], end=" | ")
+    print(f"{i+1:>3}/{len(sorted_entries)} | {german_meaning:<60}"[:60], end=" | ")
     # only reattempt 10 times as to not be mean to openai
     output = None
     for _ in range(10):
@@ -77,7 +77,7 @@ def try_gpt_translate(german_meaning, sorted_entries, i):
             # output = query_gpt_fake(prompt)
             output = query_gpt(prompt)
             break
-        except openai.error.ServiceUnavailableError as err:
+        except (openai.error.ServiceUnavailableError, openai.error.APIError, openai.error.Timeout) as err:
             print("---===>>> Could not connect, waiting 15 seconds and trying again... <<<===---")
             time.sleep(15)
             continue

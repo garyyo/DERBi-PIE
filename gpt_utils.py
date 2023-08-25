@@ -92,8 +92,16 @@ def query_gpt_fake(prompt):
     return completion
 
 
-def process_gpt(completion, headers):
-    text = completion["choices"][0]["message"]["content"]
+def extract_code_block(text):
+    code_block = re.search(r'```(.*?)```', text, re.DOTALL)
+    return code_block.group(1).strip() if code_block else text
+
+
+def process_gpt(completion, headers, quote_char='"'):
+    if type(completion) == str:
+        text = completion
+    else:
+        text = completion["choices"][0]["message"]["content"]
     # to keep consistent between windows/linux we remove carriage return chars
     text = text.replace("\r", "")
 
@@ -103,16 +111,20 @@ def process_gpt(completion, headers):
     # sometimes gpt includes the header text even though I do not want it to, so here we test to see if it did to inform pd.read_csv
     includes_header = set([cell.strip(' "\'') for cell in text.split("\n")[0].split(",")]) == set(headers)
 
+    if not includes_header:
+        text = ",".join(headers) + "\n" + text
+
     # remove trailing commas, GPT seems to love to sometimes include those.
     text = "\n".join([line.strip(",") for i, line in enumerate(text.split("\n"))])
     df = pd.read_csv(
         StringIO(text),
         encoding="utf-8",
-        header=0 if includes_header else None,
+        header=0,
         names=headers,
-        quotechar='"',
+        quotechar=quote_char,
         sep=',',
-        skipinitialspace=True
+        skipinitialspace=True,
+        dtype=str
     )
 
     # sometimes gpt numbers the entries even though I tell it not to.
