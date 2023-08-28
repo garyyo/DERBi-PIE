@@ -47,7 +47,7 @@ def main():
                 {"pokorny_entries": [pokorny_root]},
                 {"liv_entries": liv_roots if liv_root else []}
             ],
-            "numerical_id": counter
+            "common_id": counter
         }
         counter += 1
         # add it to the list
@@ -68,7 +68,7 @@ def main():
                 {"pokorny_entries": []},
                 {"liv_entries": [root]}
             ],
-            "numerical_id": counter
+            "common_id": counter
         }
         counter += 1
         common_data.append(new_entry)
@@ -79,16 +79,16 @@ def main():
     for entry in pokorny_data.values():
         root = entry["root"]
         common_entry = common_data_dict[root]
-        entry["common_id"] = common_entry["numerical_id"]
+        entry["common_id"] = common_entry["common_id"]
 
     for entry in liv_data.values():
         root = entry["root"]
         if root in liv_to_pokorny:
             root = liv_to_pokorny[root]
         common_entry = common_data_dict[root]
-        entry["common_id"] = common_entry["numerical_id"]
+        entry["common_id"] = common_entry["common_id"]
 
-    print("")
+    print("writing data")
     # save the common data
     with open("data_common/table_common.json", 'w') as fp:
         json.dump(common_data, fp, indent=4)
