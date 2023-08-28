@@ -3,7 +3,6 @@ import json
 import os.path
 import re
 from collections import defaultdict
-from io import StringIO
 
 import pandas as pd
 import pyperclip
@@ -19,6 +18,20 @@ This script is a collection of methods used to generate 2 files for the database
 Currently the common table (these are called tables but are actually "collections" when in MongoDB) is mostly redundant, but is there to serve as a common point
 of reference between all specialized tables. 
 """
+
+
+def load_abbreviations_df():
+    abbreviation_data = pd.read_csv("data_pokorny/abbreviations.csv").dropna(axis=1, how='all').fillna("")
+    # remove parens
+    parens_rows = abbreviation_data[abbreviation_data['German abbreviation'].str.contains(r"[()]")].copy()
+    parens_rows['German abbreviation'] = parens_rows['German abbreviation'].str.replace(r'[()]', '', regex=True)
+    parens_rows['anton notes'] = "() removed"
+    # removes parens + inside
+    parens_rows2 = abbreviation_data[abbreviation_data['German abbreviation'].str.contains(r"[()]")].copy()
+    parens_rows2['German abbreviation'] = parens_rows2['German abbreviation'].apply(lambda x: re.sub(r'\([^()]*\)', '', x))
+    parens_rows2['anton notes'] = "(...) removed"
+    abbreviation_data = pd.concat([abbreviation_data, parens_rows, parens_rows2], ignore_index=True)
+    return abbreviation_data
 
 
 def remove_html_tags_from_text(text):
@@ -76,7 +89,7 @@ def get_reflex_pos(dfs, reflex_id):
 def get_reflex_source(dfs, reflex_id):
     source_ids = dfs["lex_reflex_source"][dfs["lex_reflex_source"].reflex_id == reflex_id].source_id.to_list()
     return {
-        "text_sources": [[dfs["lex_source"][dfs["lex_source"].id == source_id].iloc[0][["code", "display"]].to_dict() for source_id in source_ids]],
+        "text_sources": [dfs["lex_source"][dfs["lex_source"].id == source_id].iloc[0][["code", "display"]].to_dict() for source_id in source_ids],
         # we always credit LRC for the db source since we are processing their DB dump.
         "db_sources": [dfs["lex_source"][dfs["lex_source"].code == "LRC"].iloc[0][["code", "display"]].to_dict()]
     }
@@ -92,9 +105,88 @@ def get_semantic(dfs, lrc_id):
         return []
 
 
+iffy_languages = set()
+not_found_languages = set()
+
+
+def recover_gpt_reflexes(dfs, lrc_id):
+    global iffy_languages
+    global not_found_languages
+    # get the root
+    root = dfs["lex_etyma"][dfs["lex_etyma"].id == lrc_id].iloc[0]["entry"]
+    # cross-reference the root to the recovered reflexes
+    reflex_df = dfs["missing_forms"][dfs["missing_forms"].root == root]
+    # loop through them to get all the entries
+    entries = []
+    for i, row in reflex_df.iterrows():
+        # fixme: I am not sure about these, but I want to keep working
+        language_override = {
+            "Modern Persian": "New Persian",
+            "Old Church Slavic": "Old Slavic",
+        }
+        override_language_name = row.language in language_override
+        row.language = language_override.get(row.language, row.language)
+
+        # try to get the language from the lex_language, and if it doesn't exist try to find the closest match.
+        # maybe the first letter of each word is not capitalized?
+        language = None
+        if row.language.lower() in dfs["lex_language"]["name"].str.lower().to_list():
+            language_series = dfs["lex_language"][dfs["lex_language"]["name"].str.lower() == row.language.lower()]
+            language = get_reflex_language(dfs, language_series.iloc[0].id)
+
+        # if all else fails try each separate
+        if language is None:
+            # try splitting on some things (dash, space), and if one of those matches (starting from the end) then use that
+            split_language = [lang.strip() for lang in re.split(r"[- ]", row.language)]
+            found_languages = [
+                dfs["lex_language"][dfs["lex_language"]["name"].str.lower() == language.lower()]
+                for language in split_language
+                if language.lower() in dfs["lex_language"]["name"].str.lower().to_list()
+            ]
+            # check if language_series (a dataframe) is not empty
+            if len(found_languages) > 0:
+                language_series = found_languages[-1]
+                language = get_reflex_language(dfs, language_series.iloc[0].id)
+                iffy_languages.add(row.language)
+                override_language_name = True
+            pass
+
+        # manual overrides for things I know are wrong but cannot fix
+        # todo: FIX THESE
+        if language is None:
+            not_found_languages.add(row.language)
+            language = {'language_name': row.language, 'language_abbr': row.language, 'langauge_aka': '', 'family_name': 'MISSING', 'family_name_override': '', 'sub_family_name': 'MISSING', 'is_sub_branch': False, 'is_sub_sub_branch': False}
+
+        if override_language_name:
+            language["language_name"] = row.language
+            language["language_abbr"] = row.language
+        entry = {
+            # language/family
+            "language": language,
+            # reflex itself (may contain multiple), store as list
+            "reflexes": [row.reflex],
+            # part of speech
+            "pos": [{'code': 'TBD', 'meaning': "To Be Determined"}],
+            # the meaning (gloss), we use the translation if it is available, and default to the original german otherwise
+            "gloss": row["meaning"] if row["F translated"] == "" else row["F translated"],
+            # source (generally IEW, but we will credit UKY and GPT as db source?)
+            # todo: figure out who to actually credit.
+            "source": {
+                # just statically set it I guess.
+                "text_sources": [{'code': 'IEW', 'display': 'Julius Pokorny: Indogermanisches etymologisches Wörterbuch (1959)'}],
+                # I guess we credit gpt and uky?
+                "db_sources": [{'code': 'UKY', 'display': 'Dr. Andrew Byrd, University of Kentucky (fact checking GPT\'s output)'}, {'code': 'GPT', 'display': 'GPT-4 (organizing text from Pokorny)'}]
+            },
+        }
+        entries.append(entry)
+    return entries
+
+
 def get_reflex_entries(dfs, lrc_id):
     reflex_ids = dfs['lex_etyma_reflex'][dfs['lex_etyma_reflex']['etyma_id'] == lrc_id]["reflex_id"].tolist()
     reflex_df = dfs["lex_reflex"][dfs["lex_reflex"].id.isin(reflex_ids)]
+    if len(reflex_df) == 0:
+        return recover_gpt_reflexes(dfs, lrc_id)
 
     entries = []
     for i, reflex_row in reflex_df.iterrows():
@@ -212,6 +304,7 @@ def main():
     #   find links to reflexes
     #       a single entry can have multiple reflexes
     #       a single reflex can be part of multiple entries (but only if the entries are already cross-referenced already)
+    dfs["missing_forms"] = get_missing_forms()
 
     # the actual entries
     pokorny_entries = []
@@ -292,6 +385,14 @@ def main():
         }
         common_entries.append(common_entry)
 
+    # todo: get rid of these when they are no longer needed
+    global not_found_languages
+    global iffy_languages
+    not_found_languages = sorted(not_found_languages)
+    iffy_languages = sorted(iffy_languages)
+    print(f"{not_found_languages=}")
+    print(f"{iffy_languages=}")
+
     # breakpoint()
 
     # second pass to link cross-references
@@ -316,6 +417,67 @@ def main():
     with open("data_pokorny/table_common.json", "w") as fp:
         json.dump(common_entries, fp)
     pass
+
+
+def get_missing_forms():
+    abbr_df = load_abbreviations_df()
+    # every field is to be interpreted as a string
+    dfs = [
+        pd.read_csv(file, dtype=str).fillna("")
+        for file in glob.glob("data_pokorny/gpt_corrections/*.csv")
+    ]
+    # drop the first column of each
+    dfs = [df.drop(columns=df.columns[0]) for df in dfs]
+
+    # some of these are similar but need to be "realigned"
+    # which just means that the columns need to be shifted, root onwards, over by 1
+    for i in range(0, 2):
+        old_cols = dfs[i].columns
+        dfs[i]["web_root"] = ""
+        # rearrange the columns
+        dfs[i] = dfs[i][["web_root"] + list(old_cols)]
+
+    # copy the column names from -1 to 0 and 1
+    dfs[1].columns = dfs[-1].columns
+    dfs[0].columns = dfs[-1].columns
+
+    # concat
+    df = pd.concat(dfs, ignore_index=True)
+    # build a dictionary translating from df.abbr to df.language, using the abbr_df["German abbreviation"]: abbr_df["English"] for each unique abbr
+    not_found = set()
+    abbreviation_to_english = {}
+    for abbr in df.abbr.unique():
+        abbr_df_row = abbr_df[abbr_df["German abbreviation"] == abbr]
+        if abbr in ["", "note"]:
+            continue
+        if len(abbr_df_row) == 0:
+            # try all lower?
+            abbr_df_row = abbr_df[abbr_df["German abbreviation"] == abbr.lower()]
+            pass
+        # try splitting on space
+        # todo: this might be a bad idea. better to handle them individually
+        if len(abbr_df_row) == 0:
+            for split_abbr in abbr.split(" "):
+                abbr_df_row = abbr_df[abbr_df["German abbreviation"] == split_abbr]
+                if len(abbr_df_row) > 0:
+                    break
+        # if it doesn't have a . at the end, add it and try again
+        if len(abbr_df_row) == 0 and not abbr.endswith("."):
+            abbr_df_row = abbr_df[abbr_df["German abbreviation"] == abbr + "."]
+        # if still nothing, skip
+        if len(abbr_df_row) == 0:
+            not_found.add(abbr)
+            continue
+        abbr_df_row = abbr_df_row.iloc[0]
+        if abbr not in abbreviation_to_english:
+            abbreviation_to_english[abbr] = abbr_df_row["English"]
+        else:
+            if abbreviation_to_english[abbr] != abbr_df_row["English"]:
+                breakpoint()
+
+    # apply the abbreviation_to_english to the df.abbr column and store in the language column
+    df["language"] = df["abbr"].apply(lambda x: abbreviation_to_english.get(x, "Language not found"))
+    return df
 
 
 if __name__ == '__main__':

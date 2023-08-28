@@ -5,7 +5,7 @@ import re
 
 import pandas as pd
 
-from generate_pokorny_db_data import remove_html_tags_from_text
+from generate_pokorny_db_data import remove_html_tags_from_text, load_abbreviations_df
 from gpt_utils import process_gpt, query_gpt_fake, get_text_digest, get_digest
 
 
@@ -130,19 +130,7 @@ def augment_material(material, abbreviation_data):
 def find_missing_pokorny():
     dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
 
-    abbreviation_data = pd.read_csv("data_pokorny/abbreviations.csv").dropna(axis=1, how='all').fillna("")
-
-    # remove parens
-    parens_rows = abbreviation_data[abbreviation_data['German abbreviation'].str.contains(r"[()]")].copy()
-    parens_rows['German abbreviation'] = parens_rows['German abbreviation'].str.replace(r'[()]', '', regex=True)
-    parens_rows['anton notes'] = "() removed"
-
-    # removes parens + inside
-    parens_rows2 = abbreviation_data[abbreviation_data['German abbreviation'].str.contains(r"[()]")].copy()
-    parens_rows2['German abbreviation'] = parens_rows2['German abbreviation'].apply(lambda x: re.sub(r'\([^()]*\)', '', x))
-    parens_rows2['anton notes'] = "(...) removed"
-
-    abbreviation_data = pd.concat([abbreviation_data, parens_rows, parens_rows2], ignore_index=True)
+    abbreviation_data = load_abbreviations_df()
 
     # etyma_to_reflex = dfs['lex_etyma_reflex'].groupby("etyma_id")["reflex_id"].apply(list).to_dict()
 
