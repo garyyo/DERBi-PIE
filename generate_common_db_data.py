@@ -47,7 +47,7 @@ def main():
                 {"pokorny_entries": [pokorny_root]},
                 {"liv_entries": liv_roots if liv_root else []}
             ],
-            "common_id": counter
+            "common_id": str(counter)
         }
         counter += 1
         # add it to the list
@@ -68,7 +68,7 @@ def main():
                 {"pokorny_entries": []},
                 {"liv_entries": [root]}
             ],
-            "common_id": counter
+            "common_id": str(counter)
         }
         counter += 1
         common_data.append(new_entry)
