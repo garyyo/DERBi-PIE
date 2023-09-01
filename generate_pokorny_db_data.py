@@ -308,7 +308,7 @@ def main():
 
     # the actual entries
     pokorny_entries = []
-    common_entries = []
+    # common_entries = []
     pokorny_by_id = {}
     # for storing the entries in a way that can be easily cross_referenced
     lrc_to_pokorny_id = {}
@@ -377,13 +377,13 @@ def main():
         pokorny_by_id[entry_id] = entry
         lrc_to_pokorny_id[lrc_id] = entry_id
 
-        common_entry = {
-            "entry_id": entry_id,
-            "root": roots,
-            "meaning": gloss,
-            "pos": None,
-        }
-        common_entries.append(common_entry)
+        # common_entry = {
+        #     "entry_id": entry_id,
+        #     "root": roots,
+        #     "meaning": gloss,
+        #     "pos": None,
+        # }
+        # common_entries.append(common_entry)
 
     # todo: get rid of these when they are no longer needed
     global not_found_languages
@@ -414,8 +414,8 @@ def main():
     with open("data_pokorny/table_pokorny.json", "w", encoding="utf-8") as fp:
         json.dump(pokorny_entries_new, fp, indent=2)
 
-    with open("data_pokorny/table_common.json", "w") as fp:
-        json.dump(common_entries, fp)
+    # with open("data_pokorny/table_common.json", "w") as fp:
+    #     json.dump(common_entries, fp)
     pass
 
 

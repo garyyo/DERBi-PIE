@@ -2,6 +2,7 @@ import json
 
 import numpy as np
 import pandas as pd
+import tqdm
 
 
 def main():
@@ -33,12 +34,12 @@ def main():
     common_data = []
     liv_to_pokorny = {}
     counter = 0
-    for index, row in match_df.iterrows():
+    for index, row in tqdm.tqdm(match_df.iterrows()):
         pokorny_root = row["root"]
         liv_root = row["liv: cross-reference"]
         liv_roots = [root.strip() for root in liv_root.split(",")]
         # find the pokorny entry in the pokorny data
-        # pokorny_data_entry = pokorny_data[pokorny_root]
+        pokorny_data_entry = pokorny_data[pokorny_root]
         # liv_data_entry = liv_data.get(liv_root, None)
 
         new_entry = {
@@ -47,6 +48,7 @@ def main():
                 {"pokorny_entries": [pokorny_root]},
                 {"liv_entries": liv_roots if liv_root else []}
             ],
+            "meaning": pokorny_data_entry["meaning"],
             "common_id": str(counter)
         }
         counter += 1
@@ -61,7 +63,7 @@ def main():
     # set math
     unused_liv = set(liv_data.keys()) - used_liv_roots
     # add the remaining liv roots to the common data
-    for root in unused_liv:
+    for root in tqdm.tqdm(unused_liv):
         new_entry = {
             "root": root,
             "dictionary": [
@@ -88,14 +90,16 @@ def main():
         common_entry = common_data_dict[root]
         entry["common_id"] = common_entry["common_id"]
 
-    print("writing data")
     # save the common data
+    print("writing common")
     with open("data_common/table_common.json", 'w') as fp:
         json.dump(common_data, fp, indent=4)
     # save the pokorny data
+    print("writing pokorny")
     with open("data_pokorny/table_pokorny.json", 'w') as fp:
         json.dump(pokorny_data_list, fp, indent=4)
     # save the liv data
+    print("writing liv")
     with open("data_liv/table_liv.json", 'w') as fp:
         json.dump(liv_data_list, fp, indent=4)
     pass

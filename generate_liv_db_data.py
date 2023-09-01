@@ -70,14 +70,19 @@ def create_lineup_csv():
 def load_olander():
     liv_data_path = "data_liv/Olander_LIV_-_resultat_af_script.csv"
     df = pd.read_csv(liv_data_path)
-    # write out the translations to file for auto translating
-    with open("data_liv/german_meanings.txt", "w", encoding='utf8') as fp:
-        fp.writelines([
-            # remove any citation in form {num} and then strip all these possible quotation marks ’‘
-            re.sub(r'\{\d+\}', '', line).strip(' ’‘') + "\n"
-            for line in df.translation.to_list()
-        ])
-    translate_meaning_gpt.main("data_liv/german_meanings.txt", "data_liv/english_meanings.txt")
+
+    # fixme: this behavior might be confusing, check here if something is strange.
+    # if the english_meanings.txt doesnt already exist
+    if not os.path.exists("data_liv/english_meanings.txt"):
+        # write out the translations to file for auto translating
+        with open("data_liv/german_meanings.txt", "w", encoding='utf8') as fp:
+            fp.writelines([
+                # remove any citation in form {num} and then strip all these possible quotation marks ’‘
+                re.sub(r'\{\d+\}', '', line).strip(' ’‘') + "\n"
+                for line in df.translation.to_list()
+            ])
+        translate_meaning_gpt.main("data_liv/german_meanings.txt", "data_liv/english_meanings.txt")
+
     # load the english
     with open("data_liv/english_meanings.txt", "r", encoding='utf8') as fp:
         english_meanings = [line.strip(" \n") for line in fp.readlines()]
