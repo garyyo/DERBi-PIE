@@ -43,7 +43,7 @@ def get_reflex_entries(group):
             "gloss": "NYI",
             # source (static cuz we only have one place we are taking it from).
             "source": {
-                "text_sources": [[{'code': 'LIV', 'display': 'Helmut Rix, Martin Kümmel et al.: Lexikon der indogermanischen Verben (1998)'}]],
+                "text_sources": [{'code': 'LIV', 'display': 'Helmut Rix, Martin Kümmel et al.: Lexikon der indogermanischen Verben (1998)'}],
                 'db_sources': [{'code': 'TOL', 'display': 'LIV as compiled by Thomas Olander)'}]
             },
         }
