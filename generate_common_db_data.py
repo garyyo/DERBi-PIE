@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import tqdm
 
+from generate_pokorny_scraped_data_OLD import remove_non_english_chars
+
 
 def main():
     # open the pokorny and liv files
@@ -70,6 +72,7 @@ def main():
                 {"pokorny_entries": []},
                 {"liv_entries": [root]}
             ],
+            "meaning": liv_data[root]["meaning"],
             "common_id": str(counter)
         }
         counter += 1
@@ -89,6 +92,9 @@ def main():
             root = liv_to_pokorny[root]
         common_entry = common_data_dict[root]
         entry["common_id"] = common_entry["common_id"]
+
+    # sort the common by root
+    common_data = sorted(common_data, key=lambda x: remove_non_english_chars(x["root"]).lower())
 
     # save the common data
     print("writing common")
