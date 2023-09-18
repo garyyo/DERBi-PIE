@@ -645,6 +645,8 @@ def categorize_pokorny_differences():
     pass
 
 
+
+
 if __name__ == '__main__':
     # categorize_pokorny_differences()
     main()
