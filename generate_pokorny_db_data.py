@@ -6,6 +6,7 @@ from collections import defaultdict
 
 import pandas as pd
 import pyperclip
+import unicodedata
 from tqdm import tqdm
 
 from generate_pokorny_scraped_data_OLD import remove_non_english_chars
@@ -110,6 +111,8 @@ not_found_languages = set()
 
 
 def recover_gpt_reflexes(dfs, lrc_id):
+    if "missing_forms" not in dfs:
+        return []
     global iffy_languages
     global not_found_languages
     # get the root
@@ -474,12 +477,175 @@ def get_missing_forms():
         else:
             if abbreviation_to_english[abbr] != abbr_df_row["English"]:
                 breakpoint()
+    # get rid of completely empty rows
+    df = df[~df.apply(lambda row: all(cell == '' for cell in row), axis=1)]
 
     # apply the abbreviation_to_english to the df.abbr column and store in the language column
     df["language"] = df["abbr"].apply(lambda x: abbreviation_to_english.get(x, "Language not found"))
     return df
 
 
+def line_up_web_lrc():
+    dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
+
+    with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
+        scraped_pokorny = json.load(fp)
+
+    web_to_lrc = {}
+    lrc_to_web = {}
+
+    manual_skips = [2007]
+    for counter, (i, row) in enumerate(dfs['lex_etyma'].iterrows()):
+        old_i = i
+        if old_i in manual_skips:
+            continue
+
+        # Attempting to solve the misaligned entries issue by adding more and more offsets when I see them.
+        if counter >= 239:
+            i = old_i - 3
+        if counter >= 429:
+            i = old_i - 2
+        if counter >= 430:
+            i = old_i - 4
+        if counter >= 500:
+            i = old_i - 5
+
+        if counter >= 606:
+            i = old_i - 6
+
+        if counter >= 663:
+            i = old_i - 1
+
+        web_root = sorted(set(scraped_pokorny[i]["root"]))
+        texas_root = remove_html_tags_from_text(row.entry).strip("\n")
+
+        for root in web_root:
+            web_to_lrc[root] = texas_root
+        lrc_to_web[texas_root] = web_root
+
+    return web_to_lrc, lrc_to_web
+
+
+def categorize_pokorny_differences():
+    # load the lrc data and the gpt recovery data
+    dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
+    # missing_forms = get_missing_forms()
+    # dfs["missing_forms"] = missing_forms
+
+    # load common stuff
+    match_up = pd.read_csv("data_common/matchup.csv")
+
+    # load the web data
+    with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
+        scraped_pokorny = json.load(fp)
+    # scraped data needs to be keyed on the roots, so make a translation from root to scraped entry
+    scraped_root_to_entry = {root: entry for entry in scraped_pokorny for root in entry["root"]}
+
+    web_to_lrc, lrc_to_web = line_up_web_lrc()
+
+    tol_format = []
+    for i, row in tqdm(dfs["lex_etyma"].iterrows(), total=len(dfs["lex_etyma"]), ncols=150):
+        root = row["entry"].strip("\n\t ").replace("<p>", "").replace("</p>", "")
+
+        root_meaning = row["gloss"].strip("\n\t ").replace("<p>", "").replace("</p>", "")
+
+        # be careful with the web_entry, only use web_entry.get(key, default) since basically any key is not guaranteed to exist
+        web_roots = lrc_to_web.get(root, [])
+        if not web_roots:
+            # try again but after cleaning up the root
+            web_roots = lrc_to_web.get(remove_html_tags_from_text(root).strip("\n\t "), [])
+            pass
+        # unfortunately the web roots are stored as a list of roots, so we check them all
+        web_entry = {}
+        for web_root in web_roots:
+            entry = scraped_root_to_entry.get(web_root, None)
+            # arguably all should link to the same one, so we only care about the first
+            if entry is not None:
+                web_entry = entry
+                break
+        grammar_notes = ', '.join([comment.strip(" \n,") for comment in web_entry.get('Grammatical comments', []) if comment.strip(" \n,") != ""])
+        general_notes = ', '.join([comment.strip(" \n,") for comment in web_entry.get('General comments', []) if comment.strip(" \n,") != ""])
+        notes = ""
+        if grammar_notes != "":
+            notes += f"Grammatical comments: {grammar_notes}"
+        if general_notes != "":
+            if notes != "":
+                notes += " | "
+            notes += f"General comments: {general_notes}"
+
+        liv_cross = match_up[match_up.root == root]["liv: cross-reference"]
+        # remove nans
+        liv_cross = liv_cross[liv_cross.notna()]
+        # if anything is left get the first
+        if len(liv_cross) > 0:
+            liv_cross = liv_cross.iloc[0]
+        else:
+            liv_cross = ""
+
+        # add an extra entry for the root itself
+        root_tol_entry = {
+            "lemma": root,
+            # translation is just the gloss
+            "translation": root_meaning,
+            "iew_reference": f"IEW {row.page_number}",
+            "liv_root": liv_cross,
+            # fixme: just setting this to "J.P." for now
+            "author": "J.P.",
+            "category": "root",
+            # presumably 0 for the root itself
+            # todo: verify this
+            "innovation": 0,
+            "pie_stem": root,
+            # always PIE for the root
+            "branch": "PIE",
+            "reflex": "",
+            "meaning": root_meaning,
+            # todo: we may be able to recover some of the language_form_and_translation for the root
+            "language_form_and_translation": f"PIE {root} ... incomplete",
+            # notes are just copied from the web
+            "notes": notes,
+        }
+        tol_format.append(root_tol_entry)
+
+        # add the entries that were in the LRC dumps
+        for entry in get_reflex_entries(dfs, row.id):
+            reflex_meaning = entry['gloss']
+            tol_format.append({
+                # lemma is just the root
+                "lemma": root,
+                # translation is just the gloss
+                "translation": root_meaning,
+                # fixme: just the page number, but it might not match up correctly
+                "iew_reference": f"IEW {row.page_number}",
+                "liv_root": liv_cross,
+                # fixme: just setting this to "J.P." for now
+                "author": "J.P.",
+                # we don't have the same level of detail that the TOL has.
+                # todo: We should figure out what is acceptable to put here, or if we need to deviate from the format
+                "category": None,
+                # todo: I don't know if we can recover this, or if this is even relevant. For now set to known unacceptable value
+                "innovation": -1,
+                # this is not the same as the reflex itself, so currently I cannot recover it
+                # todo: figure out if we can recover this, and if so how
+                "pie_stem": None,
+                # these values will not always, if ever, match with TOL format.
+                # fixme: filling with the language and branch for now
+                "branch": entry['language']['language_name'],
+                "reflex": ", ".join(entry['reflexes']),
+                "meaning": reflex_meaning,
+                "language_form_and_translation": None,
+                # notes copied from the web
+                "notes": notes,
+                # "exists_in_web": any([
+                #     unicodedata.normalize("NFKD", reflex) in unicodedata.normalize("NFKD", " ".join(scraped_root_to_entry[root]["Material"]))
+                #     for reflex in entry["reflexes"]
+                # ])
+            })
+    pd.DataFrame(tol_format).to_csv("data_pokorny/tol_format.csv", index=False, encoding="utf-8")
+    pass
+
+
 if __name__ == '__main__':
+    # categorize_pokorny_differences()
     main()
     pass
