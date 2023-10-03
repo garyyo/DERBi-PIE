@@ -5,6 +5,7 @@ import re
 
 import pandas as pd
 
+import gpt_functions
 from generate_pokorny_db_data import remove_html_tags_from_text, load_abbreviations_df
 from gpt_utils import process_gpt, query_gpt_fake, get_text_digest, get_digest
 
@@ -27,6 +28,37 @@ write more code to handle that edge case.
 
 
 # region prompts
+
+def format_gpt_prompt_new2(root, gloss, material, abbreviations_used, headers):
+    headers_str = str(headers)[1:-1]
+    headers_str = headers_str.replace("'", '"')
+    aug_prompt = re.sub(r'\\\\+', r'\\', material)
+    aug_prompt = re.sub(r'__+', r'_', aug_prompt)
+    german_abbr = "\n".join([f'- {row["German abbreviation"]}: {row["German"]}' for i, row in abbreviations_used.iterrows()])
+    prompt = f'I will give you a mostly german block of text for the Proto-Indo-European reconstructed root "{root}" meaning "{gloss}". '
+    prompt += 'The text will generally contain a language abbreviation, a reflex, and a german meaning. '
+    prompt += 'The language abbreviation is in German, so if you recognize the text as other german text it is likely notes for that entry. ' \
+              'You may find that multiple languages listed for a single set of reflexes, when you see this you should split these into separate lines. ' \
+              'Each line should only have a single language. ' \
+              f'Here is a list of abbreviations and their German meaning that might be helpful.\n{german_abbr}\n'
+    prompt += 'A reflex is an attested word from which a root in the Proto-Indo-European is reconstructed from. ' \
+              'You may find that multiple reflexes exist per line for a given language abbreviation, you should treat these are separate entries. ' \
+              'You will never find a reflex that matches an abbreviation.'
+    prompt += 'Some of the reflexes are already surrounded by backslashes, which is used to indicate italic text, but others are not and you cannot rely on this. '
+    prompt += f'If the german meaning is missing fill that field with the meaning of the root (in this case "{gloss}"). '
+    prompt += 'In comma separated format, give me the language abbreviation, the reflex, the extracted german meaning, and whatever notes you may have found in the text for that entry. '
+    prompt += 'All of these are listed in the text block. '
+    prompt += ' \n \n'
+    prompt += aug_prompt
+    prompt += ' \n \n'
+    prompt += (
+        'Remember to give these in CSV format, without any other text. '
+        'The CSV should have columns for the language abbreviation, the reflex, the untranslated german meaning, and the notes for that entry. '
+        'Put quotes around each field to preserve commas and remove any black slashes you find. '
+        'Put the CSV in a codeblock marked with ``` so I can read it easily. '
+    )
+    prompt += f'Here are the headers, continue on from here: \n{headers_str}'
+    return prompt
 
 def format_gpt_prompt_new(root, gloss, material, abbreviations_used, headers):
     headers_str = str(headers)[1:-1]
@@ -204,7 +236,7 @@ def find_missing_pokorny():
         if output_digest in output_digests:
             print("I got the same data twice which is not expected. ",
                   "If you are expecting this then you must update the source code, as this is currently not allowed. ",
-                  "If this was a mistake you must find and delete the most recent cache in the gpt_chaches/ folder. ",
+                  "If this was a mistake you must find and delete the most recent cache in the gpt_caches/ folder. ",
                   f"Look for {get_digest(prompt)}",
                   "The program will exit once you (c)ontinue from here.")
             breakpoint()
@@ -270,7 +302,199 @@ def find_unrecoverable_pokorny():
     pass
 
 
+def find_non_gpt_pokorny():
+    pokorny_filename = "data_pokorny/table_pokorny.json"
+    with open(pokorny_filename, 'r') as fp:
+        pokorny_data_list = json.load(fp)
+    allow = ["GPT"]
+    deny = []
+    filtered = []
+    for entry in pokorny_data_list:
+        pass_test = True
+        root = entry["root"]
+        sources = []
+        for reflex in entry["reflexes"]:
+            for source in (reflex["source"]["text_sources"] + reflex["source"]["db_sources"]):
+                sources.append(source['code'])
+        in_allow = set(allow).issubset(set(sources))
+        in_deny = set(deny).issubset(set(sources)) if len(deny) > 0 else False
+        if not in_allow or in_deny:
+            pass_test = False
+        if pass_test:
+            filtered.append(root)
+    # print(f"{len(filtered)}/{2222} (= {(len(filtered)/2222)*100:0.2f}%)")
+    return filtered
+
+
+def do_remaining_pokorny():
+    dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
+
+    abbreviation_data = load_abbreviations_df()
+
+    # etyma_to_reflex = dfs['lex_etyma_reflex'].groupby("etyma_id")["reflex_id"].apply(list).to_dict()
+
+    line_up_df = get_web_lrc_lineup_corrected()
+
+    # figure out what entries do not have reflexes
+    missing_ids = sorted(set(dfs["lex_etyma"].id.unique()) - set(dfs['lex_etyma_reflex'].etyma_id.unique()))
+    missing_entries = dfs['lex_etyma'][dfs['lex_etyma'].id.isin(missing_ids)]
+    complete_entries = dfs['lex_etyma'][~dfs['lex_etyma'].id.isin(missing_ids)]
+
+    headers = ['abbr', 'reflex', 'meaning', 'notes']
+
+    with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
+        scraped_pokorny = json.load(fp)
+
+    # turn scraped pokorny into a dictionary
+    scraped_pokorny_dict = {
+        ", ".join(entry["root"]): entry
+        for entry in scraped_pokorny
+    }
+
+    # build a prompt for gpt for each
+    output_dfs = []
+    output_digests = set()
+
+    # some are out of order, so I have a dict to manually realign between UTexas and the pokorny site
+    reorder_dict = {}
+    manual_skips = [2007]
+    prompt_lengths = []
+    how_many_processed = 0
+    how_many_valid = 0
+    num_gpt4 = 0
+
+    # break out the entries to be processed
+    gpt4_char_threshold = 4500
+    entries_to_be_processed = list(enumerate(complete_entries.iterrows()))
+    # entries_to_be_processed = list(enumerate(complete_entries.iterrows()))[:21]
+
+    for counter, (i, row) in entries_to_be_processed:
+        # get some information
+        material = "\n".join(scraped_pokorny[i]['Material']).replace("`", "'")
+        texas_root = remove_html_tags_from_text(row.entry).strip("\n")
+
+        web_key = get_web_from_lrc(line_up_df, texas_root)
+        if web_key is None:
+            # todo: we are going to have to figure out what to do with these extras, and the missing ones
+            breakpoint()
+            continue
+        web_entry = scraped_pokorny_dict[web_key]
+
+        web_root = web_entry["root"]
+        gloss = remove_html_tags_from_text(row.gloss)
+
+        abbreviations_used = augment_material(material, abbreviation_data)
+
+        # we cant process things if there are no materials to process
+        if material.strip() == "":
+            print("missing material - SKIPPING")
+            continue
+
+        # form prompt (which has changed over time and I do not want to invalidate the caches on work already done)
+        prompt = format_gpt_prompt_new2(texas_root, gloss, material, abbreviations_used, headers)
+
+        # ask gpt
+        # print(f"{counter+1:5}|{texas_root:20}", end=" | ")
+        # continue
+
+        how_many_valid += 1
+
+        # count the lengths of the prompts to estimate costs
+        prompt_lengths.append(len(prompt))
+        # continue
+
+        # print(f"prompt length: {len(prompt)}")
+        # modulate the model based on the length of the prompt, anything over 3000 characters gets sent to gpt4.
+        model = "gpt-4" if len(prompt) > gpt4_char_threshold else "gpt-3.5-turbo"
+        # model = "gpt-4"
+        if model == "gpt-4":
+            num_gpt4 += 1
+        how_many_processed += 1
+
+        messages, _ = gpt_functions.query_gpt([prompt], note=f"{texas_root}{' '*15}"[:15], model=model)
+        content = gpt_functions.get_last_content(messages)
+        response = gpt_functions.extract_code_block(content)
+
+        # check if the first line is not valid csv and exclude it if it's not. It is likely to be marking what language the code block is.
+        if "," not in response.split("\n")[0]:
+            response = "\n".join(response.split("\n")[1:])
+
+        df = gpt_functions.csv_to_df(response, headers)
+        df["root"] = texas_root
+        df["web_root"] = web_root[-1]
+        output_dfs.append(df)
+    # combined_df = pd.concat(output_dfs)
+    how_many_gpt4 = len([length for length in prompt_lengths if length > gpt4_char_threshold])
+    how_many_gpt35 = len(prompt_lengths) - how_many_gpt4
+    print((
+        f"{how_many_processed=}, "
+        f"{how_many_valid=}, "
+        f"{how_many_gpt35=}, "
+        f"{how_many_gpt4=}, "
+        f"percentage gpt4: {(how_many_gpt4/len(prompt_lengths))*100:03.2f}%, "
+    ))
+    gpt_functions.print_cost()
+    combined_df = pd.concat(output_dfs)
+    combined_df = combined_df[['web_root', 'root'] + headers]
+    combined_df.to_csv("data_pokorny/additional_pokorny_reflexes.csv")
+    # gpt_functions.print_cost()
+    breakpoint()
+
+
+def create_web_lrc_lineup():
+    dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
+    missing_ids = sorted(set(dfs["lex_etyma"].id.unique()) - set(dfs['lex_etyma_reflex'].etyma_id.unique()))
+    all_entries = dfs['lex_etyma']
+
+    with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
+        scraped_pokorny = json.load(fp)
+
+    entries_to_be_processed = list(enumerate(all_entries.iterrows()))
+    web_to_texas = []
+    for counter, (i, row) in entries_to_be_processed:
+        if i in range(len(scraped_pokorny)):
+            web_root = scraped_pokorny[i]["root"]
+        else:
+            web_root = []
+        texas_root = remove_html_tags_from_text(row.entry).strip("\n")
+        web_to_texas.append({
+            "web_root": ", ".join(web_root),
+            "texas_root": texas_root,
+        })
+    df = pd.DataFrame(web_to_texas)
+    df.to_csv("data_pokorny/web_to_texas.csv")
+    # breakpoint()
+
+
+def get_web_lrc_lineup_corrected():
+    # dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
+    # all_entries = dfs['lex_etyma']
+    #
+    # with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
+    #     scraped_pokorny = json.load(fp)
+
+    line_up_df = pd.read_csv("data_common/web_to_texas_corrected.csv", index_col=0).fillna("MISSING")
+    return line_up_df
+
+
+def get_web_from_lrc(line_up_df, lrc_root):
+    found_root = line_up_df[line_up_df.texas_root == lrc_root].iloc[0].web_root
+    if found_root == "MISSING":
+        return None
+    return found_root
+
+
+def get_lrc_from_web(line_up_df, web_root):
+    found_root = line_up_df[line_up_df.web_root == ", ".join(web_root)].iloc[0].texas_root
+    if found_root == "MISSING":
+        return None
+    return found_root
+
+
 if __name__ == '__main__':
-    find_unrecoverable_pokorny()
-    find_missing_pokorny()
+    # get_web_lrc_lineup_corrected()
+    # create_web_lrc_lineup()
+    do_remaining_pokorny()
+    # find_unrecoverable_pokorny()
+    # find_missing_pokorny()
     pass

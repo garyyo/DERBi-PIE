@@ -37,14 +37,14 @@ def get_models():
 
 def backup_response(prompt, response):
     digest = get_digest(prompt)
-    with open(f"gpt_chaches/{digest}.json", "w", encoding="utf-8") as fp:
+    with open(f"gpt_caches/{digest}.json", "w", encoding="utf-8") as fp:
         json.dump(response, fp, indent=2)
 
 
 def load_response(prompt):
     digest = get_digest(prompt)
-    if os.path.exists(f"gpt_chaches/{digest}.json"):
-        with open(f"gpt_chaches/{digest}.json", "r", encoding="utf-8") as fp:
+    if os.path.exists(f"gpt_caches/{digest}.json"):
+        with open(f"gpt_caches/{digest}.json", "r", encoding="utf-8") as fp:
             response = json.load(fp)
         return response, digest
     return None, digest
@@ -52,8 +52,8 @@ def load_response(prompt):
 
 def delete_response(prompt):
     digest = get_digest(prompt)
-    if os.path.exists(f"gpt_chaches/{digest}.json"):
-        os.remove(f"gpt_chaches/{digest}.json")
+    if os.path.exists(f"gpt_caches/{digest}.json"):
+        os.remove(f"gpt_caches/{digest}.json")
     return
 
 

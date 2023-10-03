@@ -645,6 +645,21 @@ def categorize_pokorny_differences():
     pass
 
 
+def compare_lrc_web():
+    # load the lrc data and the gpt recovery data
+    dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
+
+    # common data
+    match_up = pd.read_csv("data_common/matchup.csv")
+
+    # load the web data
+    with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
+        scraped_pokorny = json.load(fp)
+    # scraped data needs to be keyed on the roots, so make a translation from root to scraped entry
+    scraped_root_to_entry = {root: entry for entry in scraped_pokorny for root in entry["root"]}
+
+    web_to_lrc, lrc_to_web = line_up_web_lrc()
+    pass
 
 
 if __name__ == '__main__':
