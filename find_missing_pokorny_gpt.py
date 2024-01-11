@@ -2,8 +2,13 @@ import glob
 import json
 import os
 import re
+import sys
+import time
+import warnings
 
+import openai
 import pandas as pd
+import pyperclip
 
 import gpt_functions
 from generate_pokorny_db_data import remove_html_tags_from_text, load_abbreviations_df
@@ -361,7 +366,12 @@ def do_remaining_pokorny():
     prompt_lengths = []
     how_many_processed = 0
     how_many_valid = 0
+    num_gpt35 = 0
     num_gpt4 = 0
+    num_gpt4_errored = 0
+    num_errored = 0
+    num_too_long = 0
+    parse_errored_entries = []
 
     # break out the entries to be processed
     gpt4_char_threshold = 4500
@@ -370,24 +380,39 @@ def do_remaining_pokorny():
 
     for counter, (i, row) in entries_to_be_processed:
         # get some information
-        material = "\n".join(scraped_pokorny[i]['Material']).replace("`", "'")
         texas_root = remove_html_tags_from_text(row.entry).strip("\n")
 
         web_key = get_web_from_lrc(line_up_df, texas_root)
         if web_key is None:
             # todo: we are going to have to figure out what to do with these extras, and the missing ones
-            breakpoint()
+            # breakpoint()
             continue
-        web_entry = scraped_pokorny_dict[web_key]
+        web_entry = scraped_pokorny_dict.get(web_key, None)
+        if web_entry is None:
+            # todo: we are going to have to figure out what to do with these extras, and the missing ones
+            # breakpoint()
+            continue
 
         web_root = web_entry["root"]
         gloss = remove_html_tags_from_text(row.gloss)
 
+        material = "\n".join(web_entry['Material']).replace("`", "'")
         abbreviations_used = augment_material(material, abbreviation_data)
 
         # we cant process things if there are no materials to process
         if material.strip() == "":
             print("missing material - SKIPPING")
+            df = pd.DataFrame([
+                {
+                    'abbr': "missing material",
+                    'reflex': "missing material",
+                    'meaning': "missing material",
+                    'notes': "missing material"
+                }
+            ])
+            df["root"] = texas_root
+            df["web_root"] = web_root[-1]
+            output_dfs.append(df)
             continue
 
         # form prompt (which has changed over time and I do not want to invalidate the caches on work already done)
@@ -405,40 +430,150 @@ def do_remaining_pokorny():
 
         # print(f"prompt length: {len(prompt)}")
         # modulate the model based on the length of the prompt, anything over 3000 characters gets sent to gpt4.
+        if len(prompt) > 15000:
+            num_too_long += 1
+            df = pd.DataFrame([
+                {
+                    'abbr': "too long",
+                    'reflex': "too long",
+                    'meaning': "too long",
+                    'notes': "too long"
+                }
+            ])
+            df["root"] = texas_root
+            df["web_root"] = web_root[-1]
+            output_dfs.append(df)
+            continue
+
         model = "gpt-4" if len(prompt) > gpt4_char_threshold else "gpt-3.5-turbo"
-        # model = "gpt-4"
+
         if model == "gpt-4":
             num_gpt4 += 1
-        how_many_processed += 1
+        if model == "gpt-3.5-turbo":
+            num_gpt35 += 1
 
-        messages, _ = gpt_functions.query_gpt([prompt], note=f"{texas_root}{' '*15}"[:15], model=model)
-        content = gpt_functions.get_last_content(messages)
-        response = gpt_functions.extract_code_block(content)
+        # attempt to do a thing, if it doesn't work then move on this time
+        attempt_success = True
+        for attempt in range(2):
+            sys.stdout.flush()
+            messages, _ = gpt_functions.query_gpt(
+                [prompt],
+                note=f"{counter}/{len(entries_to_be_processed)} {texas_root}{' '*15}"[:15],
+                model=model,
+            )
+            try:
+                content = gpt_functions.get_last_content(messages)
+                response = gpt_functions.extract_code_block(content)
 
-        # check if the first line is not valid csv and exclude it if it's not. It is likely to be marking what language the code block is.
-        if "," not in response.split("\n")[0]:
-            response = "\n".join(response.split("\n")[1:])
+                # check if the first line is not valid csv and exclude it if it's not. It is likely to be marking what language the code block is.
+                if "," not in response.split("\n")[0]:
+                    response = "\n".join(response.split("\n")[1:])
 
-        df = gpt_functions.csv_to_df(response, headers)
+                df = gpt_functions.csv_to_df(response, headers)
+                break
+            except openai.error.RateLimitError as err:
+                time.sleep(60)
+                continue
+            except (pd.errors.ParserError, ) as err:
+                num_errored += 1
+                if model == "gpt-4":
+                    num_gpt4_errored += 1
+
+                # warnings.warn(f"{err}")
+                # digest, _ = gpt_functions.get_proper_digest(model, user_prompts=[prompt])
+
+                # file = f"gpt_caches/{digest}.json"
+                # manual_fix(file, headers, prompt)
+                # breakpoint()
+                df = pd.DataFrame([
+                    {
+                        'abbr': "errored",
+                        'reflex': "errored",
+                        'meaning': "errored",
+                        'notes': "errored"
+                    }
+                ])
+                break
+                # os.remove(file)
+                # continue
+                # osCommandString = f"\"C:\\Program Files (x86)\\Notepad++\\notepad++.exe\" {file}"
+                # os.system(osCommandString)
+                # # give a warning message and continue
+                # warnings.warn(f"Failed to parse response, investigate/delete the file and rerun. \n check: {digest}.json", stacklevel=2)
+                # parse_errored_entries.append(digest)
+                # num_errored += 1
+                # attempt_success = False
+                # break
+
+        if not attempt_success:
+            continue
+
         df["root"] = texas_root
         df["web_root"] = web_root[-1]
         output_dfs.append(df)
+
+        how_many_processed += 1
+
+        stopped = False
+        if stopped:
+            break
     # combined_df = pd.concat(output_dfs)
     how_many_gpt4 = len([length for length in prompt_lengths if length > gpt4_char_threshold])
     how_many_gpt35 = len(prompt_lengths) - how_many_gpt4
-    print((
-        f"{how_many_processed=}, "
-        f"{how_many_valid=}, "
-        f"{how_many_gpt35=}, "
-        f"{how_many_gpt4=}, "
-        f"percentage gpt4: {(how_many_gpt4/len(prompt_lengths))*100:03.2f}%, "
-    ))
+    completion_percentage = counter / len(complete_entries)
+    print(
+        f"{how_many_processed=}",
+        f"{num_errored=}",
+        f"{num_too_long=}",
+        f"{how_many_valid=}",
+        f"{how_many_gpt35=}",
+        f"{how_many_gpt4=}",
+        f"{num_gpt4_errored=}",
+        f"percentage gpt4: {(how_many_gpt4/len(prompt_lengths))*100:03.2f}%",
+        f"percentage completed: {completion_percentage*100:03.2f}%",
+        f"current cost: ${gpt_functions.get_cost():0.4f}",
+        f"projected cost: ${gpt_functions.get_cost()/completion_percentage:0.4f}",
+        sep="\n"
+    )
     gpt_functions.print_cost()
-    combined_df = pd.concat(output_dfs)
-    combined_df = combined_df[['web_root', 'root'] + headers]
-    combined_df.to_csv("data_pokorny/additional_pokorny_reflexes.csv")
+    if len(output_dfs) > 0:
+        for i, sub in enumerate(split_list(output_dfs)):
+            combined_df = pd.concat(sub)
+            combined_df = combined_df[['web_root', 'root'] + headers]
+            combined_df.to_csv(f"data_pokorny/additional_pokorny/additional_pokorny_reflexes_{i}.csv")
+    else:
+        print("No output")
     # gpt_functions.print_cost()
     breakpoint()
+
+
+def split_list(input_list, num_outputs=10):
+    sublist_size = len(input_list) // num_outputs
+
+    return [
+        input_list[i * sublist_size: (i+1) * sublist_size if i != num_outputs-1 else len(input_list)]
+        for i in range(num_outputs)
+    ]
+
+
+def manual_fix(file, headers, prompt):
+    with open(file, "r") as fp:
+        r = json.load(fp)
+    pyperclip.copy(prompt)
+    breakpoint()
+    content = pyperclip.paste()
+    response = gpt_functions.extract_code_block(content)
+    # try it again to validate
+    if "," not in response.split("\n")[0]:
+        response = "\n".join(response.split("\n")[1:])
+
+    df = gpt_functions.csv_to_df(response, headers)
+
+    # if it passes validation then we save it
+    r["messages"][-1]["content"] = response
+    with open(file, "w") as fp:
+        json.dump(r, fp)
+    return df
 
 
 def create_web_lrc_lineup():

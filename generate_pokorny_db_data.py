@@ -178,7 +178,7 @@ def recover_gpt_reflexes(dfs, lrc_id):
                 # just statically set it I guess.
                 "text_sources": [{'code': 'IEW', 'display': 'Julius Pokorny: Indogermanisches etymologisches Wörterbuch (1959)'}],
                 # I guess we credit gpt and uky?
-                "db_sources": [{'code': 'UKY', 'display': 'Dr. Andrew Byrd, University of Kentucky (fact checking GPT\'s output)'}, {'code': 'GPT', 'display': 'GPT-4 (organizing text from Pokorny)'}]
+                "db_sources": [{'code': 'UKY', 'display': 'Dr. Andrew Byrd, University of Kentucky (verifying and correcting GPT\'s output)'}, {'code': 'GPT', 'display': 'GPT-4 (organizing text from Pokorny)'}]
             },
         }
         entries.append(entry)

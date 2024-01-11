@@ -6,11 +6,14 @@ import hashlib
 import json
 import os
 import re
+import tempfile
 import time
 from io import StringIO
 
+import clevercsv
 import openai
 import pandas as pd
+import pyperclip
 
 g_model = "gpt-3.5-turbo"
 # g_model = "gpt-3.5-turbo-16k"
@@ -84,6 +87,23 @@ def load_response(prompts):
     return None, digest
 
 
+def load_response_digest(digest):
+    if os.path.exists(f"gpt_caches/{digest}.json"):
+        with open(f"gpt_caches/{digest}.json", "r", encoding="utf-8") as fp:
+            response = json.load(fp)
+        return response, digest
+    return None, digest
+
+
+def get_proper_digest(model=g_model, system_prompt=None, user_prompts=()):
+    if type(user_prompts) == str:
+        user_prompts = [user_prompts]
+
+    prompt_string = f"{model}-{system_prompt}-{user_prompts}"
+    digest = get_digest(prompt_string)
+    return digest, prompt_string
+
+
 def calculate_cost(model, in_tokens, out_tokens=0):
     # given a model and a number of tokens, calculate the estimated cost in USD
     # gpt4: 0.03 per 1k tokens input, 0.06 per 1k tokens output
@@ -98,15 +118,15 @@ def calculate_cost(model, in_tokens, out_tokens=0):
     return cost/1000
 
 
-def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_print=False):
+def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_print=False, fake=False):
     global total_cost
     # I also want to be able to use this with just a single string
     if type(user_prompts) == str:
         user_prompts = [user_prompts]
 
     # load a cached response if it exists
-    prompt_string = f"{model}-{system_prompt}-{user_prompts}"
-    response, digest = load_response(prompt_string)
+    digest, prompt_string = get_proper_digest(model, system_prompt, user_prompts)
+    response, digest = load_response_digest(digest)
     # notes are just so I know which query is running at a glance
     note_text = f"starting with '{user_prompts[0][:40]}...'" if note is None else f"({note})"
     query_desc = f"{digest[:20]}..., {len(user_prompts): >3} prompt(s), {note_text} -> {model}"
@@ -114,11 +134,14 @@ def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_
         prompt_cost = calculate_cost(model, response["prompt_tokens"], response["response_tokens"])
         total_cost += prompt_cost
         if not no_print:
-            print(f'Found existing: {query_desc} | used {response["total_prompts"]} prompts and {response["total_tokens"]} tokens for ${prompt_cost:02.6f}')
+            print(
+                f'Found existing: {query_desc} | used {response["total_prompts"]} prompts and {response["total_tokens"]} tokens for ${prompt_cost:02.6f}',
+                flush=True
+            )
         return response["messages"], response["messages"][-1]
 
     if not no_print:
-        print(f"Generating new: {query_desc} ", end="")
+        print(f"Generating new: {query_desc} ", end="", flush=True)
 
     # load openai key
     openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -132,12 +155,16 @@ def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_
     # build the initial messages object
     messages = [{"role": "system", "content": system_prompt}] if system_prompt is not None else []
 
+    timer_start = time.time()
     completion = None
     for prompt in user_prompts:
         if not no_print:
             print(total_prompts, end=",")
         # append the next prompt to the messages
         messages.append({"role": "user", "content": prompt})
+        if fake:
+            pyperclip.copy(prompt)
+            breakpoint()
         # contact openai and get a response
         completion = try_gpt(
             openai.ChatCompletion.create,
@@ -154,11 +181,12 @@ def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_
         total_prompts += 1
         total_tokens += completion.get("usage", {}).get("total_tokens", 0)
         pass
+    timer_end = time.time()
 
     prompt_cost = calculate_cost(model, prompt_tokens, response_tokens)
     total_cost += prompt_cost
     if not no_print:
-        print(f" | used {total_prompts} prompts and {total_tokens} tokens for ${prompt_cost:02.6f}")
+        print(f" | used {total_prompts} prompts and {total_tokens} tokens for ${prompt_cost:06.06f}, {timer_end - timer_start:05.02f}s", flush=True)
     backup_response(prompt_string, messages, prompt_tokens, response_tokens, total_tokens, total_prompts)
     return messages, messages[-1]
 
@@ -172,6 +200,7 @@ def try_gpt(call, *args, **kwargs):
     err = None
     for attempt_num in range(total_attempts):
         try:
+            time.sleep(1)
             output = call(*args, **kwargs)
             success = True
             break
@@ -210,16 +239,41 @@ def csv_to_df(text, headers):
 
     # remove trailing commas, GPT seems to love to sometimes include those.
     text = "\n".join([line.strip(",") for i, line in enumerate(text.split("\n"))])
+
+    # replace escaped " characters with fancy quote characters because it helps
+    # todo: undo this in the df
+    text = text.replace(r"\"", "“")
+
+
     # create the df, but drop any row that is all nan.
-    df = pd.read_csv(
-        StringIO(text),
-        encoding="utf-8",
-        header=0 if includes_header else None,
-        names=headers,
-        quotechar='"',
-        sep=',',
-        skipinitialspace=True
-    ).dropna(how='all')
+    try:
+        df = pd.read_csv(
+            StringIO(text),
+            encoding="utf-8",
+            header=0 if includes_header else None,
+            names=headers,
+            quotechar='"',
+            sep=',',
+            skipinitialspace=True
+        ).dropna(how='all')
+    except pd.errors.ParserError as err:
+        # replace [quote comma space quote] sequence with something that is not used, then replace all the other commas with something unused
+        unused1 = "[[[[[[[[["
+        unused_comma = "，"
+        text = text.replace("\", \"", unused1)
+        text = text.replace(",", unused_comma)
+        text = text.replace(unused1, "\", \"")
+        df = pd.read_csv(
+            StringIO(text),
+            encoding="utf-8",
+            header=0 if includes_header else None,
+            names=headers,
+            quotechar='"',
+            sep=',',
+            skipinitialspace=True
+        ).dropna(how='all')
+
+    # todo: undo the weird stuff I did earlier
 
     # sometimes gpt numbers the entries even though I tell it not to.
     # To combat that I look in the first column and try to strip out any
