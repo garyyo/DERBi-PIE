@@ -20,24 +20,24 @@ It scrapes the pokorny website: https://indo-european.info/pokorny-etymological-
 def mark_text_effects(p):
     # Loop through each <i> tag
     italic_tags = p.find_all("i")
-    for italic_tag in italic_tags:
+    for tag in italic_tags:
         # Replace <i> tags with "\\"
-        italic_tag.replace_with(r"\\" + italic_tag.text + r"\\")
+        tag.replace_with(r"\\" + tag.text + r"\\")
 
     # Loop through each <u> tag
     underline_tags = p.find_all("u")
-    for underline_tag in underline_tags:
-        underline_tag.replace_with(r"__" + underline_tag.text + r"__")
+    for tag in underline_tags:
+        tag.replace_with(r"__" + tag.text + r"__")
 
     # loop through each sup tag
-    underline_tags = p.find_all("sup")
-    for underline_tag in underline_tags:
-        underline_tag.replace_with(r"^^" + underline_tag.text + r"^^")
+    sup_tags = p.find_all("sup")
+    for tag in sup_tags:
+        tag.replace_with(r"^^" + tag.text + r"^^")
 
     # loop through each sub tag
-    underline_tags = p.find_all("sub")
-    for underline_tag in underline_tags:
-        underline_tag.replace_with(r"↓↓" + underline_tag.text + r"↓↓")
+    sub_tags = p.find_all("sub")
+    for tag in sub_tags:
+        tag.replace_with(r"↓↓" + tag.text + r"↓↓")
     return p
 
 
@@ -62,7 +62,6 @@ def extract_entries(root_urls):
         last_label = None
         for p_index, p in enumerate(paragraphs):
             # if there are italic tags then we need to preserve that by replacing them with \\
-            # todo: figure out if we need to do this for other formatting.
             p = mark_text_effects(p)
 
             # if it's the first line then it's the root
@@ -70,15 +69,18 @@ def extract_entries(root_urls):
                 entry["root"].append(p.get_text())
                 continue
 
-            # the p tags seem to be in form "label" + "\xa0"*n + "value"
-            # n meaning some amount of that character (I think it's for spacing)
+            # the p tags seem to be in form "label" + "\xa0"*n + "value" + (optionally more value lines in rare cases) + (optionally more "\xa0"*n)
+            # "\xa0" being a non-breaking space
             # if there is nothing there then it's an empty line
-            splits = p.get_text().split("\xa0")
-            if len(splits) <= 1:
+            # we remove all "\xa0" to the right since any trailing nbsp's are going to mess things up.
+            splits = p.get_text().rstrip("\xa0").split("\xa0")
+
+            # if there are only
+            if len(splits) < 1:
                 continue
 
-            label = splits[0].strip()
-            value = splits[-1].strip()
+            label = splits[0].strip() if len(splits) > 0 else ""
+            value = "".join([split.strip() for split in splits[1:] if split.strip() != ""]).strip() if len(splits) > 1 else ""
 
             # if there is no label use the last one we saw
             if len(label) == 0:
@@ -130,7 +132,7 @@ def main():
 
 
 def test():
-    extract_entries([("baxb-_bhaxbh-_paxp", "https://indo-european.info/pokorny-etymological-dictionary/baxb-_bhaxbh-_paxp.htm")])
+    extract_entries([("test", "https://indo-european.info/pokorny-etymological-dictionary/aig-3.htm")])
     breakpoint()
 
 

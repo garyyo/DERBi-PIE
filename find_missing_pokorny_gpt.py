@@ -65,6 +65,7 @@ def format_gpt_prompt_new2(root, gloss, material, abbreviations_used, headers):
     prompt += f'Here are the headers, continue on from here: \n{headers_str}'
     return prompt
 
+
 def format_gpt_prompt_new(root, gloss, material, abbreviations_used, headers):
     headers_str = str(headers)[1:-1]
     headers_str = headers_str.replace("'", '"')

@@ -191,6 +191,21 @@ def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_
     return messages, messages[-1]
 
 
+def get_cached(user_prompts=(), system_prompt=None, model=g_model):
+    # I also want to be able to use this with just a single string
+    if type(user_prompts) == str:
+        user_prompts = [user_prompts]
+
+    # load a cached response if it exists
+    digest, prompt_string = get_proper_digest(model, system_prompt, user_prompts)
+    response, digest = load_response_digest(digest)
+
+    if response is not None:
+        return response["messages"], response["messages"][-1]
+
+    return None, None
+
+
 # automatic retries because I am tired of openai timing out.
 # todo: pass a pre bound function rather than the function and its parameters
 def try_gpt(call, *args, **kwargs):
