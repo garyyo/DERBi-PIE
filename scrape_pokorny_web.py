@@ -17,27 +17,47 @@ It scrapes the pokorny website: https://indo-european.info/pokorny-etymological-
 """
 
 
+def skip_leading_whitespace(text, surrounding):
+    preamble = ""
+    lead = 0
+    for letter in text:
+        if letter in [" ", "\xa0"]:
+            preamble += letter
+            lead += 1
+        else:
+            break
+    postamble = ""
+    follow = len(text)
+    for letter in reversed(text):
+        if letter in [" ", "\xa0"]:
+            postamble = letter + postamble
+            follow -= 1
+        else:
+            break
+    return f"{preamble}{surrounding}{text[lead:follow]}{surrounding}{postamble}"
+
+
 def mark_text_effects(p):
     # Loop through each <i> tag
     italic_tags = p.find_all("i")
     for tag in italic_tags:
         # Replace <i> tags with "\\"
-        tag.replace_with(r"\\" + tag.text + r"\\")
+        tag.replace_with(skip_leading_whitespace(tag.text, r"\\"))
 
     # Loop through each <u> tag
     underline_tags = p.find_all("u")
     for tag in underline_tags:
-        tag.replace_with(r"__" + tag.text + r"__")
+        tag.replace_with(skip_leading_whitespace(tag.text, r"__"))
 
-    # loop through each sup tag
+    # loop through each <sup> tag
     sup_tags = p.find_all("sup")
     for tag in sup_tags:
-        tag.replace_with(r"^^" + tag.text + r"^^")
+        tag.replace_with(skip_leading_whitespace(tag.text, r"^^"))
 
-    # loop through each sub tag
+    # loop through each <sub> tag
     sub_tags = p.find_all("sub")
     for tag in sub_tags:
-        tag.replace_with(r"↓↓" + tag.text + r"↓↓")
+        tag.replace_with(skip_leading_whitespace(tag.text, r"↓↓"))
     return p
 
 
@@ -132,7 +152,7 @@ def main():
 
 
 def test():
-    extract_entries([("test", "https://indo-european.info/pokorny-etymological-dictionary/aig-3.htm")])
+    extract_entries([("test", "https://indo-european.info/pokorny-etymological-dictionary/aĝ.htm")])
     breakpoint()
 
 
