@@ -118,19 +118,20 @@ def calculate_cost(model, in_tokens, out_tokens=0):
     return cost/1000
 
 
-def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_print=False, fake=False):
+def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_print=False, fake=False, bypass_cache=False):
     global total_cost
     # I also want to be able to use this with just a single string
     if type(user_prompts) == str:
         user_prompts = [user_prompts]
 
-    # load a cached response if it exists
+    # notes are just so I know which query is running at a glance
     digest, prompt_string = get_proper_digest(model, system_prompt, user_prompts)
     response, digest = load_response_digest(digest)
-    # notes are just so I know which query is running at a glance
     note_text = f"starting with '{user_prompts[0][:40]}...'" if note is None else f"({note})"
     query_desc = f"{digest[:20]}..., {len(user_prompts): >3} prompt(s), {note_text} -> {model}"
-    if response is not None:
+
+    # load a cached response if it exists, and if we are not bypassing it
+    if response is not None and not bypass_cache:
         prompt_cost = calculate_cost(model, response["prompt_tokens"], response["response_tokens"])
         total_cost += prompt_cost
         if not no_print:

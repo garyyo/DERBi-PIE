@@ -118,17 +118,18 @@ def extract_bad_entries(filepath):
     return rerun_entry_ids, delete_entry_ids
 
 
-def redo_pokorny(rerun_entry_ids):
+def redo_pokorny(rerun_entry_ids, filepath):
     # we have the entries that we need to do, but we need all the other information about them
     dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
     abbreviation_data = load_abbreviations_df()
     line_up_df = get_web_lrc_lineup_corrected()
 
     redo_entries = dfs['lex_etyma'][dfs['lex_etyma'].entry.isin([id[1] for id in rerun_entry_ids])]
+    output_dfs = []
 
     headers = ['abbr', 'reflex', 'meaning', 'notes']
 
-    with open("data_pokorny/pokorny_scraped_old.json", "r", encoding="utf-8") as fp:
+    with open("data_pokorny/pokorny_scraped.json", "r", encoding="utf-8") as fp:
         scraped_pokorny = json.load(fp)
 
     # turn scraped pokorny into a dictionary
@@ -137,7 +138,7 @@ def redo_pokorny(rerun_entry_ids):
         for entry in scraped_pokorny
     }
 
-    gpt4_char_threshold = 4500
+    gpt4_char_threshold = 5000
     entries_to_be_processed = list(enumerate(redo_entries.iterrows()))
 
     header_color = "\033[92m"
@@ -153,25 +154,87 @@ def redo_pokorny(rerun_entry_ids):
         gloss = remove_html_tags_from_text(row.gloss)
 
         material = "\n".join(web_entry['Material']).replace("`", "'")
-        abbreviations_used = augment_material(material, abbreviation_data)
 
-        prompt = format_gpt_prompt_new2(texas_root, gloss, material, abbreviations_used, headers)
-
-        model = "gpt-4" if len(prompt) > gpt4_char_threshold else "gpt-3.5-turbo"
-
-        # check if it's valid before trying to grab the cached response
-        if len(prompt) > 15000 or material.strip() == "":
-            print(f"{header_color}---=== Never Run for {web_root} ===---{end_color}")
+        # for some length threshold, if its under it, we try to run as normal
+        if len(material) < 5000:
+            materials = [material]
+        # if over we try to run a bunch of smaller versions splitting the material based on the lines in the material field
         else:
-            messages, _ = gpt_functions.get_cached([prompt], model=model)
+            materials = []
+            cumulative_line = ""
+            cumulative_len = 0
+            for line in web_entry['Material']:
+                cumulative_len += len(line)
+                cumulative_line += "\n" + line
+                # we try to keep the line lengths under the gpt4 threshold, but this won't always work
+                if cumulative_len > (gpt4_char_threshold - 3000):
+                    materials.append(cumulative_line.strip())
+                    cumulative_line = ""
+                    cumulative_len = 0
+            if cumulative_len != 0:
+                materials.append(cumulative_line.strip())
 
-            if messages is not None:
-                print(f"{header_color}---=== Found Cached for {web_root} ===---{end_color}")
-                print(messages[-1]["content"])
-                print(f"for {web_root}")
+        for mat_num, mat in enumerate(materials):
+            material_progress = f"{mat_num+1}/{len(materials)}"
+            abbreviations_used = augment_material(mat, abbreviation_data)
+
+            prompt = format_gpt_prompt_new2(texas_root, gloss, mat, abbreviations_used, headers)
+
+            model = "gpt-4" if len(prompt) > gpt4_char_threshold else "gpt-3.5-turbo"
+
+            # check if it's valid before trying to grab the cached response
+            if len(prompt) > 15000:
+                print(f"{header_color}---=== Too long for {web_root} {material_progress} ===---{end_color}")
+                breakpoint()
+            elif mat.strip() == "":
+                print(f"{header_color}---=== No material for {web_root} {material_progress} ===---{end_color}")
+                breakpoint()
             else:
-                print(f"{header_color}---=== Cached Missing for {web_root}! ===---{end_color}")
-        breakpoint()
+                attempt_failed = False
+                for attempt in range(4):
+                    try:
+                        bypass_cache = (attempt != 0)
+                        messages, _ = gpt_functions.get_cached([prompt], model=model)
+
+                        if messages is None or bypass_cache:
+                            print(f"{header_color}---=== Cached Missing for {web_root} {material_progress}! ===---{end_color}")
+                            if model == "gpt-4":
+                                breakpoint()
+                            messages, _ = gpt_functions.query_gpt(
+                                [prompt],
+                                model=model,
+                                note=f"{counter}/{len(entries_to_be_processed)} {texas_root}{' '*15}"[:15],
+                                bypass_cache=bypass_cache
+                            )
+                        else:
+                            print(f"{header_color}---=== Found Cached for {web_root} {material_progress} ===---{end_color}")
+
+                        content = gpt_functions.get_last_content(messages)
+                        response = gpt_functions.extract_code_block(content)
+
+                        # check if the first line is not valid csv and exclude it if it's not. It is likely to be marking what language the code block is.
+                        if "," not in response.split("\n")[0]:
+                            response = "\n".join(response.split("\n")[1:])
+
+                        df = gpt_functions.csv_to_df(response, headers)
+
+                        df["root"] = texas_root
+                        df["web_root"] = web_root[-1]
+                        output_dfs.append(df)
+                        attempt_failed = False
+                        break
+                    except (pd.errors.ParserError, ) as err:
+                        attempt_failed = True
+                        print("\033[93mParse Error\033[0m")
+                        continue
+                if attempt_failed:
+                    breakpoint()
+                    exit()
+    if len(output_dfs) > 0:
+        combined_df = pd.concat(output_dfs)
+        combined_df = combined_df[['web_root', 'root'] + headers]
+        os.path.basename(filepath)
+        combined_df.to_csv(f"data_pokorny/additional_pokorny_corrections/rerun/{os.path.splitext(os.path.basename(filepath))[0]}.csv")
     pass
 
 
@@ -181,7 +244,7 @@ def main():
     # rerun_entry_ids, delete_entry_ids = extract_bad_entries(filepath)
     rerun_entry_ids = {('bhares- : bhores-', 'bhares-, bhores-'), ('ant-s', 'ant-s'), ('aĝ-', 'ag̑-'), ('aleq-', 'aleq-'), ('ā̆p-2', '2. ā̆p-'), ('ar(ə)-', 'ar(ə)-'), ('au̯(e)-9, au̯ed-, au̯er-', '9. au̯(e)-, au̯ed-, au̯er-'), ('ā̆l-3', '3. ā̆l-'), ('ā̆s-, davon azd-, azg(h)-', 'ā̆s-, based on it azd-, azg(h)-'), ('bhā̆u-1 : bhū̆-', '1. bhā̆u- : bhū̆-'), ('bhedh-2', '2. bhedh-'), ('au̯(e)-10, au̯ē(o)-, u̯ē-', '10. au̯(e)-, au̯ē(i)-, u̯ē-'), ('al-5', '5. al-'), ('bheid-', 'bheid-'), ('bhardhā', 'bhardhā'), ('bhel-3, bhlē-', '3. bhel-, bhlē-'), ('b(e)u-2, bh(e)ū̆-', '2. b(e)u-, bh(e)ū̆-'), ('al-1, ol-', '1. al-, ol-'), ('ak̂-, ok̂-', '2. ak̑-, ok̑-'), ('aig-3', '3. aig-'), ('ar-1^^*^^, themat. (a)re-, schwere Basis arə-, rē- und i-Basis (a)rī̆-, rēi-', '1. ar-, thematic (a)re-, heavy-base arə-, rē-, and i-base (a)rī̆-, rēi-')}
     # print out what needs to be rerun?
-    redo_pokorny(rerun_entry_ids)
+    redo_pokorny(rerun_entry_ids, filepath)
     breakpoint()
     pass
 
