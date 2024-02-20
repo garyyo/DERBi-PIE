@@ -3,14 +3,58 @@ import re
 from collections import defaultdict
 
 import pandas as pd
-
+import tqdm
 
 csv_kwargs = {"index": False}
 
 
 def parse_string(input_string):
-    if "(possibly)" in input_string:
-        breakpoint()
+    # breakdown by parts
+    broken_string = input_string
+
+    # find language
+    matches = re.findall(r"([^:]+):\s?", broken_string)
+    language = matches[0] if len(matches) else ""
+
+    if language == "":
+        return [None]
+
+    # remove language from the string
+    broken_string = broken_string[len(language)+1:].strip()
+
+    if broken_string == "":
+        return [None]
+
+    # find comma boundaries
+    matches = re.finditer(r",(?![^\(]*\))", broken_string)
+    if matches is None:
+        matches = []
+
+    # for each found entry
+    sequence_start = 0
+    entries = []
+    for match_obj in matches:
+        found_entry = broken_string[sequence_start:match_obj.span()[0]].strip()
+        sequence_start = match_obj.span()[1]
+        entries.append(found_entry)
+    found_entry = broken_string[sequence_start:].strip()
+    entries.append(found_entry)
+
+    parsed_entries = []
+    # process the entries into ones that can be returned (language, word, pronunciation, meaning)
+    for entry in entries:
+        matches = re.findall(r"([^\(]+)(?:\(.+\))?", entry)
+        if len(matches) == 0:
+            continue
+        word = matches[0].strip()
+        parsed_entries.append({
+            "language": language,
+            "word": word
+        })
+    return parsed_entries if len(parsed_entries) != 0 else [None]
+
+
+def old_parse_string(input_string):
     matches = re.findall(r"([^:]+):\s?([^\s]*)\s*(?:\((.+), [\"“]([^\"]+)[\"”]\))?", input_string)
 
     return dict(zip(["language", "word", "pronunciation", "meaning"], matches[0])) if len(matches) else None
@@ -43,13 +87,39 @@ def process_descendants(entry):
         if current_depth == 0:
             continue
 
-        node_data = parse_string(line["text"])
+        # TODO: I currently trim to only the first word found. THIS NEEDS TO BE RECTIFIED ASAP
+        node_data = parse_string(line["text"])[0]
+        # node_data = old_parse_string(line["text"])
 
-        child_node = (node_data["language"], node_data["word"]) if node_data is not None else None
+        child_node = None
+        if node_data is not None:
+            node_data["language"] = node_data["language"].strip("→⇒ \t\n")
+            child_node = (node_data["language"], node_data["word"])
 
         # todo: sometimes there just is not a word in the intermediary, for now I will ignore those.
         if node_data is not None and node_data["word"].strip() == "":
             continue
+
+        # sometimes it says "[script needed]" or something, which I have no idea how to deal with, so we will ignore it
+        bad_words = [
+            "[Term?]",
+            "[script needed]",
+            "Hieroglyphs needed",
+            "[Book",
+            "[Manichaean needed]"
+        ]
+        if any(word in line["text"] for word in bad_words):
+            continue
+
+        # if "stupeō" in line["text"]:
+        #     breakpoint()
+
+        # investigate_words = ["["]
+        # if any(word in line["text"] for word in investigate_words):
+        #     print(f"https://en.wiktionary.org/wiki/{entry['original_title']}")
+        #     print(line["text"])
+        #     breakpoint()
+        #     continue
 
         seen_nodes[current_depth] = child_node
 
@@ -75,14 +145,21 @@ def process_descendants(entry):
 
 def main():
     # load the preprocessed data from kaikki.org
-    wiki_data = {}
-    with open("data_wiktionary/kaikki.org-dictionary-ProtoIndoEuropean.json", encoding="utf-8") as fp:
-        for line in fp:
+    edges = set()
+    # approx number of lines in the "all-words" version so I can get better time estimates
+    num_lines = 9333951
+    # with open("data_wiktionary/kaikki.org-dictionary-ProtoIndoEuropean.json", encoding="utf-8") as fp:
+    with open("data_wiktionary/kaikki.org-dictionary-all-words.json", encoding="utf-8") as fp:
+        for line in tqdm.tqdm(fp, total=num_lines):
             data = json.loads(line)
-            wiki_data[data["word"]] = data
+            # wiki_data[data["word"]] = data
+            for edge in process_descendants(data):
+                edges.add(edge)
 
-    edges = [edge for entry in wiki_data.values() for edge in process_descendants(entry)]
+    # edges = [edge for entry in wiki_data.values() for edge in process_descendants(entry)]
     nodes = {node for edge in edges for node in edge}
+
+    print(f"num nodes: {len(nodes)}")
 
     # write to csv for visualization
     df = pd.DataFrame([{"source": source, "target": target} for (source, target) in edges])
