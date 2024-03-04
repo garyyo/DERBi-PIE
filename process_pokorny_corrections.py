@@ -95,29 +95,39 @@ def extract_bad_entries(filepath):
     sheet = workbook.active
     rerun_entry_ids = set()
     delete_entry_ids = set()
-    normal_colors = ["00000000", "FFFFFFFF"]
+    normal_colors = ["00000000", "FFFFFFFF", "FFFF9900"]
     error_color = "FFFF0000"
-    redo_color = "FFFF9900"
+    redo_colors = ["FFFFFF00"]
 
     for row in sheet.iter_rows():
         for cell in row:
-            if cell.fill.start_color.rgb not in normal_colors + [error_color, redo_color]:
-                # if we find a color that has never been seen
+            # if we find a color that has never been seen
+            if cell.fill.start_color.rgb not in normal_colors + [error_color] + redo_colors:
                 print(f"New cell color '{cell.fill.start_color.rgb}' in cell {cell}, with value '{cell.value}'")
                 breakpoint()
+
+            # if we find a color marking deletion
             if cell.fill.start_color.rgb == error_color:
-                # here are entries that we just need to mark for deletion
+                if row[1].value is None or row[2].value is None:
+                    print(f"Root entry highlighted, but no root found in cell {cell}, please correct and rerun")
+                    breakpoint()
                 delete_entry_ids.add((row[1].value, row[2].value))
                 break
-            if cell.fill.start_color.rgb == redo_color:
-                # this row needs to be skipped and marked as missing
+
+            # if we find a color marking missing entries
+            if cell.fill.start_color.rgb in redo_colors:
+                if row[1].value is None or row[2].value is None:
+                    print(f"Root entry highlighted, but no root found in cell {cell}, please correct and rerun")
+                    breakpoint()
                 rerun_entry_ids.add((row[1].value, row[2].value))
                 break
+
     if (None, None) in rerun_entry_ids:
         rerun_entry_ids.remove((None, None))
     return rerun_entry_ids, delete_entry_ids
 
 
+# the single most hacked together function I have ever written. If you are trying to read it, I am sorry.
 def redo_pokorny(rerun_entry_ids, filepath):
     # we have the entries that we need to do, but we need all the other information about them
     dfs = {os.path.splitext(os.path.basename(df_file))[0]: pd.read_pickle(df_file) for df_file in glob.glob("data_pokorny/table_dumps/*.df")}
@@ -138,13 +148,19 @@ def redo_pokorny(rerun_entry_ids, filepath):
         for entry in scraped_pokorny
     }
 
+    # if there are too many tokens (for which a character limit is an approximation for) we found that gpt3.5 just gets confused, even if it supports that many
+    # so this char count limit is later used to make sure that any prompt over that limit goes to gpt4
     gpt4_char_threshold = 5000
+
+    # just some data manipulation to make things look right
     entries_to_be_processed = list(enumerate(redo_entries.iterrows()))
 
+    # colors to help print things out in a way that its easy to see
     header_color = "\033[92m"
     end_color = "\033[0m"
 
     for counter, (i, row) in entries_to_be_processed:
+        # gather some data necessary for the prompt
         texas_root = remove_html_tags_from_text(row.entry).strip("\n")
 
         web_key = get_web_from_lrc(line_up_df, texas_root)
@@ -153,6 +169,7 @@ def redo_pokorny(rerun_entry_ids, filepath):
         web_root = web_entry["root"]
         gloss = remove_html_tags_from_text(row.gloss)
 
+        # gather material
         material = "\n".join(web_entry['Material']).replace("`", "'")
 
         # for some length threshold, if its under it, we try to run as normal
@@ -174,12 +191,18 @@ def redo_pokorny(rerun_entry_ids, filepath):
             if cumulative_len != 0:
                 materials.append(cumulative_line.strip())
 
+        # here we actually start forming the prompt and running
         for mat_num, mat in enumerate(materials):
+            # get progress info
             material_progress = f"{mat_num+1}/{len(materials)}"
+            # get which abbreviations are *probably* used in this, it will err on the side of more abbreviations
             abbreviations_used = augment_material(mat, abbreviation_data)
 
+            # form the actual prompt
             prompt = format_gpt_prompt_new2(texas_root, gloss, mat, abbreviations_used, headers)
 
+            # we try to cut down to only use gpt3.5, but its difficult to plan that out with 100% accuracy,
+            # so this switches to gpt4 in case we go over the limit for some reason
             model = "gpt-4" if len(prompt) > gpt4_char_threshold else "gpt-3.5-turbo"
 
             # check if it's valid before trying to grab the cached response
@@ -194,10 +217,12 @@ def redo_pokorny(rerun_entry_ids, filepath):
                 for attempt in range(4):
                     try:
                         bypass_cache = (attempt != 0)
-                        messages, _ = gpt_functions.get_cached([prompt], model=model)
+                        messages, _, digest = gpt_functions.get_cached([prompt], model=model)
 
                         if messages is None or bypass_cache:
                             print(f"{header_color}---=== Cached Missing for {web_root} {material_progress}! ===---{end_color}")
+                            # for the sake of not wasting money, a gpt-4 request must be manually OK'd by having the user continue from the breakpoint.
+                            # not ideal for users, but money.
                             if model == "gpt-4":
                                 breakpoint()
                             messages, _ = gpt_functions.query_gpt(
@@ -207,7 +232,7 @@ def redo_pokorny(rerun_entry_ids, filepath):
                                 bypass_cache=bypass_cache
                             )
                         else:
-                            print(f"{header_color}---=== Found Cached for {web_root} {material_progress} ===---{end_color}")
+                            print(f"{header_color}---=== Found Cached for {web_root} {material_progress} ===---{end_color} {digest}")
 
                         content = gpt_functions.get_last_content(messages)
                         response = gpt_functions.extract_code_block(content)
@@ -239,10 +264,11 @@ def redo_pokorny(rerun_entry_ids, filepath):
 
 
 def main():
-    filepath = 'data_pokorny/additional_pokorny_corrections/Additional Pokorny Forms 0.xlsx'
-    # filepath = fix_italics(filepath)
-    # rerun_entry_ids, delete_entry_ids = extract_bad_entries(filepath)
-    rerun_entry_ids = {('bhares- : bhores-', 'bhares-, bhores-'), ('ant-s', 'ant-s'), ('aĝ-', 'ag̑-'), ('aleq-', 'aleq-'), ('ā̆p-2', '2. ā̆p-'), ('ar(ə)-', 'ar(ə)-'), ('au̯(e)-9, au̯ed-, au̯er-', '9. au̯(e)-, au̯ed-, au̯er-'), ('ā̆l-3', '3. ā̆l-'), ('ā̆s-, davon azd-, azg(h)-', 'ā̆s-, based on it azd-, azg(h)-'), ('bhā̆u-1 : bhū̆-', '1. bhā̆u- : bhū̆-'), ('bhedh-2', '2. bhedh-'), ('au̯(e)-10, au̯ē(o)-, u̯ē-', '10. au̯(e)-, au̯ē(i)-, u̯ē-'), ('al-5', '5. al-'), ('bheid-', 'bheid-'), ('bhardhā', 'bhardhā'), ('bhel-3, bhlē-', '3. bhel-, bhlē-'), ('b(e)u-2, bh(e)ū̆-', '2. b(e)u-, bh(e)ū̆-'), ('al-1, ol-', '1. al-, ol-'), ('ak̂-, ok̂-', '2. ak̑-, ok̑-'), ('aig-3', '3. aig-'), ('ar-1^^*^^, themat. (a)re-, schwere Basis arə-, rē- und i-Basis (a)rī̆-, rēi-', '1. ar-, thematic (a)re-, heavy-base arə-, rē-, and i-base (a)rī̆-, rēi-')}
+    filepath = 'data_pokorny/additional_pokorny_corrections/Additional Pokorny Forms 1.xlsx'
+    # filepath_italic = fix_italics(filepath)
+    # rerun_entry_ids, delete_entry_ids = extract_bad_entries(filepath_italic)
+    # breakpoint()
+    rerun_entry_ids = {('bhendh-', 'bhendh-'), ('bher-2', '2. bher-'), ('bhū̆ĝo-s, Koseform bhukko-s', 'bhū̆g̑o-s, familiar form bhukko-s'), ('bher-1', '1. bher-'), ('bher-3', '3. bher-')}
     # print out what needs to be rerun?
     redo_pokorny(rerun_entry_ids, filepath)
     breakpoint()

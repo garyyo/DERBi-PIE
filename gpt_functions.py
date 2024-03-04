@@ -202,9 +202,9 @@ def get_cached(user_prompts=(), system_prompt=None, model=g_model):
     response, digest = load_response_digest(digest)
 
     if response is not None:
-        return response["messages"], response["messages"][-1]
+        return response["messages"], response["messages"][-1], digest
 
-    return None, None
+    return None, None, digest
 
 
 # automatic retries because I am tired of openai timing out.
