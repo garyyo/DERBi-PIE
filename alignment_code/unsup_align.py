@@ -7,21 +7,7 @@
 
 import codecs, sys, time, math, argparse, ot
 import numpy as np
-from utils import *
-
-parser = argparse.ArgumentParser(description='Wasserstein Procrustes for Embedding Alignment')
-parser.add_argument('--model_src', type=str, help='Path to source word embeddings')
-parser.add_argument('--model_tgt', type=str, help='Path to target word embeddings')
-parser.add_argument('--lexicon', type=str, help='Path to the evaluation lexicon')
-parser.add_argument('--output_src', default='', type=str, help='Path to save the aligned source embeddings')
-parser.add_argument('--output_tgt', default='', type=str, help='Path to save the aligned target embeddings')
-parser.add_argument('--seed', default=1111, type=int, help='Random number generator seed')
-parser.add_argument('--nepoch', default=6, type=int, help='Number of epochs')
-parser.add_argument('--niter', default=5000, type=int, help='Initial number of iterations')
-parser.add_argument('--bsz', default=100, type=int, help='Initial batch size')
-parser.add_argument('--lr', default=500., type=float, help='Learning rate')
-parser.add_argument('--nmax', default=20000, type=int, help='Vocabulary size for learning the alignment')
-parser.add_argument('--reg', default=0.05, type=float, help='Regularization parameter for sinkhorn')
+from alignment_code.utils import *
 
 
 def objective(X, Y, R, n=5000):
@@ -125,10 +111,20 @@ def main(model_src, model_tgt, lexicon, output_src, output_tgt, seed=1111, nepoc
         save_vectors(output_tgt, np.dot(x_tgt, R.T), words_tgt)
 
 
-def args_expand(args):
-    main(args.model_src, args.model_tgt, args.lexicon, args.output_src, args.output_tgt, args.seed, args.nepoch, args.niter, args.bsz, args.lr, args.nmax, args.reg)
-
-
 if __name__ == '__main__':
-    args_expand(parser.parse_args())
+    parser = argparse.ArgumentParser(description='Wasserstein Procrustes for Embedding Alignment')
+    parser.add_argument('--model_src', type=str, help='Path to source word embeddings')
+    parser.add_argument('--model_tgt', type=str, help='Path to target word embeddings')
+    parser.add_argument('--lexicon', type=str, help='Path to the evaluation lexicon')
+    parser.add_argument('--output_src', default='', type=str, help='Path to save the aligned source embeddings')
+    parser.add_argument('--output_tgt', default='', type=str, help='Path to save the aligned target embeddings')
+    parser.add_argument('--seed', default=1111, type=int, help='Random number generator seed')
+    parser.add_argument('--nepoch', default=6, type=int, help='Number of epochs')
+    parser.add_argument('--niter', default=5000, type=int, help='Initial number of iterations')
+    parser.add_argument('--bsz', default=100, type=int, help='Initial batch size')
+    parser.add_argument('--lr', default=500., type=float, help='Learning rate')
+    parser.add_argument('--nmax', default=20000, type=int, help='Vocabulary size for learning the alignment')
+    parser.add_argument('--reg', default=0.05, type=float, help='Regularization parameter for sinkhorn')
+    args = parser.parse_args()
+    main(args.model_src, args.model_tgt, args.lexicon, args.output_src, args.output_tgt, args.seed, args.nepoch, args.niter, args.bsz, args.lr, args.nmax, args.reg)
     pass

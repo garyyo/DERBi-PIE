@@ -3,12 +3,17 @@ import gc
 import re
 
 import gensim
+import gensim.models
 import numpy as np
 import fasttext
 import fasttext.util
 import pandas as pd
 import spacy
 import errno
+import scipy.spatial.distance
+
+import alignment_code.unsup_align
+import alignment_code.unsup_multialign
 
 
 def find_words(words_source, lang_source, words_target, lang_target):
@@ -54,13 +59,13 @@ def ft_model_to_vec(model, vec_save_path):
             vector_str = " ".join([str(v) for v in vector])
 
             fp.write(f"{word} {vector_str}\n")
-    pass
+    return vec_save_path
 
 
-def ft_vec_to_model(model, vec_load_path):
-    # todo: write all this.
-    breakpoint()
-    pass
+def ft_vec_to_model(vec_load_path):
+    # we load an unaligned version of the same model, then overwrite the vectors with the aligned version
+    model = gensim.models.KeyedVectors.load_word2vec_format(vec_load_path, binary=False)
+    return model
 
 
 def ft_save_lexicon(source_to_target, lexicon_save_path):
@@ -74,37 +79,91 @@ def ft_save_lexicon(source_to_target, lexicon_save_path):
             if " " in source or " " in target_chosen:
                 breakpoint()
             fp.write(f"{source} {target_chosen}\n")
+    return lexicon_save_path
+
+
+def analogize(model, w1, w2, w3, **kwargs):
+    return model.most_similar(negative=[w1], positive=[w2, w3], **kwargs)
+
+
+def test_french_analogies(model_fr, model_fr_aligned):
+    compares = [
+        ("roi", "femme", "homme"),  # King is to queen as man is to woman
+        ("amour", "guerre", "paix"),  # Love is to hate as peace is to war
+        ("dieu", "monde", "ciel"),  # God is to creator/Lord as heaven is to the world
+        ("berger", "femme", "homme"),  # Shepherd (feminine) as shepherd is to man
+        ("sagesse", "fou", "sage"),  # Wisdom is to folly as the wise man is to the fool
+        ("péché", "repentance", "pécheur"),  # Sin is to salvation/redemption as sinner is to repentance
+        ("prophète", "message", "dieu"),  # Prophet is to revelation as God is to message
+        ("roi", "justice", "guerre")  # King is to judge/peace as war is to justice
+    ]
+    print("for initial/aligned respectively:")
+    for word1, word2, word3 in compares:
+        initial_analogy, _ = analogize(model_fr, word1, word2, word3, topn=1)[0]
+        aligned_analogy, _ = analogize(model_fr_aligned, word1, word2, word3, topn=1)[0]
+        correct = '✓' if initial_analogy == aligned_analogy else '✗'
+        print(f"{correct} {word1:10} -> {word2:10} = {word3:10} -> {initial_analogy:>15} / {aligned_analogy:20}")
 
 
 def main():
-    # load some data to align together
-    model_ft_fr = fasttext.load_model("alignment/fr_bible_model_ft.bin")
-    model_ft_es = fasttext.load_model("alignment/es_bible_model_ft.bin")
-
-    # a third model to test against (currently ALSO being used to connect translation from es to fr)
-    model_ft_la = fasttext.load_model("alignment/la_bible_model_ft.bin")
+    # load two models as the source language models. these will be used to recreate the target language model
+    model_fr: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/fr_bible_model.bin")
+    model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/es_bible_model.bin")
+    # a third model to be a target. the source models will attempt to recreate this
+    model_la: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/la_bible_model.bin")
 
     # select words between the two models that are considered roughly equivalent
-    latin_to_french, french_to_latin = find_words(model_ft_la.words, "Latin", model_ft_fr.words, "French")
-    latin_to_spanish, spanish_to_latin = find_words(model_ft_la.words, "Latin", model_ft_es.words, "Spanish")
+    # todo: this needs to eventually be switched to find words that take a path from source 1 (french) to source 2 (spanish) instead of going through latin
+    latin_to_french, french_to_latin = find_words(model_la.index_to_key, "Latin", model_fr.index_to_key, "French")
+    latin_to_spanish, spanish_to_latin = find_words(model_la.index_to_key, "Latin", model_es.index_to_key, "Spanish")
     french_to_spanish = chain_translation(french_to_latin, latin_to_spanish)
     spanish_to_french = chain_translation(spanish_to_latin, latin_to_french)
 
-    # save the vec and lexicon files to do alignment outside of this script (anton: may eventually be put back in this script)
-    ft_model_to_vec(model_ft_fr, "alignment/unaligned_models/fr_bible_model.vec")
-    ft_model_to_vec(model_ft_es, "alignment/unaligned_models/es_bible_model.vec")
+    # save the vec and lexicon files to do alignment (anton: eventually remove all the file io stuff maybe)
+    model_source_1_path ="alignment/unaligned_models/es_bible_model.vec"
+    model_source_2_path ="alignment/unaligned_models/fr_bible_model.vec"
+    model_es.save_word2vec_format(model_source_1_path)
+    model_fr.save_word2vec_format(model_source_2_path)
 
     # the lexicon
-    ft_save_lexicon(spanish_to_french, "alignment/unaligned_models/es_to_fr.lex")
+    # lexicon_path = ft_save_lexicon(spanish_to_french, "alignment/unaligned_models/es_to_fr.lex")
 
-    # third model to align later to test against
-    ft_model_to_vec(model_ft_la, "alignment/unaligned_models/la_bible_model.vec")
+    # align to that
+    # alignment_code.unsup_align.main(
+    #     model_source_1_path, model_source_2_path, lexicon_path,
+    #     "alignment/aligned_models/es_aligned_model.vec", "alignment/aligned_models/fr_aligned_model.vec",
+    #     nmax=min(len(model_es.index_to_key), len(model_fr.index_to_key))
+    # )
+    # aligned_file_es = "alignment/aligned_models/es_aligned_model.vec"
+    # aligned_file_fr = "alignment/aligned_models/fr_aligned_model.vec"
 
-    ft_save_lexicon(spanish_to_latin, "alignment/unaligned_models/es_to_la.lex")
+    # multi alignment, needed to align more than one model together (which even in the base case of 2 languages is needed for comparison to the target)
+    # aligned_file_es, aligned_file_fr, aligned_file_la = alignment_code.unsup_multialign.main(
+    #     ["es", "fr", "la"], max_load=min(len(model_es.index_to_key), len(model_fr.index_to_key))
+    # )
+    aligned_file_es, aligned_file_fr, aligned_file_la = ('alignment/aligned_models/es-ma[es,fr,la].vec', 'alignment/aligned_models/fr-ma[es,fr,la].vec', 'alignment/aligned_models/la-ma[es,fr,la].vec')
 
-    # align the models
+    # load the aligned version now, but I can only load as a keyed vector.
+    model_es_aligned = gensim.models.KeyedVectors.load_word2vec_format(aligned_file_es, binary=False)
+    model_fr_aligned = gensim.models.KeyedVectors.load_word2vec_format(aligned_file_fr, binary=False)
+    # model_la_aligned = gensim.models.KeyedVectors.load_word2vec_format(aligned_file_la, binary=False)
 
+    test_french_analogies(model_fr, model_fr_aligned)
+
+    es_to_fr_aligned_cos = []
+    es_to_fr_normal_cos = []
+    for es_word, fr_words in spanish_to_french.items():
+        fr_word = fr_words[0]
+        distance_aligned = scipy.spatial.distance.cosine(model_es_aligned[es_word], model_fr_aligned[fr_word])
+        distance_normal = scipy.spatial.distance.cosine(model_es[es_word], model_fr[fr_word])
+        print(f"{es_word + ' - ' + fr_word:25} : {distance_aligned:.4f} vs {distance_normal:.4f}")
+        es_to_fr_aligned_cos.append(distance_aligned)
+        es_to_fr_normal_cos.append(distance_normal)
+
+    print(f"combined distance aligned: {np.sum(es_to_fr_aligned_cos):.4f} / {len(spanish_to_french)} = {np.mean(es_to_fr_aligned_cos) * 100:.4f}%")
+    print(f"combined distance normal: {np.sum(es_to_fr_normal_cos):.4f} / {len(spanish_to_french)} = {np.mean(es_to_fr_normal_cos) * 100:.4f}%")
     breakpoint()
+
     pass
 
     # create a new model descendant model based on the two aligned children
@@ -117,7 +176,7 @@ def main():
     # compare the test model and the recreated model
     pass
 
-    breakpoint()
+    # breakpoint()
     pass
 
 

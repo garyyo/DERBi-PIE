@@ -49,8 +49,21 @@ def save_vectors(fname, x, words):
     fout = io.open(fname, 'w', encoding='utf-8')
     fout.write(u"%d %d\n" % (n, d))
     for i in range(n):
+        # anton: doing a weird "quantization" thing here where they only save 4 decimal points
         fout.write(words[i] + " " + " ".join(map(lambda a: "%.4f" % a, x[i, :])) + "\n")
     fout.close()
+
+
+# anton: I wrote this one.
+def load_matrix(fname):
+    fout = io.open(fname, 'r', encoding='utf-8')
+    n, d = fout.readline().split(" ")
+    lines = fout.readlines()
+    fout.close()
+    # anton: i gotta use n and d to make sure the data is right.
+    x = np.array([[float(val) for val in line.split(" ")] for line in lines])
+
+    return x
 
 
 def save_matrix(fname, x):
@@ -60,6 +73,7 @@ def save_matrix(fname, x):
     for i in range(n):
         fout.write(" ".join(map(lambda a: "%.4f" % a, x[i, :])) + "\n")
     fout.close()
+
 
 
 def procrustes(X_src, Y_tgt):
