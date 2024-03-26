@@ -7,7 +7,9 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 import glob
-import io, os, ot, argparse, random
+import ot, argparse, random
+
+import gensim
 import numpy as np
 from alignment_code.utils import *
 
@@ -180,11 +182,13 @@ def main(language_list, emb_dir='alignment/unaligned_models', max_load=20000, ou
     # init
     print("Computing initial bilingual mapping with Gromov-Wasserstein...")
     TRANS = {}
+
     # anton: I think that max_init=2000 is a parameter that is tunable, making note here of that. It also might be related to max_load
     #  changed to 4000 just to see if it changes things
     max_init = 4000
     pivot_embedding = embeddings_dict[0][:max_init, :]
     C0 = calculate_squared_distance_matrix(pivot_embedding)
+
     # anton: this np.eye(300) is weird, I am not sure why it is 300. it seems that down the line it needs to be 100 for the current run, but that might change?
     #  it seems that 300 is chosen because the original vectors were 300 long.
     # TRANS[0] = np.eye(300)
@@ -207,6 +211,49 @@ def main(language_list, emb_dir='alignment/unaligned_models', max_load=20000, ou
         save_vectors(language_out_file, np.dot(embeddings_dict[i], TRANS[i].T), words_dict[i])
         language_out_file_list.append(language_out_file)
     return language_out_file_list
+
+
+def multi_align_from_keyed_vectors(model_list, max_load=20000, uniform=False, lr=0.1, batch_size=500, epoch=5, n_iter=500, alt_lr=25, alt_epoch=1000, alt_batch_size=100):
+    embeddings_dict = {}
+    words_dict = {}
+
+    for i, model in enumerate(model_list):
+        embeddings_dict[i] = model.vectors.copy()
+        words_dict[i] = model.index_to_key
+
+    print("Computing initial bilingual mapping with Gromov-Wasserstein...")
+    TRANS = {}
+
+    # anton: I think that max_init=2000 is a parameter that is tunable, making note here of that. It also might be related to max_load
+    #  changed to 4000 just to see if it changes things
+    max_init = 4000
+    pivot_embedding = embeddings_dict[0][:max_init, :]
+    C0 = calculate_squared_distance_matrix(pivot_embedding)
+
+    # anton: this np.eye(300) is weird, I am not sure why it is 300. it seems that down the line it needs to be 100 for the current run, but that might change?
+    #  it seems that 300 is chosen because the original vectors were 300 long.
+    # TRANS[0] = np.eye(300)
+    TRANS[0] = np.eye(100)
+    for i in range(1, len(model_list)):
+        print(f"init {i}")
+        emb_i = embeddings_dict[i][:max_init, :]
+        TRANS[i] = gromov_wasserstein(emb_i, pivot_embedding, C0)
+
+    # align
+    align(embeddings_dict, TRANS, model_list, max_load, uniform, lr, batch_size, epoch, n_iter, alt_lr, alt_epoch, alt_batch_size)
+
+    # output aligned model
+    aligned_language_and_models = []
+    for i, old_model in enumerate(model_list):
+        words = words_dict[i]
+        vectors = np.dot(embeddings_dict[i], TRANS[i].T)
+
+        aligned_model = gensim.models.KeyedVectors(vectors.shape[1])
+        aligned_model.add_vectors(words, vectors)
+
+        aligned_language_and_models.append(aligned_model)
+
+    return aligned_language_and_models
 
 
 if __name__ == '__main__':

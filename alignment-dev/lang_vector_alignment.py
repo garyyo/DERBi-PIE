@@ -18,7 +18,7 @@ import alignment_code.unsup_multialign
 
 def find_words(words_source, lang_source, words_target, lang_target):
     # load the graph up
-    graph_df = pd.read_csv("data_wiktionary/graph_all.csv")
+    graph_df = pd.read_csv("../data_wiktionary/graph_all.csv")
     pattern = r"^\(['\"](.+)['\"],\s*['\"](.+)['\"]\)$"
     new_cols = ['source_lang', 'source_word', 'target_lang', 'target_word']
 
@@ -120,8 +120,8 @@ def main():
     spanish_to_french = chain_translation(spanish_to_latin, latin_to_french)
 
     # save the vec and lexicon files to do alignment (anton: eventually remove all the file io stuff maybe)
-    model_source_1_path ="alignment/unaligned_models/es_bible_model.vec"
-    model_source_2_path ="alignment/unaligned_models/fr_bible_model.vec"
+    model_source_1_path = "alignment/unaligned_models/es_bible_model.vec"
+    model_source_2_path = "alignment/unaligned_models/fr_bible_model.vec"
     model_es.save_word2vec_format(model_source_1_path)
     model_fr.save_word2vec_format(model_source_2_path)
 

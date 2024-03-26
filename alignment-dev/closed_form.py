@@ -149,7 +149,7 @@ def match_models(model_a, language_a, model_b, language_b):
     new_model_b = gensim.models.KeyedVectors(vectors_b.shape[1])
     new_model_b.add_vectors(keys_b, vectors_b)
 
-    return new_model_a, new_model_b, a_to_b
+    return new_model_a, new_model_b, a_to_b, b_to_a
 
 
 def main():
@@ -160,7 +160,7 @@ def main():
     model_fr: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("../alignment/fr_bible_model.bin")
     model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("../alignment/es_bible_model.bin")
 
-    new_model_fr, new_model_es, french_to_spanish = match_models(model_fr, "fr", model_es, "es")
+    new_model_fr, new_model_es, french_to_spanish, spanish_to_french = match_models(model_fr, "fr", model_es, "es")
 
     # apply the alignment to B
     model_fr_ao_vectors = absolute_orientation_centered_scaling(new_model_es.vectors.copy(), new_model_fr.vectors.copy())
