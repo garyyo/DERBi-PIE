@@ -6,6 +6,8 @@
 # LICENSE file in the root directory of this source tree.
 
 import time, math, argparse, ot
+
+import gensim
 import numpy as np
 from alignment_code.utils import *
 
@@ -87,7 +89,7 @@ def main(model_src, model_tgt, lexicon, output_src, output_tgt, seed=1111, nepoc
     maxload = 200000
     words_src, x_src = load_vectors(model_src, maxload, norm=True, center=True)
     words_tgt, x_tgt = load_vectors(model_tgt, maxload, norm=True, center=True)
-    source_to_target, _ = load_lexicon(lexicon, words_src, words_tgt)
+    # source_to_target, _ = load_lexicon(lexicon, words_src, words_tgt)
 
     print("\nComputing initial mapping with convex relaxation...")
     t0 = time.time()
@@ -100,8 +102,8 @@ def main(model_src, model_tgt, lexicon, output_src, output_tgt, seed=1111, nepoc
               nepoch=nepoch, reg=reg, nmax=nmax)
     print("Done [%03d sec]" % math.floor(time.time() - t0))
 
-    acc = compute_nn_accuracy(x_src, np.dot(x_tgt, R.T), source_to_target)
-    print("\nPrecision@1: %.3f\n" % acc)
+    # acc = compute_nn_accuracy(x_src, np.dot(x_tgt, R.T), source_to_target)
+    # print("\nPrecision@1: %.3f\n" % acc)
 
     if output_src != '':
         x_src = x_src / np.linalg.norm(x_src, 2, 1).reshape([-1, 1])
@@ -109,6 +111,33 @@ def main(model_src, model_tgt, lexicon, output_src, output_tgt, seed=1111, nepoc
     if output_tgt != '':
         x_tgt = x_tgt / np.linalg.norm(x_tgt, 2, 1).reshape([-1, 1])
         save_vectors(output_tgt, np.dot(x_tgt, R.T), words_tgt)
+
+
+def single_align_from_keyed_vectors(model1, model2, seed=1111, nepoch=6, niter=5000, batch_size=100, lr=500.0, nmax=20000, reg=0.1):
+    x_src, x_tgt = model1.vectors.copy(), model2.vectors.copy()
+
+    print("\nComputing initial mapping with convex relaxation...")
+    t0 = time.time()
+    R0 = convex_init(x_src[:2500], x_tgt[:2500], reg=reg, apply_sqrt=True)
+    print("Done [%03d sec]" % math.floor(time.time() - t0))
+
+    print("\nComputing mapping with Wasserstein Procrustes...")
+    t0 = time.time()
+    R = align(x_src, x_tgt, R0.copy(), bsz=batch_size, lr=lr, niter=niter, nepoch=nepoch, reg=reg, nmax=nmax)
+    print("Done [%03d sec]" % math.floor(time.time() - t0))
+
+    x_src = x_src / np.linalg.norm(x_src, 2, 1).reshape([-1, 1])
+    x_tgt = x_tgt / np.linalg.norm(x_tgt, 2, 1).reshape([-1, 1])
+    x_tgt = np.dot(x_tgt, R.T)
+
+    # model1
+    aligned_model1 = gensim.models.KeyedVectors(x_src.shape[1])
+    aligned_model1.add_vectors(model1.index_to_key, x_src)
+    # model2
+    aligned_model2 = gensim.models.KeyedVectors(x_tgt.shape[1])
+    aligned_model2.add_vectors(model2.index_to_key, x_tgt)
+
+    return aligned_model1, aligned_model2
 
 
 if __name__ == '__main__':
