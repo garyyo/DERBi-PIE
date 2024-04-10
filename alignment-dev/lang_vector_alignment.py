@@ -129,11 +129,11 @@ def main():
     # lexicon_path = ft_save_lexicon(spanish_to_french, "alignment/unaligned_models/es_to_fr.lex")
 
     # align to that
-    # alignment_code.unsup_align.main(
-    #     model_source_1_path, model_source_2_path, lexicon_path,
-    #     "alignment/aligned_models/es_aligned_model.vec", "alignment/aligned_models/fr_aligned_model.vec",
-    #     nmax=min(len(model_es.index_to_key), len(model_fr.index_to_key))
-    # )
+    alignment_code.unsup_align.main(
+        model_source_1_path, model_source_2_path, None,
+        "alignment/aligned_models/es_aligned_model.vec", "alignment/aligned_models/fr_aligned_model.vec",
+        nmax=min(len(model_es.index_to_key), len(model_fr.index_to_key))
+    )
     # aligned_file_es = "alignment/aligned_models/es_aligned_model.vec"
     # aligned_file_fr = "alignment/aligned_models/fr_aligned_model.vec"
 

@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from alignment_code.unsup_multialign import multi_align_from_keyed_vectors
+from alignment_code.unsup_align import single_align_from_keyed_vectors
 from closed_form import match_models
 
 
@@ -56,25 +57,36 @@ def grid_search(unaligned_model1, unaligned_model2, translation_dict, align_func
     all_scores = []
 
     # Generate all combinations of parameter values
-    param_names = config_dict.keys()
-    for values in product(*config_dict.values()):
-        params = dict(zip(param_names, values))
-        print(params)
+    test_values = config_dict["test_values"]
+    found_params = config_dict["found_values"]
+    param_names = test_values.keys()
+    for values in product(*test_values.values()):
+        test_params = dict(zip(param_names, values))
 
+        # try:
         # Align the models using the current parameter combination
-        aligned_model1, aligned_model2 = align_func(unaligned_model1, unaligned_model2, **params)
+        aligned_model1, aligned_model2 = align_func(unaligned_model1, unaligned_model2, **{**test_params, **found_params})
 
         # Evaluate the alignment
         metrics = eval_func(aligned_model1, aligned_model2, translation_dict)
         score = metrics['accuracy']  # You can choose to optimize on accuracy or any other metric
+        # except Exception as e:
+        #     print(e)
+        #     metrics = {
+        #         "accuracy": 0,
+        #         "precision": 0,
+        #         "recall": 0,
+        #         "f1_score": 0
+        #     }
+        #     score = 0
 
         # Update the best parameters if the current score is better
         if score > best_score:
             best_score = score
-            best_params = params
+            best_params = test_params
 
-        all_scores.append((params, metrics))
-        print(f"Params: {params}, Metrics: {metrics}")  # Optional: Print current params and scores for monitoring
+        all_scores.append((test_params, metrics))
+        print(f"Params: {test_params}, Metrics: {metrics}")  # Optional: Print current params and scores for monitoring
 
     return best_params, best_score, all_scores
 
@@ -86,32 +98,33 @@ def plot_heatmaps(all_scores, folder_path):
     os.makedirs(folder_path, exist_ok=True)
 
     # Extract parameter names
-    param_names = list(next(iter(all_scores))[0].keys())
+    param_names = list(all_scores[0][0].keys())
 
-    # Initialize a DataFrame for each metric
-    metrics_dfs = {}
+    # merge params and scores
+    merged_scores = [{**params, **scores} for params, scores in all_scores]
+    data_df = pd.DataFrame(merged_scores)
 
-    for params, metrics in all_scores:
-        for metric_name, metric_value in metrics.items():
-            if metric_name not in metrics_dfs:
-                metrics_dfs[metric_name] = pd.DataFrame(columns=param_names)
-            # Add metric value to the DataFrame
-            metrics_dfs[metric_name].loc[params[param_names[0]], params[param_names[1]]] = metric_value
+    # Plotting settings
+    sns.set(context='notebook', style='white', palette='muted')
 
-    for metric_name, df in metrics_dfs.items():
-        # Reset index for better heatmap plotting
-        df.reset_index(inplace=True)
-        df = df.pivot(index=param_names[0], columns=param_names[1], values=metric_name)
+    # Metrics to plot
+    metrics = list(all_scores[0][1].keys())
+    # metrics = ['accuracy', 'precision', 'recall', 'f1_score']
 
+    for metric in metrics:
+        # Pivot the DataFrame for the current metric
+        pivot_df = data_df.pivot(index=param_names[0], columns=param_names[1], values=metric)
+
+        # Plot heatmap
         plt.figure(figsize=(10, 8))
-        sns.heatmap(df, annot=True, fmt=".2f", cmap="rocket", cbar_kws={'label': metric_name}, vmin=0, vmax=1)
-        plt.title(f'Heatmap of {metric_name} for Parameter Combinations')
-        plt.ylabel(param_names[0])
+        sns.heatmap(pivot_df, annot=True, fmt=".2f", cmap='viridis')
+        plt.title(f'Heatmap of {metric} by {param_names[0]} and {param_names[1]}')
         plt.xlabel(param_names[1])
+        plt.ylabel(param_names[0])
 
         # Save the figure
-        plt.savefig(os.path.join(folder_path, f'{metric_name}_heatmap.png'))
-        plt.close()
+        plt.savefig(os.path.join(folder_path, f'{metric}_heatmap.png'))
+        plt.close()  # Close the figure to avoid displaying it inline if running in a notebook
 
 
 def unsupervised_multi_alignment(unaligned_model1, unaligned_model2, **params):
@@ -123,9 +136,31 @@ def unsupervised_multi_alignment(unaligned_model1, unaligned_model2, **params):
     return aligned_models[0], aligned_models[1]
 
 
+def unsupervised_single_alignment(unaligned_model1, unaligned_model2, **params):
+    aligned_model1, aligned_model2 = single_align_from_keyed_vectors(unaligned_model1, unaligned_model2, **params)
+    return aligned_model1, aligned_model2
+
+
 unsup_multialign_config = {
-    "lr": [0.001, 0.01],
-    "batch_size": [100, 200, 300, 500]
+    "found_values": {
+        "lr": 0.001,
+        "batch_size": 500
+    },
+    "test_values": {
+        # "lr": [0.0001, 0.001, 0.01],
+        # "batch_size": [1, 50, 100, 250, 500]
+        "epoch": [3, 4, 5, 7, 9],
+        "n_iter": [300, 500, 600, 700, 800]
+    }
+}
+
+unsup_singlealign_config = {
+    "found_values": {
+    },
+    "test_values": {
+        "lr": [300, 400, 500, 600, 700],
+        "batch_size": [1, 50, 100, 250, 500]
+    }
 }
 
 
@@ -142,8 +177,6 @@ def main():
     # use only a subset of the models that match words
     new_model_fr, new_model_es, french_to_spanish, spanish_to_french = match_models(model_fr, "fr", model_es, "es")
 
-    # breakpoint()
-
     # a test call to the metric function
     # metric = calculate_translation_metrics(new_model_es, new_model_fr, spanish_to_french)
 
@@ -155,13 +188,19 @@ def main():
     #   if that matches the known translation, +1 points, otherwise +0.
     #  2. Cross lingual word similarity
     #   This seems more difficult, I will try the other one first.
+
     eval_func = calculate_translation_metrics
 
-    # load method
-    method_func = unsupervised_multi_alignment
-
+    align_func = unsupervised_multi_alignment
     config_dict = unsup_multialign_config
-    best_params, best_score, all_scores = grid_search(new_model_es, new_model_fr, spanish_to_french, method_func, config_dict, eval_func)
+
+    # align_func = unsupervised_single_alignment
+    # config_dict = unsup_singlealign_config
+
+    best_params, best_score, all_scores = grid_search(new_model_es, new_model_fr, spanish_to_french, align_func, config_dict, eval_func)
+
+    # save to file in case of crash
+    np.save("data_backup.pkl", {"all_scores": all_scores}, allow_pickle=True)
 
     # graph metric
     plot_heatmaps(all_scores, "graphs/")
