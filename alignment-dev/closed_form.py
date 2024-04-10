@@ -114,6 +114,7 @@ def match_models(model_a, language_a, model_b, language_b):
         with open('word_matchups/fr_translations.json', "r") as fp:
             translate_dict = json.load(fp)
 
+        # todo: lemmatize only when needed,
         for word, translated_word in translate_dict.items():
             translated_lemmatized_word = nlp_es(translated_word)[0].lemma_
             if translated_lemmatized_word in b_words_lemmatized:
@@ -161,6 +162,10 @@ def main():
     model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("../alignment/es_bible_model.bin")
 
     new_model_fr, new_model_es, french_to_spanish, spanish_to_french = match_models(model_fr, "fr", model_es, "es")
+
+    # memory management attempt
+    del model_fr
+    del model_es
 
     # apply the alignment to B
     model_fr_ao_vectors = absolute_orientation_centered_scaling(new_model_es.vectors.copy(), new_model_fr.vectors.copy())

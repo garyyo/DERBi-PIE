@@ -1,6 +1,7 @@
 import os
 from itertools import product
 import gensim
+import numpy as np
 from sklearn.metrics import precision_score, recall_score, f1_score
 
 import pandas as pd
@@ -58,6 +59,7 @@ def grid_search(unaligned_model1, unaligned_model2, translation_dict, align_func
     param_names = config_dict.keys()
     for values in product(*config_dict.values()):
         params = dict(zip(param_names, values))
+        print(params)
 
         # Align the models using the current parameter combination
         aligned_model1, aligned_model2 = align_func(unaligned_model1, unaligned_model2, **params)
@@ -122,21 +124,25 @@ def unsupervised_multi_alignment(unaligned_model1, unaligned_model2, **params):
 
 
 unsup_multialign_config = {
-    "lr": [0.001, 0.01, 0.1, 0.2],
-    "batch_size": [50, 100, 250, 500]
+    "lr": [0.001, 0.01],
+    "batch_size": [100, 200, 300, 500]
 }
 
 
 def main():
     # range of things to test
 
-    # load method
     # load models
-    model_fr: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/fr_bible_model.bin")
-    model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/es_bible_model.bin")
+    # model_fr: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/fr_bible_model.bin")
+    # model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/es_bible_model.bin")
+    # newer models
+    model_fr: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("wiki/fr_pared_keyed_vectors.kv")
+    model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("wiki/es_pared_keyed_vectors.kv")
 
     # use only a subset of the models that match words
     new_model_fr, new_model_es, french_to_spanish, spanish_to_french = match_models(model_fr, "fr", model_es, "es")
+
+    # breakpoint()
 
     # a test call to the metric function
     # metric = calculate_translation_metrics(new_model_es, new_model_fr, spanish_to_french)
@@ -151,8 +157,11 @@ def main():
     #   This seems more difficult, I will try the other one first.
     eval_func = calculate_translation_metrics
 
+    # load method
+    method_func = unsupervised_multi_alignment
+
     config_dict = unsup_multialign_config
-    best_params, best_score, all_scores = grid_search(new_model_es, new_model_fr, spanish_to_french, unsupervised_multi_alignment, config_dict, eval_func)
+    best_params, best_score, all_scores = grid_search(new_model_es, new_model_fr, spanish_to_french, method_func, config_dict, eval_func)
 
     # graph metric
     plot_heatmaps(all_scores, "graphs/")
