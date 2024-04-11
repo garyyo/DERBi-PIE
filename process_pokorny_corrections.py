@@ -264,10 +264,10 @@ def redo_pokorny(rerun_entry_ids, filepath):
 
 
 def main():
-    filepath = 'data_pokorny/additional_pokorny_corrections/Additional Pokorny Forms 1.xlsx'
-    # filepath_italic = fix_italics(filepath)
-    # rerun_entry_ids, delete_entry_ids = extract_bad_entries(filepath_italic)
-    # breakpoint()
+    filepath = 'data_pokorny/additional_pokorny_corrections/Additional Pokorny Forms 2.xlsx'
+    filepath_italic = fix_italics(filepath)
+    rerun_entry_ids, delete_entry_ids = extract_bad_entries(filepath_italic)
+    breakpoint()
     rerun_entry_ids = {('bhendh-', 'bhendh-'), ('bher-2', '2. bher-'), ('bhū̆ĝo-s, Koseform bhukko-s', 'bhū̆g̑o-s, familiar form bhukko-s'), ('bher-1', '1. bher-'), ('bher-3', '3. bher-')}
     # print out what needs to be rerun?
     redo_pokorny(rerun_entry_ids, filepath)

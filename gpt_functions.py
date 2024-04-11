@@ -10,7 +10,6 @@ import tempfile
 import time
 from io import StringIO
 
-import clevercsv
 import openai
 import pandas as pd
 import pyperclip
