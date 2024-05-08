@@ -26,28 +26,32 @@ def calculate_translation_metrics(model1, model2, translation_dict):
 
         test_vector = model1[word]
         true_translations = [word for word in translation_dict[word] if word in model2.index_to_key]
-        most_similar_word = model2.most_similar(positive=[test_vector, ])[0][0]
 
-        if most_similar_word in true_translations:
-            correct_translations += 1
+        # most_similar_word = model2.most_similar(positive=[test_vector, ])[0][0]
+        most_similar_words = [word for word, _ in model2.most_similar(positive=[test_vector, ])]
+
+        for similar_word in most_similar_words:
+            if similar_word in true_translations:
+                correct_translations += 1
+                break
 
         total_translations += 1
 
         # For precision, recall, F1: considering each possible translation as a separate instance
-        for possible_translation in true_translations:
-            all_y_true.append(1)  # True translation
-            all_y_pred.append(1 if possible_translation == most_similar_word else 0)
+        # for possible_translation in true_translations:
+        #     all_y_true.append(1)  # True translation
+        #     all_y_pred.append(1 if possible_translation == most_similar_word else 0)
 
     accuracy = correct_translations / total_translations if total_translations > 0 else 0
-    precision = precision_score(all_y_true, all_y_pred, zero_division=0)
-    recall = recall_score(all_y_true, all_y_pred, zero_division=0)
-    f1 = f1_score(all_y_true, all_y_pred, zero_division=0)
+    # precision = precision_score(all_y_true, all_y_pred, zero_division=0)
+    # recall = recall_score(all_y_true, all_y_pred, zero_division=0)
+    # f1 = f1_score(all_y_true, all_y_pred, zero_division=0)
 
     return {
         "accuracy": accuracy,
-        "precision": precision,
-        "recall": recall,
-        "f1_score": f1
+        # "precision": precision,
+        # "recall": recall,
+        # "f1_score": f1
     }
 
 
@@ -143,14 +147,15 @@ def unsupervised_single_alignment(unaligned_model1, unaligned_model2, **params):
 
 unsup_multialign_config = {
     "found_values": {
-        "lr": 0.001,
-        "batch_size": 500
+        # "lr": 0.01,
+        "batch_size": 250
     },
     "test_values": {
-        # "lr": [0.0001, 0.001, 0.01],
+        "lr": [0.0001, 0.001, 0.01],
+        "alt_lr": [5, 10, 25, 50, 100],
         # "batch_size": [1, 50, 100, 250, 500]
-        "epoch": [3, 4, 5, 7, 9],
-        "n_iter": [300, 500, 600, 700, 800]
+        # "epoch": [3, 4, 5, 7, 9],
+        # "n_iter": [300, 500, 600, 700, 800]
     }
 }
 
@@ -171,8 +176,11 @@ def main():
     # model_fr: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/fr_bible_model.bin")
     # model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("alignment/es_bible_model.bin")
     # newer models
-    model_fr: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("wiki/fr_pared_keyed_vectors.kv")
-    model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("wiki/es_pared_keyed_vectors.kv")
+    # model_fr: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("wiki/fr_pared_keyed_vectors.kv")
+    # model_es: gensim.models.KeyedVectors = gensim.models.KeyedVectors.load("wiki/es_pared_keyed_vectors.kv")
+    # ft models
+    model_fr = gensim.models.fasttext.load_facebook_vectors("ft_model/cc.fr.100.bin", encoding="utf-8")
+    model_es = gensim.models.fasttext.load_facebook_vectors("ft_model/cc.es.100.bin", encoding="utf-8")
 
     # use only a subset of the models that match words
     new_model_fr, new_model_es, french_to_spanish, spanish_to_french = match_models(model_fr, "fr", model_es, "es")

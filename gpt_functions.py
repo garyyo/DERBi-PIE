@@ -155,6 +155,9 @@ def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_
     # build the initial messages object
     messages = [{"role": "system", "content": system_prompt}] if system_prompt is not None else []
 
+    if model == "gpt-4":
+        fake = True
+
     timer_start = time.time()
     completion = None
     for prompt in user_prompts:

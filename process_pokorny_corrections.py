@@ -95,30 +95,32 @@ def extract_bad_entries(filepath):
     sheet = workbook.active
     rerun_entry_ids = set()
     delete_entry_ids = set()
-    normal_colors = ["00000000", "FFFFFFFF", "FFFF9900"]
+    normal_colors = ["00000000", "FFFFFF00", "FFFFFFFF"]
     error_color = "FFFF0000"
-    redo_colors = ["FFFFFF00"]
+    redo_colors = ["FFFF9900"]
 
     for row in sheet.iter_rows():
         for cell in row:
             # if we find a color that has never been seen
             if cell.fill.start_color.rgb not in normal_colors + [error_color] + redo_colors:
                 print(f"New cell color '{cell.fill.start_color.rgb}' in cell {cell}, with value '{cell.value}'")
-                breakpoint()
+                # breakpoint()
 
             # if we find a color marking deletion
-            if cell.fill.start_color.rgb == error_color:
+            elif cell.fill.start_color.rgb == error_color:
+                print("found error")
                 if row[1].value is None or row[2].value is None:
                     print(f"Root entry highlighted, but no root found in cell {cell}, please correct and rerun")
-                    breakpoint()
+                    # breakpoint()
                 delete_entry_ids.add((row[1].value, row[2].value))
                 break
 
             # if we find a color marking missing entries
-            if cell.fill.start_color.rgb in redo_colors:
+            elif cell.fill.start_color.rgb in redo_colors:
+                print("found redo")
                 if row[1].value is None or row[2].value is None:
                     print(f"Root entry highlighted, but no root found in cell {cell}, please correct and rerun")
-                    breakpoint()
+                    # breakpoint()
                 rerun_entry_ids.add((row[1].value, row[2].value))
                 break
 
@@ -208,10 +210,10 @@ def redo_pokorny(rerun_entry_ids, filepath):
             # check if it's valid before trying to grab the cached response
             if len(prompt) > 15000:
                 print(f"{header_color}---=== Too long for {web_root} {material_progress} ===---{end_color}")
-                breakpoint()
+                # breakpoint()
             elif mat.strip() == "":
                 print(f"{header_color}---=== No material for {web_root} {material_progress} ===---{end_color}")
-                breakpoint()
+                # breakpoint()
             else:
                 attempt_failed = False
                 for attempt in range(4):
@@ -253,7 +255,7 @@ def redo_pokorny(rerun_entry_ids, filepath):
                         print("\033[93mParse Error\033[0m")
                         continue
                 if attempt_failed:
-                    breakpoint()
+                    # breakpoint()
                     exit()
     if len(output_dfs) > 0:
         combined_df = pd.concat(output_dfs)
@@ -265,13 +267,21 @@ def redo_pokorny(rerun_entry_ids, filepath):
 
 def main():
     filepath = 'data_pokorny/additional_pokorny_corrections/Additional Pokorny Forms 2.xlsx'
-    filepath_italic = fix_italics(filepath)
-    rerun_entry_ids, delete_entry_ids = extract_bad_entries(filepath_italic)
-    breakpoint()
-    rerun_entry_ids = {('bhendh-', 'bhendh-'), ('bher-2', '2. bher-'), ('bhū̆ĝo-s, Koseform bhukko-s', 'bhū̆g̑o-s, familiar form bhukko-s'), ('bher-1', '1. bher-'), ('bher-3', '3. bher-')}
+    # filepath_italic = fix_italics(filepath)
+    # rerun_entry_ids, delete_entry_ids = extract_bad_entries(filepath_italic)
+    # breakpoint()
+    # print(rerun_entry_ids, delete_entry_ids)
+    rerun_entry_ids = {
+        ('dheu-4, dheu̯ə- (vermutlich: dhu̯ē-, vgl. die Erw. dhu̯ē-k-, dhu̯ē̆-s-)', '4. dheu-, dheu̯ə-, presumably dhu̯ē-, compare suffixes dhu̯ē-k-, dhu̯ē̆-s-'),
+        ('gel-1', '1. gel-'),
+        ('gēu-, gəu-, gū-', 'gēu-, gəu-, gū-'),
+        ('e-3, ei-, i-, fem. ī-', '3. e-, ei-, i-, fem. ī-'),
+        ('ger-3', '3. ger-'),
+        ('er-3 : or- : r-', '3. er- : or- : r-')
+    }
     # print out what needs to be rerun?
     redo_pokorny(rerun_entry_ids, filepath)
-    breakpoint()
+    # breakpoint()
     pass
 
 

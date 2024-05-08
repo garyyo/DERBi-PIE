@@ -1,5 +1,6 @@
 import json
 import os
+import regex as re
 from collections import defaultdict, Counter
 
 import gensim
@@ -7,6 +8,7 @@ import numpy as np
 import scipy
 import spacy
 from deep_translator import GoogleTranslator
+import tqdm
 
 
 def absolute_orientation_rotation(A, B):
@@ -101,27 +103,64 @@ def test_french_analogies(model_fr, model_fr_aligned):
         print(f"{correct} {word1:10} -> {word2:10} = {word3:10} -> {initial_analogy:>15} / {aligned_analogy:20}")
 
 
+def is_valid_word(word):
+    # This regex matches strings that consist only of letter characters (including those from non-Latin alphabets)
+    # and mark characters for diacritics. It excludes numbers and special characters.
+    pattern = re.compile(u'^[\p{L}\p{M}]+$')
+
+    return bool(pattern.match(word))
+
+
 def match_models(model_a, language_a, model_b, language_b):
     a_words = model_a.index_to_key
     b_words = model_b.index_to_key
     if not os.path.exists(f"word_matchups/{language_a}_to_{language_b}.json"):
         a_to_b_index = []
 
-        b_words_lemmatized = [nlp_es(word)[0].lemma_ for word in b_words]
+        # b_words_lemmatized = [nlp_es(word)[0].lemma_ if is_valid_word(word) else None for word in b_words]
 
-        # translated_words = GoogleTranslator(source=language_a, target=language_b).translate_batch(a_words)
-        # translate_dict = dict(zip(a_words, translated_words))
+        # get some translations for every word, but only if they contain no weird number or symbol characters.
+        translated_words = []
+        with open("word_matchups/fr_translations.json", "r") as fp:
+            translate_dict = json.load(fp)
+            translated_words = list(translate_dict.keys())
+
+        for i, word in tqdm.tqdm(enumerate(a_words), ncols=160, total=len(a_words)):
+            # redo translation for words that are after the 50% mark, are valid, (redo clause), are the same when translated, and are not capitalized (thus likely proper nouns)
+            if ((i/len(a_words)) > 0.5) and is_valid_word(word) and word in translate_dict and word == translate_dict[word] and word.lower() == word:
+                word = try_translate(a_words, language_a, language_b, translate_dict, translated_words, word)
+                translated_words.append(word)
+            elif word in translate_dict:
+                translated_words.append(translate_dict[word])
+            elif not is_valid_word(word):
+                translated_words.append(None)
+            else:
+                word = try_translate(a_words, language_a, language_b, translate_dict, translated_words, word)
+                translated_words.append(word)
+            pass
+
+        translate_dict = dict(zip(a_words, translated_words))
+        with open('word_matchups/fr_translations.json', "w") as fp:
+            json.dump(translate_dict, fp)
+
         with open('word_matchups/fr_translations.json', "r") as fp:
             translate_dict = json.load(fp)
 
         # todo: lemmatize only when needed,
         for word, translated_word in translate_dict.items():
-            translated_lemmatized_word = nlp_es(translated_word)[0].lemma_
-            if translated_lemmatized_word in b_words_lemmatized:
-                new_index = b_words_lemmatized.index(translated_lemmatized_word)
+            # if the word or the translated word are either not valid words (like if they are symbols or numbers or something), just skip, don't even try.
+            if not is_valid_word(word):
+                a_to_b_index.append(None)
+                continue
+            if not is_valid_word(translated_word):
+                a_to_b_index.append(None)
+                continue
+            # translated_lemmatized_word = nlp_es(translated_word)[0].lemma_
+            # if translated_lemmatized_word in b_words_lemmatized:
+            #     new_index = b_words_lemmatized.index(translated_lemmatized_word)
             # anton: original way of doing it,
-            # if translated_word.lower() in b_words:
-            #     new_index = b_words.index(translated_word.lower())
+            if translated_word.lower() in b_words:
+                new_index = b_words.index(translated_word.lower())
             else:
                 new_index = None
             a_to_b_index.append(new_index)
@@ -151,6 +190,20 @@ def match_models(model_a, language_a, model_b, language_b):
     new_model_b.add_vectors(keys_b, vectors_b)
 
     return new_model_a, new_model_b, a_to_b, b_to_a
+
+
+def try_translate(a_words, language_a, language_b, translate_dict, translated_words, word):
+    try:
+        word = GoogleTranslator(source=language_a, target=language_b).translate(word)
+        return word
+    except Exception as err:
+        print(err)
+        translated_words.append(None)
+
+        translate_dict = dict(zip(a_words, translated_words))
+        with open('word_matchups/fr_translations_err.json', "w") as fp:
+            json.dump(translate_dict, fp)
+        return None
 
 
 def main():
