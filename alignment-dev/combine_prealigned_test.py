@@ -11,14 +11,17 @@ import numpy as np
 import pandas as pd
 import spacy
 from PyMultiDictionary import MultiDictionary
+import gensim_evaluations.wikiqueries
+import gensim_evaluations.methods
 from deep_translator import GoogleTranslator
-from gensim.models import KeyedVectors, Word2Vec
+from gensim.models import KeyedVectors, Word2Vec, FastText
 import regex as re
 from nltk import sent_tokenize, RegexpTokenizer
 from scipy.spatial.distance import cosine
 from tqdm import tqdm
 
 
+# region filter words
 def is_valid_word(word):
     # This regex matches strings that consist only of letter characters (including those from non-Latin alphabets)
     # and mark characters for diacritics. It excludes numbers and special characters.
@@ -113,17 +116,10 @@ def load_or_create_pruned(fr_lemmatized, es_lemmatized):
             json.dump(es_pruned, file)
 
     return fr_pruned, es_pruned
+# endregion
 
 
-def try_translate(word, lang_from, lang_to):
-    try:
-        word = GoogleTranslator(source=lang_from, target=lang_to).translate(word)
-        return word
-    except Exception as err:
-        print(err)
-        return None
-
-
+# region translation
 def translate_batched(lang1_words, lang1_code, lang2_code, limit_groups=None, group_sizes=200):
     # the final translation is stored in a dict of lists, each list should be of size one, but just in case store in a list anyway
     lang1_to_lang2 = defaultdict(list)
@@ -157,21 +153,32 @@ def translation_batched(words, lang1_code, lang2_code):
     # do the translation
     translated_phrase = try_translate(to_translate_phrase, lang1_code, lang2_code)
 
+    if translated_phrase == "" or translated_phrase is None:
+        return None
+
     # sometimes there are weird non-standard spaces, we pretend those are standard spaces (and replace them with 1 if there are multiples in a row)
     nonstandard_spaces = r'[\s\u00A0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\u200B]+'
     translated_phrase = re.sub(nonstandard_spaces, ' ', translated_phrase)
 
-    # un-batch them to get the actual meanings out, split on the | first since its probably the least likely to appear in the language and cause an issue
+    # un-batch them to get the actual meanings out, split on the | first since it's probably the least likely to appear in the language and cause an issue
     translated_words = re.split(r' \| ', translated_phrase[1:-2])
 
     # we have to invoke regex here to handle any sort of quotes not just standard double quotes, even though we only give standard double quotes
     translated_words = [re.sub(r'[“”"„«»❝❞]', '', word) for word in translated_words]
 
     # if the number of words returned to me is different from the number of words given then something went wrong,
-
     if len(words) != len(translated_words):
         return None
     return translated_words
+
+
+def try_translate(word, lang_from, lang_to):
+    try:
+        word = GoogleTranslator(source=lang_from, target=lang_to).translate(word)
+        return word
+    except Exception as err:
+        print(err)
+        return None
 
 
 def break_in_two_and_try_again(og_words, lang1_code, lang2_code):
@@ -222,8 +229,8 @@ def load_translations(fr_words, es_words):
 
 
 def load_translations_latin(la_words):
-    la_to_fr_filepath = "prealigned/cached_steps/la_to_fr.json"
-    la_to_es_filepath = "prealigned/cached_steps/la_to_es.json"
+    la_to_fr_filepath = "prealigned/cached_steps/la_to_fr2.json"
+    la_to_es_filepath = "prealigned/cached_steps/la_to_es2.json"
 
     # if it exists, load it because this is a really long process
     if os.path.exists(la_to_fr_filepath):
@@ -249,34 +256,44 @@ def load_translations_latin(la_words):
             json.dump(la_to_es, file)
 
     return la_to_fr, la_to_es
+# endregion
 
 
-def is_valid_csv(csv_file, headers=""):
+# region lemmatization
+# (actual lemmatization needs to be done outside of this script, sorry)
+def is_valid_csv(csv_file, names=None):
     try:
         # Attempt to parse the CSV
-        pd.read_csv(csv_file)
-    except:
+        pd.read_csv(csv_file, names=names, encoding="ansi")
+    except Exception as err:
+        print(err)
         return False
     return True
 
 
 def latin_vocab_list():
+    col_names = ["original", "normalized", "lemma", "pos", "extra_info1", "extra_info2", "extra_info3"]
     lines = []
-    for file in glob.glob("prealigned/latin_corpus_paragraphs/*.csv"):
-        if not is_valid_csv(file):
+    err_counter = 0
+    for file in tqdm(glob.glob("prealigned/latin_corpus_paragraphs2/*.csv"), ncols=160, desc="combining lemlat"):
+        if not is_valid_csv(file, col_names):
             print(f"Skipping invalid CSV -> {os.path.basename(file)}")
+            err_counter += 1
             continue
         # the program I use to lemmatize stupidly seems to save output as ansi
         with open(file, "r", encoding="ANSI") as fp:
             lines += fp.readlines() + ["\n"]
-    with open("prealigned/lemmatized_bak.csv", "w", encoding="utf-8") as fp:
+    print(f"{err_counter=}")
+    combined_csv_path = "prealigned/lemmatized_bak2.csv"
+    with open(combined_csv_path, "w", encoding="utf-8") as fp:
         fp.writelines(lines)
-    latin_words_df = pd.read_csv(
-        "prealigned/lemmatized_bak.csv",
-        names=["original", "normalized", "lemma", "pos", "extra_info1", "extra_info2", "extra_info3"]
-    )
+    latin_words_df = pd.read_csv(combined_csv_path, names=col_names)
 
     latin_words_df["original"] = latin_words_df["original"].str.lower()
+
+    # LEMLAT replaces V with U, but Google Translate doesn't seem to like that
+    # but it also doesn't quite like replacing ALL U's with V's
+    # latin_words_df[["normalized", "lemma"]] = latin_words_df[["normalized", "lemma"]].apply(lambda col: col.str.replace("u", "v"))
 
     normalized_to_lemmas = latin_words_df.groupby('normalized')['lemma'].agg(lambda x: list(set(x))).to_dict()
     lemma_to_normalized = latin_words_df.groupby('lemma')['normalized'].agg(lambda x: list(set(x))).to_dict()
@@ -285,67 +302,6 @@ def latin_vocab_list():
     lemma_to_original = latin_words_df.groupby('lemma')['original'].agg(lambda x: list(set(x))).to_dict()
 
     return normalized_to_lemmas, lemma_to_normalized, original_to_lemmas, lemma_to_original
-
-
-# unused now
-def find_minimum_coverage(latin_corpus, coverage_target=0.8, min_count=5, early_exit_percentage=0.2):
-    with open(latin_corpus, "r", encoding="utf-8") as fp:
-        paragraphs = " ".join([line.lower() for line in fp.readlines()]).split("\n \n")
-
-    word_count = {}
-    paragraphs_with_words = {}
-
-    # Count words and initialize paragraphs with words
-    for index, para in enumerate(paragraphs):
-        words = set(re.findall(r'\b[A-Za-z]+\b', para))
-        for word in words:
-            word_count[word] = word_count.get(word, 0) + 1
-        paragraphs_with_words[index] = words
-
-    # Filter words that appear min_count times or less
-    filtered_global_unique_words = {word for word, count in word_count.items() if count > min_count}
-
-    covered_words = set()
-    selected_paragraph_indices = []
-    total_unique_words = len(filtered_global_unique_words)
-    words_needed = int(coverage_target * total_unique_words)
-    contribution_min = 5
-
-    paragraphs_with_words_filtered = {key: (words & filtered_global_unique_words) for key, words in paragraphs_with_words.items()}
-
-    # Continue selecting paragraphs until the coverage target is met or paragraphs are exhausted
-    while len(covered_words) < words_needed and paragraphs_with_words:
-        best_new_words = 0
-        best_index = -1
-        # Number of new words that qualifies for early exit
-        good_enough_addition = int((words_needed - len(covered_words)) * early_exit_percentage)
-
-        for index in list(paragraphs_with_words.keys()):
-            words = paragraphs_with_words_filtered[index]
-            new_words = len(words - covered_words)
-            if new_words <= contribution_min:
-                # Remove entry as it contributes no new words
-                del paragraphs_with_words[index]
-                continue
-            if new_words > best_new_words:
-                best_new_words = new_words
-                best_index = index
-                # Early exit if the paragraph adds a good enough number of new words
-                if new_words >= good_enough_addition:
-                    break
-
-        # Break if no paragraph can add any new words
-        if best_index == -1:
-            break
-
-            # Select the best paragraph found in the current iteration
-        selected_paragraph_indices.append(best_index)
-        covered_words.update(paragraphs_with_words[best_index] & filtered_global_unique_words)
-        # print(best_new_words, len(covered_words), words_needed, sep="\t")
-        del paragraphs_with_words[best_index]  # Remove the selected paragraph
-
-    # return the paragraphs that we keep
-    return [paragraphs[index] for index in selected_paragraph_indices]
 
 
 # unused
@@ -379,7 +335,10 @@ def split_paragraphs():
             fp.write(split.strip())
     pass
 
+# endregion
 
+
+# region relating words
 def relate_words(valid_fr_words, fr_lemmatized, fr_pruned, fr_to_es, valid_es_words, es_lemmatized, es_pruned, es_to_fr, la_to_es, la_to_fr):
     """
     This function will take a latin translation into french, then find if that translation exists in our model
@@ -390,7 +349,7 @@ def relate_words(valid_fr_words, fr_lemmatized, fr_pruned, fr_to_es, valid_es_wo
     It also does the reverse, for spanish -> french
     Then it saves the french and spanish relations to latin, because this process is a little bit slow.
     """
-    latin_relations_filepath = "prealigned/cached_steps/latin_relations.json"
+    latin_relations_filepath = "prealigned/cached_steps/latin_relations2.json"
 
     # if it exists, load it because this is a really long process
     if os.path.exists(latin_relations_filepath):
@@ -399,6 +358,9 @@ def relate_words(valid_fr_words, fr_lemmatized, fr_pruned, fr_to_es, valid_es_wo
     # otherwise relate them
     else:
         latin_to_model_words = {}
+        # fixme: when relating words like this, we should probably actually consider the a group of latin words as the same word.
+        #  Then that group gets related to a group of es words, and a group of fr words.
+        #  Then later on that entire group gets the same vector,
         for la_word in tqdm(la_to_fr, ncols=160, desc="relating words"):
             # load the french and spanish
             fr_word = la_to_fr[la_word][0]
@@ -468,91 +430,21 @@ def find_model_lemma(word, valid_words, lemmatized, pruned):
         lemmatized_word = word
 
     return model_word, lemmatized_word
+# endregion
 
 
-def generate_latin_daughter_vectors():
-    # load models (or just the words since we are not making use of the models yet). model words are specifically words as they exist in the model
-    model_es, model_es_words, model_fr, model_fr_words = load_model_words(load_model=False)
-    print("loaded words")
-
-    # 1. filter out model words that contain non-word characters
-    valid_es_words = [word for word in tqdm(model_es_words, desc="filtering spanish", ncols=160) if is_valid_word(word)]
-    valid_fr_words = [word for word in tqdm(model_fr_words, desc="filtering french", ncols=160) if is_valid_word(word)]
-    print("filtered out non-words")
-    # (alt) turn each model word into some base lemmatized form, and (todo) try to filter out proper nouns.
-    #    then do the above with the lemmatized versions and just consider all lemmatized versions of that word
-    es_lemmatized, fr_lemmatized = load_lemmatized(valid_es_words, valid_fr_words)
-    print("lemmatized words")
-    print(f"Spanish Reduction: {100 * (1 - len(set(es_lemmatized)) / len(valid_es_words)):.2f}%")
-    print(f"French Reduction: {100 * (1 - len(set(fr_lemmatized)) / len(valid_fr_words)):.2f}%")
-    # (another) remove words that are not actually french and spanish? This doesn't work as well as I want it to
-    fr_pruned, es_pruned = load_or_create_pruned(fr_lemmatized, es_lemmatized)
-    print("pruned out-of-language words")
-    print(f"Spanish Reduction: {100 * (1 - len(set(es_pruned)) / len(set(es_lemmatized))):.2f}%")
-    print(f"French Reduction: {100 * (1 - len(set(fr_pruned)) / len(set(fr_lemmatized))):.2f}%")
-
-    # 2. for each word left, translate it into the other language to associate them together
-    # find translation of (french -> spanish) and (spanish -> french)
-    fr_to_es, es_to_fr = load_translations(fr_pruned, es_pruned)
-
-    # 3. for each word in latin corpus, lemmatize it, translate to French and Spanish, and relate it to the existing french and spanish model words.
-    # load the lemmatized latin (some of the parts are processed outside of this script)
-    latin_normalized_to_lemmas, latin_lemma_to_normalized, latin_original_to_lemmas, latin_lemma_to_original = latin_vocab_list()
-    # isolate the latin lemmas for translation
-    # fixme: remove lemmas with symbols in them since we can't handle them right now, but eventually it would be better to keep those
-    latin_lemma_words = [lemma for lemma in latin_lemma_to_normalized.keys() if not re.search(r'["/\\\'()\[\]{}\-+]', lemma)]
-
-    # translate from latin to french and spanish, this will help associate with each other (latin <--> french <--> spanish)
-    la_to_fr, la_to_es = load_translations_latin(latin_lemma_words)
-    # relate the latin words to an existing spanish or french word
-    latin_to_model_words = relate_words(valid_fr_words, fr_lemmatized, fr_pruned, fr_to_es,
-                                        valid_es_words, es_lemmatized, es_pruned, es_to_fr,
-                                        la_to_es, la_to_fr)
-    # filter out latin words that don't have at least 1 corresponding spanish or french model word
-    latin_to_model_words = {
-        latin: model_words
-        for latin, model_words in latin_to_model_words.items()
-        if len(model_words["fr"]) > 0 and len(model_words["es"]) > 0
-    }
-
-    # 4. gather the lemmatized French and Spanish word vectors, average the groups together (optionally check if they are in a cluster of some sort),
-    #    and use that as the starting value for the vector for Latin (perhaps change the method of training later to not allow for these values to change?)
-
-    # ok now we need the actual models
-    model_es, model_es_words, model_fr, model_fr_words = load_model_words(load_model=True)
-
-    latin_vectors = {}
-    for i, (latin, model_words) in enumerate(latin_to_model_words.items()):
-        found_fr_words = model_words["fr"]
-        if len([word for word in found_fr_words if word not in model_fr.index_to_key]) > 0:
-            print(f"trouble in fr: {found_fr_words}")
-        if len([word for word in found_fr_words if word not in model_fr.index_to_key]) == len(found_fr_words):
-            print("All words missing from model")
-            continue
-
-        found_es_words = model_words["es"]
-        if len([word for word in found_es_words if word not in model_es.index_to_key]) > 0:
-            print(f"trouble in es: {found_es_words}")
-        # weirdly enough, sometimes spanish words are in the model word list, but not in the model vector list.
-        if len([word for word in found_es_words if word not in model_es.index_to_key]) == len(found_es_words):
-            print("All words missing from model")
-            continue
-
-        # get the center of french words
-        fr_vector = np.mean([model_fr.get_vector(word) for word in found_fr_words if word in model_fr.index_to_key], axis=0)
-        # get the center of spanish words
-        es_vector = np.mean([model_es.get_vector(word) for word in found_es_words if word in model_es.index_to_key], axis=0)
-        # get the center between the two
-        la_vector = np.mean([fr_vector, es_vector], axis=0)
-
-        # turn the latin lemmas back into in-vocab latin words
-        for latin_original_word in latin_lemma_to_original[latin]:
-            latin_vectors[latin_original_word] = la_vector
-        pass
-    latin_keyed_vectors = KeyedVectors(vector_size=len(next(iter(latin_vectors.values()))))
-    latin_keyed_vectors.add_vectors(list(latin_vectors.keys()), list(latin_vectors.values()))
-
-    return latin_keyed_vectors
+# region train/test
+def load_latin_corpus():
+    # build corpus as list of lists of words (list of sentences where each sentence is a list of words)
+    latin_corpus = "prealigned/latin_corpus2.txt"
+    with open(latin_corpus, "r", encoding="utf-8") as fp:
+        paragraphs = " ".join(fp.readlines()).split("\n \n")
+    # split paragraphs into sentences, split sentences into words
+    tokenized_paragraphs = [tokenize_corpus(paragraph) for paragraph in paragraphs]
+    all_sentences = paragraphs_to_sentences(tokenized_paragraphs)
+    all_words = [word for sentence in all_sentences for word in sentence]
+    print("words tokenized")
+    return tokenized_paragraphs, all_sentences, all_words
 
 
 def tokenize_corpus(text):
@@ -602,6 +494,82 @@ def paragraphs_to_sentences(paragraphs):
     ]
 
 
+def init_tests():
+    categories = [
+        'Q9415',  # emotion
+        'Q60539481',  # negative emotion
+        'Q4271324',  # mythical character
+        'Q6256',  # country
+        'Q515',  # city
+    ]
+    langs = ['la']
+    test_filename = "test_ooo_topk"
+    gensim_evaluations.wikiqueries.generate_test_set(items=categories, languages=langs, filename=test_filename)
+    return f'{test_filename}_{langs[0]}.txt'
+
+
+def set_new_vectors(model, latin_keyed_vectors, lock_f_val=1):
+    # set the vectors that we do have
+    new_keys = set(latin_keyed_vectors.index_to_key).intersection(set(model.wv.index_to_key))
+    new_keys = [key for key in latin_keyed_vectors.index_to_key if key in new_keys]
+    new_vectors = [latin_keyed_vectors.vectors[latin_keyed_vectors.key_to_index[key]] for key in new_keys]
+    skipped_keys = list(set(latin_keyed_vectors.index_to_key) - set(model.wv.index_to_key))
+
+    # skipped_vectors = [latin_keyed_vectors.vectors[latin_keyed_vectors.key_to_index[key]] for key in skipped_keys]
+    missing_keys = list(set(model.wv.index_to_key) - set(latin_keyed_vectors.index_to_key))
+    num_used = len(new_keys)
+    num_total = len(latin_keyed_vectors.index_to_key)
+    num_vocab = len(model.wv.index_to_key)
+    num_skipped = len(skipped_keys)
+    num_missing = len(missing_keys)
+
+    print(f"Reusing {num_used} of {num_total} latin generated vectors ({num_used / num_total * 100:.2f}%), skipped {num_skipped} vectors")
+    print(f"Vectors Cover {num_used} of {num_vocab} vocab ({num_used / num_vocab * 100:.2f}%), {num_missing} vectors are set to random")
+    print(f"Skipped key: {skipped_keys[:20]}{'...' if len(skipped_keys)> 20 else ''}, # = {len(skipped_keys)}")
+
+    model.wv[new_keys] = new_vectors
+
+    # lock the vectors that we set because we don't want them to move around.
+    lock_f = np.ones([model.wv.vectors.shape[0]])
+    lock_f[[model.wv.key_to_index[key] for key in new_keys]] = lock_f_val
+    model.wv.vectors_lockf = lock_f
+
+    print("vectors set")
+    pass
+
+
+def test_models(model_wv, model_blind_wv):
+    # using OddOneOut and Topk from gensim_evaluations
+    cat_file = 'test_ooo_topk_la.txt'
+    scores: dict[tuple] = {
+        'ooo_descendant': run_test(gensim_evaluations.methods.OddOneOut, cat_file, model_wv, k_in=3, allow_oov=True, sample_size=1000),
+        'ooo_blind': run_test(gensim_evaluations.methods.OddOneOut, cat_file, model_blind_wv, k_in=3, allow_oov=True, sample_size=1000),
+        'topk_descendant': run_test(gensim_evaluations.methods.Topk, cat_file, model_wv, k=3, allow_oov=True),
+        'topk_blind': run_test(gensim_evaluations.methods.Topk, cat_file, model_blind_wv, k=3, allow_oov=True),
+    }
+
+    print_scores(scores)
+
+
+def run_test(method, cat_file, model_wv, **method_kwargs):
+    result = method(cat_file=cat_file, model=model_wv, **method_kwargs)
+    # cuts out some annoying text from labels, and puts the "overall" label in the same dict for easy parsing
+    formatted_result = {**{instance_of[13:-5]: score for instance_of, score in result[1].items()}, **{"overall": result[0]}}
+    return formatted_result
+
+
+def print_scores(scores):
+    score_types = [" "] + list(list(scores.values())[0].keys())
+    max_col_width = max(len(label) for label in score_types)
+    max_col_width = max_col_width + max_col_width % 2
+    print(*[f"{label:^{max_col_width}}" for label in score_types], "", sep=" | ")
+    for test, test_scores in scores.items():
+        print(f"{test:>{max_col_width}} |", end="")
+        for category, score in test_scores.items():
+            print(f"{score:^{max_col_width + 3}.4f}", end="")
+        print("   ")
+
+
 def analogy_accuracy(wv, analogy_tests, top_n=5):
     correct_top1 = 0
     correct_topn = 0
@@ -639,10 +607,131 @@ def analogy_accuracy(wv, analogy_tests, top_n=5):
         "closest": closest,
     }
 
+# endregion
+
+
+# essentially, main part 1
+def generate_latin_daughter_vectors():
+    # load models (or just the words since we are not making use of the models yet). model words are specifically words as they exist in the model
+    model_es, model_es_words, model_fr, model_fr_words = load_model_words(load_model=False)
+    print("loaded words")
+
+    # 1. filter out model words that contain non-word characters
+    valid_es_words = [word for word in tqdm(model_es_words, desc="filtering spanish", ncols=160) if is_valid_word(word)]
+    valid_fr_words = [word for word in tqdm(model_fr_words, desc="filtering french", ncols=160) if is_valid_word(word)]
+    print("filtered out non-words")
+
+    # (alt) turn each model word into some base lemmatized form, and (todo) try to filter out proper nouns.
+    #    then do the above with the lemmatized versions and just consider all lemmatized versions of that word
+    es_lemmatized, fr_lemmatized = load_lemmatized(valid_es_words, valid_fr_words)
+    print("lemmatized words")
+    print(f"Spanish Reduction: {100 * (1 - len(set(es_lemmatized)) / len(valid_es_words)):.2f}%")
+    print(f"French Reduction: {100 * (1 - len(set(fr_lemmatized)) / len(valid_fr_words)):.2f}%")
+
+    # (another) remove words that are not actually french and spanish? This doesn't work as well as I want it to
+    fr_pruned, es_pruned = load_or_create_pruned(fr_lemmatized, es_lemmatized)
+    print("pruned out-of-language words")
+    print(f"Spanish Reduction: {100 * (1 - len(set(es_pruned)) / len(set(es_lemmatized))):.2f}%")
+    print(f"French Reduction: {100 * (1 - len(set(fr_pruned)) / len(set(fr_lemmatized))):.2f}%")
+
+    # 2. for each word left, translate it into the other language to associate them together
+    # find translation of (french -> spanish) and (spanish -> french)
+    fr_to_es, es_to_fr = load_translations(fr_pruned, es_pruned)
+
+    # 3. for each word in latin corpus, lemmatize it, translate to French and Spanish, and relate it to the existing french and spanish model words.
+    # load the lemmatized latin (some of the parts are processed outside of this script)
+    latin_normalized_to_lemmas, latin_lemma_to_normalized, latin_original_to_lemmas, latin_lemma_to_original = latin_vocab_list()
+    # lemma is not enough, we probably should translate the originals too since the LEMLAT does weird things
+    latin_translate_to_original = defaultdict(set)
+    for lemma, originals in latin_lemma_to_original.items():
+        for original in originals:
+            latin_translate_to_original[original].add(original)
+        latin_translate_to_original[lemma] = latin_translate_to_original[lemma].union(set(originals))
+
+    # isolate the latin lemmas for translation
+    # fixme: remove lemmas with symbols in them since we can't handle them right now, but eventually it would be better to keep those
+    latin_lemma_words = [lemma for lemma in latin_lemma_to_normalized.keys() if not re.search(r'["/\\\'()\[\]{}\-+]', lemma)]
+    # fixme: the same for original words with symbols. They might be actual words but I have no way of handling them right now.
+    latin_translate_words = latin_lemma_words + [original for original in latin_original_to_lemmas.keys() if not re.search(r'["/\\\'()\[\]{}\-+]', original)]
+    # remove duplicates, sort for consistent ordering to help debugging and to turn back into a list
+    latin_translate_words = sorted(set(latin_translate_words))
+
+    # translate from latin to french and spanish, this will help associate with each other (latin <--> french <--> spanish)
+    la_to_fr, la_to_es = load_translations_latin(latin_translate_words)
+    # relate the latin words to an existing spanish or french word
+    latin_to_model_words = relate_words(valid_fr_words, fr_lemmatized, fr_pruned, fr_to_es,
+                                        valid_es_words, es_lemmatized, es_pruned, es_to_fr,
+                                        la_to_es, la_to_fr)
+    # filter out latin words that don't have at least 1 corresponding spanish or french model word
+    latin_to_model_words = {
+        latin: model_words
+        for latin, model_words in latin_to_model_words.items()
+        if len(model_words["fr"]) > 0 and len(model_words["es"]) > 0
+    }
+    print(
+        f"{len(latin_to_model_words)} of {len(la_to_fr)} latin words remaining from translation (which expands # of words). "
+        f"Lost {(1 - len(latin_to_model_words) / len(la_to_fr)) * 100:.2f}%"
+    )
+    # 4. gather the lemmatized French and Spanish word vectors, average the groups together (optionally check if they are in a cluster of some sort),
+    #    and use that as the starting value for the vector for Latin (perhaps change the method of training later to not allow for these values to change?)
+
+    # ok now we need the actual models
+    model_es, model_es_words, model_fr, model_fr_words = load_model_words(load_model=True)
+
+    latin_vectors = {}
+    for i, (latin, model_words) in tqdm(enumerate(latin_to_model_words.items()), ncols=160, desc="assigning vectors"):
+        # some words are missing from the model but are in the
+        found_fr_words = model_words["fr"]
+        missing_model_words_fr = [word for word in found_fr_words if word not in model_fr.index_to_key]
+        if len(missing_model_words_fr) > 0:
+            print(f"Words are missing in the french model: {missing_model_words_fr} (despite allegedly coming from said model)")
+        if len(missing_model_words_fr) == len(found_fr_words):
+            print("All words missing from model, skipping entry")
+            continue
+
+        found_es_words = model_words["es"]
+        missing_model_words_es = [word for word in found_es_words if word not in model_es.index_to_key]
+        if len(missing_model_words_es) > 0:
+            print(f"Words are missing in the spanish model: {missing_model_words_es} (despite allegedly coming from said model)")
+        # weirdly enough, sometimes spanish words are in the model word list, but not in the model vector list.
+        if len(missing_model_words_es) == len(found_es_words):
+            print("All words missing from model, skipping entry")
+            continue
+
+        # get the center of french words
+        fr_vector = np.mean([model_fr.get_vector(word) for word in found_fr_words if word in model_fr.index_to_key], axis=0)
+        # get the center of spanish words
+        es_vector = np.mean([model_es.get_vector(word) for word in found_es_words if word in model_es.index_to_key], axis=0)
+        # get the center between the two
+        la_vector = np.mean([fr_vector, es_vector], axis=0)
+
+        # turn the latin lemmas back into in-vocab latin words
+        # todo: latin_translate_to_original technically probably has original words that have more than one translate.
+        #  Thus we should be building out those groups first, then taking the average vector.
+        #  Ideally these vectors would be similar to each other so doing that would be ok.
+        for latin_original_word in latin_translate_to_original[latin]:
+            latin_vectors[latin_original_word] = la_vector
+        pass
+    latin_keyed_vectors = KeyedVectors(vector_size=len(next(iter(latin_vectors.values()))))
+    latin_keyed_vectors.add_vectors(list(latin_vectors.keys()), list(latin_vectors.values()))
+
+    print(f"{len(latin_keyed_vectors.index_to_key)} of {len(latin_original_to_lemmas)} latin words have vectors. {(len(latin_keyed_vectors.index_to_key)/len(latin_original_to_lemmas.keys()))*100:.2f}% of words have a vector.")
+
+    return latin_keyed_vectors
+
 
 def main():
+    """
+    The full process:
+    1-4: generate latin descendant vectors
+    5.a: initialize descendant model
+    5.b: load descendant vectors into the model
+    5.c: train the model
+    5.d: test the model
+    6:   the same as 5 but with a blind model (init, train, test)
+    """
     # 1-4: create the latin daughter vectors
-    latin_daughter_vector_filepath = "prealigned/latin_daughter_vectors.vec"
+    latin_daughter_vector_filepath = "prealigned/latin_daughter_vectors2.vec"
     if os.path.exists(latin_daughter_vector_filepath):
         latin_keyed_vectors = KeyedVectors.load(latin_daughter_vector_filepath)
     else:
@@ -651,63 +740,50 @@ def main():
 
     # 5. train a latin model on the corpus using these vectors as initial values.
     # initialize model
+    # model_init = Word2Vec
+    model_init = FastText
     w2v_params = {
         "vector_size": latin_keyed_vectors.vector_size,
-        "min_count": 1,
-        "window": 5,
-        "epochs": 100,
+        # "min_count": 1,
+        # "window": 5,
+        # "epochs": 100,
         "seed": 42,
+        # default = 0.025
+        # "alpha": 0.045,
+        # default = 0.0001
+        "min_alpha": 0.0001,
+        "workers": 8,
+        # below are the optimized values
+        "alpha": 0.05, "epochs": 60, "min_count": 1.0, "negative": 15.0, "window": 3.0
     }
-    model = Word2Vec(**w2v_params)
+    model = model_init(**w2v_params)
 
-    # build corpus as list of lists of words (list of sentences where each sentence is a list of words)
-    latin_corpus = "prealigned/latin_corpus.txt"
-    with open(latin_corpus, "r", encoding="utf-8") as fp:
-        paragraphs = " ".join(fp.readlines()).split("\n \n")
-
-    # split paragraphs into sentences, split sentences into words
-    tokenized_paragraphs = [tokenize_corpus(paragraph) for paragraph in paragraphs]
-    all_sentences = paragraphs_to_sentences(tokenized_paragraphs)
-    all_words = [word for sentence in all_sentences for word in sentence]
-    print("words tokenized")
+    all_paragraphs, all_sentences, all_words = load_latin_corpus()
 
     # build the vocab
-
     model.build_vocab(all_sentences)
     model.init_weights()
     print("vocab built")
 
-    # set the vectors that we do have. anton: update this part: Replace set to True to make sure the vectors are overwritten
-    new_keys, new_vectors = [], []
-    for key, vector in zip(latin_keyed_vectors.index_to_key, latin_keyed_vectors.vectors):
-        if model.wv.has_index_for(key):
-            new_keys.append(key)
-            new_vectors.append(vector)
-        else:
-            print(f"({key=}) not found in model vocab.")
-    model.wv[new_keys] = new_vectors
-    # model.wv.add_vectors(latin_keyed_vectors.index_to_key, latin_keyed_vectors.vectors, replace=True)
-    print("vectors set")
+    # set vectors (and lock them maybe)
+    set_new_vectors(model, latin_keyed_vectors, 0.1)
 
     # randomly shuffle (deterministically)
     random.seed(42)
-    random.shuffle(tokenized_paragraphs)
-    # separate into test-train-validate sets on paragraph (validation set is being ignored for now)
-    train_paragraphs, test_paragraphs, validate_paragraphs = split_data(tokenized_paragraphs, 1, 0, 0)
+    random.shuffle(all_paragraphs)
 
+    # separate into test-train-validate sets on paragraph (test/validation sets are being ignored for now since I can't use them)
+    train_paragraphs, _, _ = split_data(all_paragraphs, 1, 0, 0)
     train_sentences = paragraphs_to_sentences(train_paragraphs)
-    # test_sentences = paragraphs_to_sentences(train_paragraphs)
 
     model.train(train_sentences, total_examples=model.corpus_count, epochs=model.epochs)
     print("model trained")
 
-    model.save("model_daughter.bin")
+    model.save("latin_models/model_descendant.bin")
 
     # 6. train another latin model on the corpus without these vectors.
     # init model. Making sure to keep the parameters the same between the two
-    model_blind = Word2Vec(**w2v_params)
-    # anton: may want to reset the model to keep even more things the same?
-    # model_blind.reset_from(model)
+    model_blind = model_init(**w2v_params)
 
     model_blind.build_vocab(all_sentences)
     print("vocab built - blind model")
@@ -715,7 +791,7 @@ def main():
     model_blind.train(train_sentences, total_examples=model.corpus_count, epochs=model.epochs)
     print("model trained - blind model")
 
-    model_blind.save("model_blind.bin")
+    model_blind.save("latin_models/model_blind.bin")
 
     # 7. (maybe?) train another latin model on a much larger corpus.
     # todo
@@ -724,47 +800,14 @@ def main():
     # 1. Run latin based analogy tests
     # todo
 
-    # simple handcrafted analogy tests
-    analogy_tests = [
-        ("rex", "regina", "vir", "femina"),  # not in latin_daughter
-        ("bonus", "melior", "malus", "peior"),
-        ("amo", "amavi", "video", "vidi"),  # not in latin_daughter
-        ("rex", "regius", "pater", "patrius"),
-        ("manus", "manu", "caput", "capite"),
-        ("volo", "volam", "possum", "potero"),  # not in latin_daughter
-        ("audio", "audire", "scribo", "scribere"),  # not in latin_daughter
-        ("flos", "floris", "arbor", "arboris"),
-    ]
+    test_models(model.wv, model_blind.wv)
 
-    from pprint import pprint
-    accuracies = analogy_accuracy(model.wv, analogy_tests)
-    pprint(accuracies)
-    accuracies = analogy_accuracy(model_blind.wv, analogy_tests)
-    pprint(accuracies)
-
-    test_models(model, model_blind)
-
-    breakpoint()
+    # breakpoint()
     pass
 
 
-def test_models(model, model_blind):
-    # using OddOneOut and Topk from gensim_evaluations
-    from gensim_evaluations import wikiqueries, methods
-    categories = ['Q60539481']
-    langs = ['la']
-    wikiqueries.generate_test_set(items=categories, languages=langs, filename='neg_emotion')
-    odd_out_result = methods.OddOneOut(cat_file='neg_emotion_la.txt', model=model.wv, k_in=3, allow_oov=True, sample_size=1000)
-    odd_out_result_blind = methods.OddOneOut(cat_file='neg_emotion_la.txt', model=model_blind.wv, k_in=3, allow_oov=True, sample_size=1000)
-    topk_result = methods.Topk(cat_file='neg_emotion_la.txt', model=model.wv, k=3, allow_oov=True)
-    topk_result_blind = methods.Topk(cat_file='neg_emotion_la.txt', model=model_blind.wv, k=3, allow_oov=True)
-    print(f'{odd_out_result=}')
-    print(f'{odd_out_result_blind=}')
-    print(f'{topk_result=}')
-    print(f'{topk_result_blind=}')
-
-
 if __name__ == '__main__':
-    # main()
-    test_models(Word2Vec.load("model_daughter.bin"), Word2Vec.load("model_blind.bin"))
+    main()
+    # test_models(Word2Vec.load("latin_models/model_descendant.bin").wv, Word2Vec.load("latin_models/model_blind.bin").wv)
+    # plot_hyperparameter_scatter("opt_logs/logs_0_desc.log.json")
     pass
