@@ -435,15 +435,25 @@ def find_model_lemma(word, valid_words, lemmatized, pruned):
 
 # region train/test
 def load_latin_corpus():
-    # build corpus as list of lists of words (list of sentences where each sentence is a list of words)
-    latin_corpus = "prealigned/latin_corpus2.txt"
-    with open(latin_corpus, "r", encoding="utf-8") as fp:
-        paragraphs = " ".join(fp.readlines()).split("\n \n")
-    # split paragraphs into sentences, split sentences into words
-    tokenized_paragraphs = [tokenize_corpus(paragraph) for paragraph in paragraphs]
-    all_sentences = paragraphs_to_sentences(tokenized_paragraphs)
-    all_words = [word for sentence in all_sentences for word in sentence]
-    print("words tokenized")
+    corpus_processed_path = "prealigned/cached_steps/corpus_processed.json"
+    if not os.path.exists(corpus_processed_path):
+        # build corpus as list of lists of words (list of sentences where each sentence is a list of words)
+        latin_corpus = "prealigned/latin_corpus2.txt"
+        with open(latin_corpus, "r", encoding="utf-8") as fp:
+            paragraphs = " ".join(fp.readlines()).split("\n \n")
+
+        # split paragraphs into sentences, split sentences into words
+        tokenized_paragraphs = [tokenize_corpus(paragraph) for paragraph in paragraphs]
+        all_sentences = paragraphs_to_sentences(tokenized_paragraphs)
+        all_words = [word for sentence in all_sentences for word in sentence]
+        with open(corpus_processed_path, "w", encoding="utf-8") as fp:
+            json.dump({"tokenized_paragraphs": tokenized_paragraphs, "all_sentences": all_sentences, "all_words": all_words}, fp)
+        print("words tokenized")
+    else:
+        with open(corpus_processed_path, "r", encoding="utf-8") as fp:
+            obj = json.load(fp)
+        tokenized_paragraphs, all_sentences, all_words = obj["tokenized_paragraphs"], obj["all_sentences"], obj["all_words"]
+
     return tokenized_paragraphs, all_sentences, all_words
 
 
@@ -501,6 +511,9 @@ def init_tests():
         'Q4271324',  # mythical character
         'Q6256',  # country
         'Q515',  # city
+        'Q397',  # Latin
+        'Q7198',  # Ovid
+        'Q1747689'  # Ancient Rome
     ]
     langs = ['la']
     test_filename = "test_ooo_topk"
@@ -754,7 +767,9 @@ def main():
         "min_alpha": 0.0001,
         "workers": 8,
         # below are the optimized values
-        "alpha": 0.05, "epochs": 60, "min_count": 1.0, "negative": 15.0, "window": 3.0
+        # "alpha": 0.05, "epochs": 60, "min_count": 1.0, "negative": 15.0, "window": 3.0,
+        # these are the values used by facebook in their original training
+        "alpha": 0.05, "epochs": 60, "min_count": 1.0, "negative": 10, "window": 5, "min_n": 5, "max_n": 5
     }
     model = model_init(**w2v_params)
 
@@ -809,5 +824,4 @@ def main():
 if __name__ == '__main__':
     main()
     # test_models(Word2Vec.load("latin_models/model_descendant.bin").wv, Word2Vec.load("latin_models/model_blind.bin").wv)
-    # plot_hyperparameter_scatter("opt_logs/logs_0_desc.log.json")
     pass
