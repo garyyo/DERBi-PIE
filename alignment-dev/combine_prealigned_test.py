@@ -60,7 +60,7 @@ def load_model_words(load_model=False):
 def load_lemmatized(valid_es_words, valid_fr_words):
     # Define file paths
     es_lemmatized_filepath = "prealigned/cached_steps/es_lemmatized.json"
-    fr_lemmatized_filepath = "prealigned/fr_lemmatized.json"
+    fr_lemmatized_filepath = "prealigned/cached_steps/fr_lemmatized.json"
 
     # Load or create Spanish lemmatized words
     if os.path.exists(es_lemmatized_filepath):
