@@ -102,7 +102,11 @@ def worker(run_func, args, kwargs, result_queue):
         result_queue.put(-1)
 
 
-def intermediary(run_func, *args, **kwargs):
+def intermediary(run_func, skip_mp=False, *args, **kwargs):
+    # using mp is for a shoddy thread crash protection, but it has a significant overhead
+    if skip_mp:
+        return run_func(*args, **kwargs)
+
     result_queue = multiprocessing.Queue()
     process = multiprocessing.Process(target=worker, args=(run_func, args, kwargs, result_queue))
 
@@ -117,6 +121,34 @@ def intermediary(run_func, *args, **kwargs):
         # Process finished normally
         result = result_queue.get()
         return result
+
+
+def plot_heatmaps(df):
+    df = df.round({'ratio': 2, 'lock_f_val': 2})
+
+    # Create pivot tables for heatmaps with keyword-only arguments to avoid warnings
+    descendant_pivot = df.pivot(index="ratio", columns="lock_f_val", values="descendant")
+    normal_pivot = df.pivot(index="ratio", columns="lock_f_val", values="normal")
+
+    # Plot heatmaps
+    plt.figure(figsize=(14, 6))
+
+    # Descendant heatmap
+    plt.subplot(1, 2, 1)
+    sns.heatmap(descendant_pivot, annot=True, cmap="rocket", cbar=True)
+    plt.title("Descendant Heatmap")
+    plt.xlabel("lock_f_val")
+    plt.ylabel("ratio")
+
+    # Normal heatmap
+    plt.subplot(1, 2, 2)
+    sns.heatmap(normal_pivot, annot=True, cmap="rocket", cbar=True)
+    plt.title("Normal Heatmap")
+    plt.xlabel("lock_f_val")
+    plt.ylabel("ratio")
+
+    plt.tight_layout()
+    plt.show()
 
 
 def grid_tests():
@@ -198,34 +230,6 @@ def grid_tests():
     plot_heatmaps(df)
 
     pass
-
-
-def plot_heatmaps(df):
-    df = df.round({'ratio': 2, 'lock_f_val': 2})
-
-    # Create pivot tables for heatmaps with keyword-only arguments to avoid warnings
-    descendant_pivot = df.pivot(index="ratio", columns="lock_f_val", values="descendant")
-    normal_pivot = df.pivot(index="ratio", columns="lock_f_val", values="normal")
-
-    # Plot heatmaps
-    plt.figure(figsize=(14, 6))
-
-    # Descendant heatmap
-    plt.subplot(1, 2, 1)
-    sns.heatmap(descendant_pivot, annot=True, cmap="rocket", cbar=True)
-    plt.title("Descendant Heatmap")
-    plt.xlabel("lock_f_val")
-    plt.ylabel("ratio")
-
-    # Normal heatmap
-    plt.subplot(1, 2, 2)
-    sns.heatmap(normal_pivot, annot=True, cmap="rocket", cbar=True)
-    plt.title("Normal Heatmap")
-    plt.xlabel("lock_f_val")
-    plt.ylabel("ratio")
-
-    plt.tight_layout()
-    plt.show()
 
 
 if __name__ == '__main__':
