@@ -766,7 +766,9 @@ def main(force_regenerate=False):
         # todo: remove this
         "alpha": 0.05, "epochs": 20, "min_count": 1.0, "negative": 10, "window": 5
     }
-    model = model_type(**w2v_params)
+    lock_f = 0.639
+    ratio = 0.02
+    model: FastText = model_type(**w2v_params)
 
     all_paragraphs, all_sentences, all_words = load_latin_corpus()
 
@@ -776,14 +778,14 @@ def main(force_regenerate=False):
     print("vocab built")
 
     # set vectors (and lock them maybe)
-    set_new_vectors(model, latin_keyed_vectors, 1)
+    set_new_vectors(model, latin_keyed_vectors, lock_f)
 
     # randomly shuffle (deterministically)
     random.seed(42)
     random.shuffle(all_paragraphs)
 
     # separate into test-train-validate sets on paragraph (test/validation sets are being ignored for now since I can't use them)
-    train_paragraphs, _, _ = split_data(all_paragraphs, 1, 19, 0)
+    train_paragraphs, _, _ = split_data(all_paragraphs, ratio, 1-ratio, 0)
     train_sentences = paragraphs_to_sentences(train_paragraphs)
 
     model.train(train_sentences, total_examples=model.corpus_count, epochs=model.epochs)
