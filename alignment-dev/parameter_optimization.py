@@ -144,15 +144,17 @@ def model_optimization():
 
     # optimizer
     model_type = FastText
-    bound_func = optimize_normal
-    optimizer_func = functools.partial(bound_func, all_sentences, train_sentences, int_params, param_found, model_type)
+
+    # this is for the regular model
+    # bound_func = optimize_normal
+    # optimizer_func = functools.partial(bound_func, all_sentences, train_sentences, int_params, param_found, model_type)
 
     # this is only for the descendant model
-    # bound_func = optimize_descendant
-    # latin_daughter_vector_filepath = "prealigned/latin_daughter_vectors2.vec"
-    # latin_keyed_vectors = KeyedVectors.load(latin_daughter_vector_filepath)
-    # param_bounds["lock_f_val"] = (0, 1)
-    # optimizer_func = functools.partial(bound_func, all_sentences, train_sentences, int_params, latin_keyed_vectors, param_found, model_type)
+    bound_func = optimize_descendant
+    latin_daughter_vector_filepath = "prealigned/latin_daughter_vectors3.vec"
+    latin_keyed_vectors = KeyedVectors.load(latin_daughter_vector_filepath)
+    param_bounds["lock_f_val"] = (0, 1)
+    optimizer_func = functools.partial(bound_func, all_sentences, train_sentences, int_params, latin_keyed_vectors, param_found, model_type)
 
     optimizer = BayesianOptimization(
         f=optimizer_func,

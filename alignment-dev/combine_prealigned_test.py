@@ -4,6 +4,7 @@ import json
 import os.path
 import random
 import shutil
+import time
 from collections import defaultdict
 
 import cltk
@@ -479,7 +480,7 @@ def split_data(data, train_ratio=0.8, test_ratio=0.2, val_ratio=0):
         train_ratio /= total_ratio
         val_ratio /= total_ratio
         test_ratio /= total_ratio
-        print(f"Warning: Ratios did not sum to 1. Normalized to {train_ratio}, {val_ratio}, {test_ratio}")
+        print(f"Warning: Ratios did not sum to 1. Normalized to {train_ratio=}, {test_ratio=}, {val_ratio=}")
 
     n = len(data)
 
@@ -511,9 +512,10 @@ def init_tests():
         'Q4271324',  # mythical character
         'Q6256',  # country
         'Q515',  # city
-        'Q397',  # Latin
-        'Q7198',  # Ovid
-        'Q1747689'  # Ancient Rome
+        # these don't do anything actually
+        # 'Q397',  # Latin
+        # 'Q7198',  # Ovid
+        # 'Q1747689'  # Ancient Rome
     ]
     langs = ['la']
     test_filename = "test_ooo_topk"
@@ -521,7 +523,7 @@ def init_tests():
     return f'{test_filename}_{langs[0]}.txt'
 
 
-def set_new_vectors(model, latin_keyed_vectors, lock_f_val=1):
+def set_new_vectors(model, latin_keyed_vectors, lock_f_val, silent=False):
     # set the vectors that we do have
     new_keys = set(latin_keyed_vectors.index_to_key).intersection(set(model.wv.index_to_key))
     new_keys = [key for key in latin_keyed_vectors.index_to_key if key in new_keys]
@@ -536,29 +538,35 @@ def set_new_vectors(model, latin_keyed_vectors, lock_f_val=1):
     num_skipped = len(skipped_keys)
     num_missing = len(missing_keys)
 
-    print(f"Reusing {num_used} of {num_total} latin generated vectors ({num_used / num_total * 100:.2f}%), skipped {num_skipped} vectors")
-    print(f"Vectors Cover {num_used} of {num_vocab} vocab ({num_used / num_vocab * 100:.2f}%), {num_missing} vectors are set to random")
-    print(f"Skipped key: {skipped_keys[:20]}{'...' if len(skipped_keys)> 20 else ''}, # = {len(skipped_keys)}")
+    if not silent:
+        print(f"Reusing {num_used} of {num_total} latin generated vectors ({num_used / num_total * 100:.2f}%), skipped {num_skipped} vectors")
+        print(f"Vectors Cover {num_used} of {num_vocab} vocab ({num_used / num_vocab * 100:.2f}%), {num_missing} vectors are set to random")
+        print(f"Skipped key: {skipped_keys[:20]}{'...' if len(skipped_keys)> 20 else ''}, # = {len(skipped_keys)}")
 
     model.wv[new_keys] = new_vectors
 
     # lock the vectors that we set because we don't want them to move around.
     lock_f = np.ones([model.wv.vectors.shape[0]])
     lock_f[[model.wv.key_to_index[key] for key in new_keys]] = lock_f_val
-    model.wv.vectors_lockf = lock_f
+    if model.__class__.__name__ == "FastText":
+        model.wv.vectors_vocab_lockf = lock_f
+        model.wv.vectors_ngrams_lockf = lock_f
+    else:
+        model.wv.vectors_lockf = lock_f
 
-    print("vectors set")
+    if not silent:
+        print("vectors set")
     pass
 
 
-def test_models(model_wv, model_blind_wv):
+def test_models(model_wv, model_blind_wv, ft=True):
     # using OddOneOut and Topk from gensim_evaluations
     cat_file = 'test_ooo_topk_la.txt'
     scores: dict[tuple] = {
-        'ooo_descendant': run_test(gensim_evaluations.methods.OddOneOut, cat_file, model_wv, k_in=3, allow_oov=True, sample_size=1000),
-        'ooo_blind': run_test(gensim_evaluations.methods.OddOneOut, cat_file, model_blind_wv, k_in=3, allow_oov=True, sample_size=1000),
-        'topk_descendant': run_test(gensim_evaluations.methods.Topk, cat_file, model_wv, k=3, allow_oov=True),
-        'topk_blind': run_test(gensim_evaluations.methods.Topk, cat_file, model_blind_wv, k=3, allow_oov=True),
+        'ooo_descendant': run_test(gensim_evaluations.methods.OddOneOut, cat_file, model_wv, k_in=3, allow_oov=True, sample_size=1000, ft=ft, silent=True),
+        'ooo_blind': run_test(gensim_evaluations.methods.OddOneOut, cat_file, model_blind_wv, k_in=3, allow_oov=True, sample_size=1000, ft=ft, silent=True),
+        # 'topk_descendant': run_test(gensim_evaluations.methods.Topk, cat_file, model_wv, k=3, allow_oov=True, ft=ft),
+        # 'topk_blind': run_test(gensim_evaluations.methods.Topk, cat_file, model_blind_wv, k=3, allow_oov=True, ft=ft),
     }
 
     print_scores(scores)
@@ -687,12 +695,15 @@ def generate_latin_daughter_vectors():
     )
     # 4. gather the lemmatized French and Spanish word vectors, average the groups together (optionally check if they are in a cluster of some sort),
     #    and use that as the starting value for the vector for Latin (perhaps change the method of training later to not allow for these values to change?)
-
     # ok now we need the actual models
+    print("Loading the actual models (this may take a couple minutes)", end="")
+    start_time = time.time()
     model_es, model_es_words, model_fr, model_fr_words = load_model_words(load_model=True)
+    end_time = time.time()
+    print(f". Yeah so it turns out it took {(end_time - start_time)/60:.02f} minutes")
 
     latin_vectors = {}
-    for i, (latin, model_words) in tqdm(enumerate(latin_to_model_words.items()), ncols=160, desc="assigning vectors"):
+    for i, (latin, model_words) in enumerate(tqdm(latin_to_model_words.items(), ncols=160, desc="assigning vectors")):
         # some words are missing from the model but are in the
         found_fr_words = model_words["fr"]
         missing_model_words_fr = [word for word in found_fr_words if word not in model_fr.index_to_key]
@@ -711,12 +722,26 @@ def generate_latin_daughter_vectors():
             print("All words missing from model, skipping entry")
             continue
 
-        # get the center of french words
-        fr_vector = np.mean([model_fr.get_vector(word) for word in found_fr_words if word in model_fr.index_to_key], axis=0)
-        # get the center of spanish words
-        es_vector = np.mean([model_es.get_vector(word) for word in found_es_words if word in model_es.index_to_key], axis=0)
-        # get the center between the two
-        la_vector = np.mean([fr_vector, es_vector], axis=0)
+        # calculate a centroid of the vectors given and then throw out any that are too far away from that center.
+        # todo: use some method to figure out which are truly outliers, currently just using the closest to the center of the vectors.
+        # find the valid words
+        valid_fr = [model_fr.get_vector(word) for word in found_fr_words if word in model_fr.index_to_key]
+        valid_es = [model_es.get_vector(word) for word in found_es_words if word in model_es.index_to_key]
+        # find the center of all words
+        centroid = np.mean([np.mean(valid_fr, axis=0), np.mean(valid_es, axis=0)], axis=0)
+        # for each language find the distance of the vectors that center
+        scored_fr = [cosine(vec, centroid) for vec in valid_fr]
+        scored_es = [cosine(vec, centroid) for vec in valid_es]
+        # only use the closest vector to the center of the valid points
+        la_vector = np.mean([valid_fr[np.argmin(scored_fr)], valid_es[np.argmin(scored_es)]], axis=0)
+
+        # the old way, does not filter for potentially outlier vectors
+        # # get the center of french words
+        # fr_vector = np.mean(valid_fr, axis=0)
+        # # get the center of spanish words
+        # es_vector = np.mean(valid_es, axis=0)
+        # # get the center between the two
+        # la_vector = np.mean([fr_vector, es_vector], axis=0)
 
         # turn the latin lemmas back into in-vocab latin words
         # todo: latin_translate_to_original technically probably has original words that have more than one translate.
@@ -733,7 +758,7 @@ def generate_latin_daughter_vectors():
     return latin_keyed_vectors
 
 
-def main():
+def main(force_regenerate=False):
     """
     The full process:
     1-4: generate latin descendant vectors
@@ -744,8 +769,8 @@ def main():
     6:   the same as 5 but with a blind model (init, train, test)
     """
     # 1-4: create the latin daughter vectors
-    latin_daughter_vector_filepath = "prealigned/latin_daughter_vectors2.vec"
-    if os.path.exists(latin_daughter_vector_filepath):
+    latin_daughter_vector_filepath = "prealigned/latin_daughter_vectors3.vec"
+    if os.path.exists(latin_daughter_vector_filepath) and not force_regenerate:
         latin_keyed_vectors = KeyedVectors.load(latin_daughter_vector_filepath)
     else:
         latin_keyed_vectors = generate_latin_daughter_vectors()
@@ -753,8 +778,8 @@ def main():
 
     # 5. train a latin model on the corpus using these vectors as initial values.
     # initialize model
-    # model_init = Word2Vec
-    model_init = FastText
+    # model_type = Word2Vec
+    model_type = FastText
     w2v_params = {
         "vector_size": latin_keyed_vectors.vector_size,
         # "min_count": 1,
@@ -769,9 +794,11 @@ def main():
         # below are the optimized values
         # "alpha": 0.05, "epochs": 60, "min_count": 1.0, "negative": 15.0, "window": 3.0,
         # these are the values used by facebook in their original training
-        "alpha": 0.05, "epochs": 60, "min_count": 1.0, "negative": 10, "window": 5, "min_n": 5, "max_n": 5
+        # "alpha": 0.05, "epochs": 60, "min_count": 1.0, "negative": 10, "window": 5, "min_n": 5, "max_n": 5
+        # todo: remove this
+        "alpha": 0.05, "epochs": 20, "min_count": 1.0, "negative": 10, "window": 5
     }
-    model = model_init(**w2v_params)
+    model = model_type(**w2v_params)
 
     all_paragraphs, all_sentences, all_words = load_latin_corpus()
 
@@ -781,14 +808,14 @@ def main():
     print("vocab built")
 
     # set vectors (and lock them maybe)
-    set_new_vectors(model, latin_keyed_vectors, 0.1)
+    set_new_vectors(model, latin_keyed_vectors, 1)
 
     # randomly shuffle (deterministically)
     random.seed(42)
     random.shuffle(all_paragraphs)
 
     # separate into test-train-validate sets on paragraph (test/validation sets are being ignored for now since I can't use them)
-    train_paragraphs, _, _ = split_data(all_paragraphs, 1, 0, 0)
+    train_paragraphs, _, _ = split_data(all_paragraphs, 1, 19, 0)
     train_sentences = paragraphs_to_sentences(train_paragraphs)
 
     model.train(train_sentences, total_examples=model.corpus_count, epochs=model.epochs)
@@ -798,7 +825,7 @@ def main():
 
     # 6. train another latin model on the corpus without these vectors.
     # init model. Making sure to keep the parameters the same between the two
-    model_blind = model_init(**w2v_params)
+    model_blind = model_type(**w2v_params)
 
     model_blind.build_vocab(all_sentences)
     print("vocab built - blind model")
@@ -815,7 +842,7 @@ def main():
     # 1. Run latin based analogy tests
     # todo
 
-    test_models(model.wv, model_blind.wv)
+    test_models(model.wv, model_blind.wv, ft=model_type.__name__ == "FastText")
 
     # breakpoint()
     pass
