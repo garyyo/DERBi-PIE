@@ -304,38 +304,6 @@ def latin_vocab_list():
 
     return normalized_to_lemmas, lemma_to_normalized, original_to_lemmas, lemma_to_original
 
-
-# unused
-def split_paragraphs():
-    #
-    latin_corpus = "prealigned/latin_corpus.txt"
-    with open(latin_corpus, "r", encoding="utf-8") as fp:
-        paragraphs = " ".join(fp.readlines()).split("\n \n")
-
-    # split the file into n character chunks
-    max_text_len = 8000
-    current_text = paragraphs.pop()
-    paragraph_splits = []
-    while paragraphs:
-        paragraph = paragraphs.pop()
-        if len(current_text) + len(paragraph) > max_text_len:
-            paragraph_splits.append(current_text)
-            current_text = paragraph
-        else:
-            current_text += "\n \n" + paragraph
-
-    # clear out the directory beforehand
-    directory = "prealigned/latin_corpus_paragraphs"
-    shutil.rmtree(directory)
-    os.makedirs(directory)
-
-    # save it
-    pad_amount = len(str(len(paragraph_splits)))
-    for i, split in enumerate(paragraph_splits):
-        with open(f"{directory}/{i:0{pad_amount}}.txt", "w", encoding="utf-8") as fp:
-            fp.write(split.strip())
-    pass
-
 # endregion
 
 
