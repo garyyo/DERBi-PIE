@@ -518,7 +518,7 @@ def set_new_vectors(model, latin_keyed_vectors, lock_f_val, silent=False):
     lock_f[[model.wv.key_to_index[key] for key in new_keys]] = lock_f_val
     if model.__class__.__name__ == "FastText":
         model.wv.vectors_vocab_lockf = lock_f
-        model.wv.vectors_ngrams_lockf = lock_f
+        # model.wv.vectors_ngrams_lockf = lock_f
     else:
         model.wv.vectors_lockf = lock_f
 
@@ -766,8 +766,8 @@ def main(force_regenerate=False):
         # todo: remove this
         "alpha": 0.05, "epochs": 20, "min_count": 1.0, "negative": 10, "window": 5
     }
-    lock_f = 0.639
-    ratio = 0.02
+    lock_f = 0.87
+    ratio = 0.2
     model: FastText = model_type(**w2v_params)
 
     all_paragraphs, all_sentences, all_words = load_latin_corpus()
@@ -819,6 +819,7 @@ def main(force_regenerate=False):
 
 
 if __name__ == '__main__':
-    main()
+    generate_latin_daughter_vectors()
+    # main()
     # test_models(Word2Vec.load("latin_models/model_descendant.bin").wv, Word2Vec.load("latin_models/model_blind.bin").wv)
     pass
