@@ -491,7 +491,7 @@ def init_tests():
     return f'{test_filename}_{langs[0]}.txt'
 
 
-def set_new_vectors(model, latin_keyed_vectors, lock_f_val, silent=False):
+def set_new_vectors(model, latin_keyed_vectors, lock_f_val, lock_type="both", silent=False):
     # set the vectors that we do have
     new_keys = set(latin_keyed_vectors.index_to_key).intersection(set(model.wv.index_to_key))
     new_keys = [key for key in latin_keyed_vectors.index_to_key if key in new_keys]
@@ -517,8 +517,13 @@ def set_new_vectors(model, latin_keyed_vectors, lock_f_val, silent=False):
     lock_f = np.ones([model.wv.vectors.shape[0]])
     lock_f[[model.wv.key_to_index[key] for key in new_keys]] = lock_f_val
     if model.__class__.__name__ == "FastText":
-        model.wv.vectors_vocab_lockf = lock_f
-        # model.wv.vectors_ngrams_lockf = lock_f
+        if lock_type == "both":
+            model.wv.vectors_vocab_lockf = lock_f
+            model.wv.vectors_ngrams_lockf = lock_f
+        if lock_type == "vocab":
+            model.wv.vectors_vocab_lockf = lock_f
+        if lock_type == "ngram":
+            model.wv.vectors_ngrams_lockf = lock_f
     else:
         model.wv.vectors_lockf = lock_f
 
@@ -557,44 +562,6 @@ def print_scores(scores):
         for category, score in test_scores.items():
             print(f"{score:^{max_col_width + 3}.4f}", end="")
         print("   ")
-
-
-def analogy_accuracy(wv, analogy_tests, top_n=5):
-    correct_top1 = 0
-    correct_topn = 0
-    distances = []
-    closest = []
-
-    for A, B, C, expected in analogy_tests:
-        # Compute vector D such that D = B - A + C
-        vector_D = wv[B] - wv[A] + wv[C]
-
-        # Get the most similar words to vector D
-        most_similar = wv.similar_by_vector(vector_D, topn=top_n)
-        most_similar_words = [word for word, _ in most_similar]
-
-        # Check if the expected word is in the top 1 and top n results
-        if expected in most_similar_words[:1]:
-            correct_top1 += 1
-        if expected in most_similar_words[:top_n]:
-            correct_topn += 1
-
-        # Compute the distance between vector D and the true value of the vector for the expected word
-        distance = cosine(vector_D, wv[expected])
-        distances.append(distance)
-
-        closest.append(most_similar_words[:1])
-
-    # Calculate accuracy
-    top1_accuracy = correct_top1 / len(analogy_tests)
-    topn_accuracy = correct_topn / len(analogy_tests)
-
-    return {
-        "top1_accuracy": top1_accuracy,
-        "topn_accuracy": topn_accuracy,
-        "distances": distances,
-        "closest": closest,
-    }
 
 # endregion
 
@@ -746,8 +713,8 @@ def main(force_regenerate=False):
 
     # 5. train a latin model on the corpus using these vectors as initial values.
     # initialize model
-    # model_type = Word2Vec
-    model_type = FastText
+    model_type = Word2Vec
+    # model_type = FastText
     w2v_params = {
         "vector_size": latin_keyed_vectors.vector_size,
         # "min_count": 1,
@@ -766,9 +733,9 @@ def main(force_regenerate=False):
         # todo: remove this
         "alpha": 0.05, "epochs": 20, "min_count": 1.0, "negative": 10, "window": 5
     }
-    lock_f = 0.87
-    ratio = 0.2
-    model: FastText = model_type(**w2v_params)
+    lock_f = 1
+    ratio = 1
+    model: model_type = model_type(**w2v_params)
 
     all_paragraphs, all_sentences, all_words = load_latin_corpus()
 
@@ -819,7 +786,7 @@ def main(force_regenerate=False):
 
 
 if __name__ == '__main__':
-    generate_latin_daughter_vectors()
-    # main()
+    # generate_latin_daughter_vectors()
+    main()
     # test_models(Word2Vec.load("latin_models/model_descendant.bin").wv, Word2Vec.load("latin_models/model_blind.bin").wv)
     pass
