@@ -197,7 +197,7 @@ def find_translate_greek(doc):
                 #         continue
                 #     run.text = run.text.replace(key, value)
                 pass
-            run.font.name = None
+            # run.font.name = None
         # for key, value in titus_font2unicode.items():
         #     if key in p.text:
         #         for run in p.runs:
