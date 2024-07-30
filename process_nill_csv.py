@@ -1,4 +1,9 @@
+import json
+from collections import defaultdict
 from dataclasses import dataclass
+
+import pyperclip
+from tqdm import tqdm
 
 from docx import Document
 from docx.document import Document as DocType
@@ -7,6 +12,40 @@ from docx.oxml.text.paragraph import CT_P
 from docx.table import _Cell, Table
 from docx.text.paragraph import Paragraph
 import regex as re
+import os
+import pickle
+import copy
+
+import gpt_functions
+
+# collecting stats
+num_weird_headings = 0
+num_bad_descendants = 0
+num_gpt_skipped = 0
+num_parts = {
+    "box1": 0,
+    "box2": 0,
+    "box3": 0,
+    "box4": 0,
+    "box5": 0,
+    "box6": 0,
+    "box7": 0,
+}
+
+
+# stuff
+font_copyable = ['all_caps', 'bold', 'complex_script', 'cs_bold', 'cs_italic', 'double_strike', 'emboss', 'hidden', 'highlight_color', 'imprint', 'italic', 'math', 'name', 'no_proof', 'outline', 'rtl', 'shadow', 'size', 'small_caps', 'snap_to_grid', 'spec_vanish', 'strike', 'subscript', 'superscript', 'underline', 'web_hidden']
+
+
+def run_or_load(filename, func, rerun=False, **kwargs):
+    if os.path.exists(filename) and not rerun:
+        with open(filename, 'rb') as f:
+            return pickle.load(f)
+    else:
+        result = func(**kwargs)
+        with open(filename, 'wb') as f:
+            pickle.dump(result, f)
+        return result
 
 
 @dataclass
@@ -85,8 +124,13 @@ def match_heading(item):
 
 
 def match_heading_sources(item):
+    # valid sources: 'EIEC', 'IEW', 'LIPP', 'LIV'
+    valid_sources = ['EIEC', 'IEW', 'LIPP', 'LIV']
+    # 'vgl.' is a flag that means to 'compare'. note, I do not know what it actually means
+    # assert that a valid source exists
+    assert any([source in item.text for source in valid_sources])
     sources = item.text.split(',')
-    return sources
+    return [source.strip() for source in sources]
 
 
 def superscript_markings(run):
@@ -156,16 +200,20 @@ def match_stem(item):
         pass
 
     try:
-        stem_groups = re.match(r"^(\? ?)?(\*(?:[^\s^]|\^\^é\^\^)+)(\^\^\d{0,2}\^\^)?( \(?[mfnc]\.\)?)?(\^\^\d{0,2}\^\^)?$", stem_text.strip()).groups()
-        questionable_stem, stem, stem_cite, gender, gender_cite = stem_groups
+        stem_groups = re.match(r"^(\? ?)?((?:\*|\^\^x\^\^)(?:[^\s^]|\^\^é\^\^)+)(\^\^\d{0,2}\^\^)?( \(?[mfnc]\.\)?)?( ASg\.)?(\^\^\d{0,2}\^\^)?$", stem_text.strip()).groups()
+        questionable_stem, stem, stem_cite, asg, gender, gender_cite = stem_groups
         questionable_stem = questionable_stem is not None
         stem_cite = stem_cite.replace("^", "") if stem_cite is not None else None
         gender_cite = gender_cite.replace("^", "") if gender_cite is not None else None
     except AttributeError:
         # if it errors there is not much I can do, just silently move on.
+        global num_bad_descendants
+        num_bad_descendants += 1
+
         stem = None
         questionable_stem = None
         stem_cite = None
+        asg = None
         gender = None
         gender_cite = None
 
@@ -175,7 +223,8 @@ def match_stem(item):
             "questionable": questionable_stem,
             "cite": stem_cite,
             "gender": gender,
-            "gender_cite": gender_cite
+            "gender_cite": gender_cite,
+            "asg": asg
         },
         "reflexes": []
     }
@@ -183,6 +232,22 @@ def match_stem(item):
     # Only add a new reflex if there is one
     # if info_text is not None:
     #     descendant["reflex"].append(match_reflex(info_text))
+    return descendant
+
+
+def match_stem_analogy(item):
+    descendant = {
+        "stem": {
+            "stem": item.text,
+            "arrow_splits": item.text.split("→"),
+            "questionable": False,
+            "cite": None,
+            "gender": None,
+            "gender_cite": None,
+            "is_sub_entry": False
+        },
+        "reflexes": []
+    }
     return descendant
 
 
@@ -214,7 +279,6 @@ def match_reflex(info_text):
         # if at any point language abbreviation info is missing we inherit from the last seen
         if lang_abbr is None and len(reflexes):
             lang_abbr = reflexes[-1]["language"]["language_abbr"]
-
 
         reflex = {
             "language": {
@@ -410,62 +474,147 @@ def make_new_entry():
 
 
 def process_cell(item, cell_state, current_entry, all_entries):
+    global num_parts
     # make new entry if we see a new cell
     if cell_state == 1:
-        all_entries.append(make_new_entry())
-        current_entry = all_entries[-1]
+        num_parts["box1"] += 1
+        new_entry = make_new_entry()
 
         # match the heading as best we can
-        current_entry["questionable"], current_entry["root"], current_entry["gloss"], current_entry["root_cite"] = match_heading(item)
+        new_entry["questionable"], new_entry["root"], new_entry["gloss"], new_entry["root_cite"] = match_heading(item)
 
         # a safety precaution to make sure we are not missing anything
-        current_entry["cell_info"].append(item.text)
+        new_entry["cell_info"].append(item.text)
+
+        all_entries.append(new_entry)
+        current_entry = all_entries[-1]
         pass
     if cell_state == 2:
+        num_parts["box2"] += 1
         current_entry["cell_info"].append(item.text)
         current_entry["sources"] = match_heading_sources(item)
         pass
     return current_entry
 
 
+def amend_runs(item, delimiter, collapse_sequential=True):
+    runs_list = [[]]
+    # this just sorta staggers them so from [0,1,2,3] we get [(1,0), (2,1), (3,2), (None,3)]
+    for next_run, run in zip(item.runs[1:] + [None], item.runs):
+        if delimiter in run.text:
+            # if we see a delimiter in the next one, and the current one is just a delimiter, then we skip (this condition does not run)
+            if collapse_sequential and next_run is not None and run.text.strip() == delimiter.strip() and delimiter in next_run.text:
+                pass
+            else:
+                runs_list.append([])
+        runs_list[-1].append(run)
+    return runs_list
+
+
+def copy_item(item, new_runs=()):
+    item_copy = copy.deepcopy(item)
+    # reset the text to remove the runs
+    item_copy.text = ""
+    if len(new_runs) == 0:
+        new_runs = item.runs
+    for run in new_runs:
+        # make the new run
+        item_copy.add_run(run.text, run.style)
+        # copy over all the copyable attributes
+        for font_prop in font_copyable:
+            setattr(item_copy.runs[-1].font, font_prop, getattr(run.font, font_prop))
+    # process it
+    return item_copy
+
+
+def process_weird_heading(item, current_entry, all_entries):
+    # if this contains a tab, it's probably a new entry but was weirdly placed into a heading6 instead of a table
+    new_entry = None
+    try:
+        if "\t" in item.text:
+            # collapse multiple subsequent tabs into a single, then split both the text and the runs.
+            cells = re.sub(r"\t+", "\t", item.text).split("\t")
+            # we only handle cases where there are exactly 2 parts to this, error on anything else
+            assert len(cells) == 2
+            split_runs = amend_runs(item, "\t")
+
+            # for each cell we run it through the standard process
+            new_entry = None
+            for i, (cell, runs) in enumerate(zip(cells, split_runs)):
+                # make the proper copies of each sub item (there is no easy way to do this)
+                item_copy = copy_item(item, runs)
+                new_entry = process_cell(item_copy, i+1, new_entry, all_entries)
+            # return it nothing errored, otherwise it jump to the except clause
+            return new_entry
+    except Exception as err:
+        print(err)
+        if new_entry == all_entries[-1]:
+            all_entries.pop()
+    return current_entry
+
+
 def process_descendant_initial(item, first_indent, current_entry):
+    global num_parts
+    num_parts["box3"] += 1
+    num_parts["box4"] += 1
     # anton: why is there sometimes an arrow?
     if "→" in item.text:
-        # breakpoint()
+        descendant = match_stem_analogy(item)
+        current_entry["descendants"].append(descendant)
+        current_entry["descendant_info"].append(item.text)
         return
     # anton: why is there sometimes some amount of indentation?
     if first_indent is not None:
+        # print(first_indent, item.text)
         # breakpoint()
         pass
     descendant = match_stem(item)
     current_entry["descendants"].append(descendant)
-    current_entry["descendant_info"].append(item.text)
+    current_entry["descendant_info"].append(markup_paragraph(item))
+    current_entry["descendants"][-1]["stem"]["is_sub_entry"] = item.paragraph_format.element.style == "LIN3"
 
 
 def process_descendant_continuation(item, first_indent, current_entry):
+    global num_parts
+    num_parts["box4"] += 1
     # todo: currently descendant continuation info needs something more complex that a state machine (AKA regex will not work)
     #  This could possibly be built with some combo of regex and other logic, but currently is too difficult a task to attempt.
     # match_reflex_paragraph(item)
 
     # anton: note the indent info, currently we don't use it to mean anything but it might.
     indent_info = f"[indented by {first_indent}]" if first_indent is not None else ""
-    current_entry["descendant_info"][-1] = current_entry["descendant_info"][-1].rstrip() + "\n" + indent_info + item.text.lstrip()
+    current_entry["descendant_info"][-1] = current_entry["descendant_info"][-1].rstrip() + "\n\t" + indent_info + item.text.lstrip()
     pass
 
 
 def process_other_initial(item, first_indent, current_entry):
+    global num_parts
+    num_parts["box5"] += 1
+    num_parts["box6"] += 1
     indent_info = f"[indented by {first_indent}]" if first_indent is not None else ""
     current_entry["other"].append(indent_info + item.text)
     pass
 
 
 def process_other_continuation(item, first_indent, current_entry):
+    global num_parts
+    num_parts["box6"] += 1
     indent_info = f"[indented by {first_indent}]" if first_indent is not None else ""
     current_entry["other"][-1] = current_entry["other"][-1].rstrip() + "\n" + indent_info + item.text.lstrip()
     pass
 
 
+def process_footnotes(item, current_entry):
+    global num_parts
+    num_parts["box7"] += 1
+    current_entry["footnotes"].append(item.text)
+    pass
+
+
 def match_nil_parts(document):
+    # for tracking statistics about the doc
+    global num_parts
+
     # tracking states
     cell_state = 0
     other_state = False
@@ -481,10 +630,7 @@ def match_nil_parts(document):
 
     possible_styles = set()
 
-    # collecting stats
-    num_weird_headings = 0
-
-    for item, item_type in iter_block_with_type(document):
+    for item, item_type in tqdm(iter_block_with_type(document), ncols=150, total=len(list(iter_block_with_type(document)))):
         possible_styles.add(item.paragraph_format.element.style)
         # first skip anything that is an empty line. Empty lines also signify the end of an "other" items block
         if item.text.strip() == "":
@@ -492,10 +638,10 @@ def match_nil_parts(document):
             continue
 
         # debug printout
-        print(f"---{item_type}---")
-        print(f"text= {item.text}")
-        print(f"style= {item.paragraph_format.element.style}")
-        print(f"indent= {item.paragraph_format.first_line_indent}")
+        # print(f"---{item_type}---")
+        # print(f"text= {item.text}")
+        # print(f"style= {item.paragraph_format.element.style}")
+        # print(f"indent= {item.paragraph_format.first_line_indent}")
 
         # various properties of the text
         regex_item = RegexEqual(item.text)
@@ -511,6 +657,8 @@ def match_nil_parts(document):
             continue
         elif style == "Heading6":
             # breakpoint()
+            global num_weird_headings
+            current_entry = process_weird_heading(item, current_entry, all_entries)
             num_weird_headings += 1
             continue
         else:
@@ -570,21 +718,167 @@ def match_nil_parts(document):
         # anton: I do not currently try to do anything with these but eventually should figure out what number they start with (something that is persistent
         #  across several lines) and associate then with that number.
         if style == "Literatur2":
-            current_entry["footnotes"].append(item.text)
+            process_footnotes(item, current_entry)
             continue
         breakpoint()
         pass
-    breakpoint()
+    return all_entries
+
+
+def extract_number_and_text(s):
+    match = re.match(r'^(\d+)\s*(.*)', s)
+    if match:
+        number = match.group(1)
+        text = match.group(2)
+        return number, text
+    else:
+        return None, s
+
+
+def categorize_footnotes(entry):
+    # for each footnote
+    numbered_footnotes = defaultdict(list)
+    latest_number = None
+    for footnote in entry["footnotes"]:
+        number, text = extract_number_and_text(footnote)
+        if number in numbered_footnotes:
+            # this should never happen
+            breakpoint()
+        # if the footnote starts with a number it makes a new set of footnotes
+        if number is not None:
+            numbered_footnotes[number].append(text)
+            latest_number = number
+        # otherwise it adds to the last set of footnotes
+        elif latest_number is not None:
+            numbered_footnotes[latest_number].append(text)
+        # if this happens before a new set of footnotes is added, then something went really wrong
+        else:
+            breakpoint()
+    entry["numbered_footnotes"] = dict(numbered_footnotes)
+    # in the very last footnote (if it exists) look for a bunch of tabs. whatever is after that is the abbreviation of the author(s) that wrote that entry
+
+    entry["footnote_attribution"] = None
+    if len(numbered_footnotes) > 0:
+        last_footnote = numbered_footnotes[list(numbered_footnotes)[-1]][-1]
+        matches = re.findall(r"\t*(\(\S+\))$", last_footnote)
+        if len(matches) > 0:
+            entry["footnote_attribution"] = matches[-1].strip()
+
+    return entry
+
+
+def reflex_prompt(stem, info):
+    prompt = "\n".join([
+        (
+            "I need you to help digitize entries in a German Proto-Indo European etymological dictionary. "
+            "These are structured generally with a stem (which itself can be questionable, have a gender, etc.) followed by a tab with the reflex info. "
+            "Sometimes the stem and following tab is missing, I will try to give it to you separately but it may also be missing (labeled as None) so wherever it is present you should use that information. "
+            "After the tab (if the stem exists in the text) the reflex info consists of some amount of lines that generally start with a tab, then the German abbreviation for the language the reflex is in, the reflex itself (which is generally but not always surrounded with // to indicate italics), whether it is questionable (it will be marked as questionable by a leading '?'), its gender abbreviation if applicable, the gloss in quotes, and where it was first attested (generally in parentheses). "
+            "Occasionally there is a number surrounded by '^^' (which used to indicate that it is superscript text) that refers to the footnotes, which needs to be extracted. "
+            "Sometimes there are multiple reflexes for a single language often separated by a semicolon, in these cases create a new reflex entry for each, duplicating the relevant info for each entry. "
+            "Sometimes there are multiple glosses for a single reflex, generally quoted and separated by a semicolon too, keep these together as a single string."
+        ),
+        "",
+        "I need you to extract what the reflex is, and for each reflex note its:",
+        "- language abbreviation",
+        "- the reflex",
+        "- questionable (true or false)",
+        "- gloss",
+        "- gender (if it exists, from m., f., n., c.)",
+        "- first_attested (if they exist)",
+        "- attested_info",
+        "- footnote_num",
+        "- other_abbr if there are other abbreviations unrecognized, or '' if there aren't",
+        "- unknown_text, if you see some text that is otherwise impossible to classify",
+        "",
+        "I also want you to find the following information for the stem:",
+        "- stem",
+        "- stem_questionable (true or false)",
+        "- stem_footnote_num (if they exist)",
+        "- stem_gender",
+        "",
+        f"Here is the text for the stem '{stem}':" if stem is not None else "I could not find the stem myself in the text, regardless here is the text:",
+        "```",
+        f"{info}",
+        "```",
+        "",
+        "```json",
+        "{",
+        "  'stem': string,",
+        "  'stem_questionable': bool,",
+        "  'stem_footnote_num': string|null,",
+        "  'stem_gender': string|null,",
+        "  'reflexes': [",
+        "    {",
+        "      'language_abbreviation': string,",
+        "      'reflex': string,",
+        "      'questionable': bool,",
+        "      'gloss': string,",
+        "      'gender': string|null,",
+        "      'first_attested': string|null,",
+        "      'attested_info': string|null,",
+        "      'footnote_num': string|null,",
+        "      'other_abbr': string|null,",
+        "      'unknown_text': string|null",
+        "    }",
+        "  ]",
+        "}",
+        "```",
+    ])
+
+    return prompt
+
+
+def gpt_entries(all_entries):
+    global num_gpt_skipped
+    from pyperclip import copy, paste
+    total_entries = len(all_entries)
+    for entry_count, entry in enumerate(all_entries):
+        total_descendants = len(entry["descendant_info"])
+        assert len(entry["descendant_info"]) == len(entry["descendants"])
+        for descendant_count, (descendants, info) in enumerate(zip(entry["descendants"], entry["descendant_info"])):
+            if descendants["stem"]["stem"] is None:
+                num_gpt_skipped += 1
+                # continue
+
+            prompt = reflex_prompt(descendants["stem"]["stem"], info)
+            print(info, descendants["stem"]["stem"], sep=" | ")
+            breakpoint()
+
+            # messages, response = gpt_functions.query_gpt(
+            #     [prompt],
+            #     model="gpt-4o-mini",
+            #     json_mode=True,
+            #     note=f"{descendant_count+1}/{total_descendants} -> {entry_count+1}/{total_entries}"
+            # )
+            #
+            # json_text = gpt_functions.extract_code_block(response['content'])
+            # reflexes = json.loads(json_text)
+            #
+            # # sanity check to make sure that the stems match
+            # if not reflexes["stem"] == descendants["stem"]["stem"]:
+            #     # breakpoint()
+            #     pass
+            # descendants["reflexes"] = reflexes["reflexes"]
+    gpt_functions.print_cost()
+    pass
 
 
 def main():
     document = Document('data_nil/NIL (edited).docx')
 
-    match_nil_parts(document)
-    breakpoint()
+    all_entries = run_or_load("temp.pkl", match_nil_parts, document=document)
+    # all_entries = run_or_load("temp.pkl", match_nil_parts, rerun=True, document=document)
+    # all_entries = match_nil_parts(document)
+    for entry in all_entries:
+        categorize_footnotes(entry)
+    # breakpoint()
     # STATS for those interested:
     # 4 special cases for headers
     # 5935 different reflexes (number of lines in either the box 4 or 6 in the chart).
+    gpt_entries(all_entries)
+
+    breakpoint()
     pass
 
 

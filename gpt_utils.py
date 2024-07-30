@@ -93,7 +93,7 @@ def query_gpt_fake(prompt):
 
 
 def extract_code_block(text):
-    code_block = re.search(r'```(.*?)```', text, re.DOTALL)
+    code_block = re.search(r'```(?:json\r?\n|csv\r?\n)?(.*?)```', text, re.DOTALL)
     return code_block.group(1).strip() if code_block else text
 
 

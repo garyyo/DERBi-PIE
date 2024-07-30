@@ -14,7 +14,7 @@ import openai
 import pandas as pd
 import pyperclip
 
-g_model = "gpt-3.5-turbo"
+g_model = "gpt-4o-mini"
 # g_model = "gpt-3.5-turbo-16k"
 # g_model = "gpt-3.5-turbo-0301"
 # g_model = "gpt-4"
@@ -112,12 +112,14 @@ def calculate_cost(model, in_tokens, out_tokens=0):
         "gpt-3.5-turbo-16k": {"in": 0.003, "out": 0.004},
         "gpt-3.5-turbo-0301": {"in": 0.0015, "out": 0.002},
         "gpt-4": {"in": 0.03, "out": 0.06},
+        "gpt-4o": {"in": 0.005, "out": 0.015},
+        "gpt-4o-mini": {"in": 0.00015, "out": 0.0006},
     }
     cost = in_tokens * model_pricing[model]["in"] + out_tokens * model_pricing[model]["out"]
     return cost/1000
 
 
-def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_print=False, fake=False, bypass_cache=False):
+def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_print=False, fake=False, bypass_cache=False, json_mode=False):
     global total_cost
     # I also want to be able to use this with just a single string
     if type(user_prompts) == str:
@@ -169,10 +171,14 @@ def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_
             pyperclip.copy(prompt)
             breakpoint()
         # contact openai and get a response
+        do_json_mode = {}
+        if json_mode:
+            do_json_mode["response_format"] = {"type": "json_object"}
         completion = try_gpt(
             openai.ChatCompletion.create,
             model=model,
             messages=messages,
+            **do_json_mode,
         )
         # extract the response from the completion
         response = completion["choices"][-1]["message"]
@@ -232,7 +238,7 @@ def try_gpt(call, *args, **kwargs):
 
 
 def extract_code_block(text):
-    code_block = re.search(r'```(.*?)```', text, re.DOTALL)
+    code_block = re.search(r'```(?:json\r?\n|csv\r?\n)?(.*?)```', text, re.DOTALL)
     return code_block.group(1).strip() if code_block else text
 
 
