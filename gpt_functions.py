@@ -94,6 +94,13 @@ def load_response_digest(digest):
     return None, digest
 
 
+def delete_response_digest(digest):
+    if os.path.exists(f"gpt_caches/{digest}.json"):
+        os.remove(f"gpt_caches/{digest}.json")
+    else:
+        print("response does not exist")
+
+
 def get_proper_digest(model=g_model, system_prompt=None, user_prompts=()):
     if type(user_prompts) == str:
         user_prompts = [user_prompts]
@@ -119,15 +126,16 @@ def calculate_cost(model, in_tokens, out_tokens=0):
     return cost/1000
 
 
-def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_print=False, fake=False, bypass_cache=False, json_mode=False):
+def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_print=False, fake=False, bypass_cache=False, json_mode=False, expected_schema=None):
     global total_cost
     # I also want to be able to use this with just a single string
     if type(user_prompts) == str:
         user_prompts = [user_prompts]
 
-    # notes are just so I know which query is running at a glance
     digest, prompt_string = get_proper_digest(model, system_prompt, user_prompts)
     response, digest = load_response_digest(digest)
+
+    # notes are just so I know which query is running at a glance
     note_text = f"starting with '{user_prompts[0][:40]}...'" if note is None else f"({note})"
     query_desc = f"{digest[:20]}..., {len(user_prompts): >3} prompt(s), {note_text} -> {model}"
 
@@ -176,6 +184,7 @@ def query_gpt(user_prompts=(), system_prompt=None, model=g_model, note=None, no_
             do_json_mode["response_format"] = {"type": "json_object"}
         completion = try_gpt(
             openai.ChatCompletion.create,
+            expected_schema=expected_schema,
             model=model,
             messages=messages,
             **do_json_mode,
@@ -215,9 +224,49 @@ def get_cached(user_prompts=(), system_prompt=None, model=g_model):
     return None, None, digest
 
 
+def check_schema(schema, obj, path=""):
+    missing = []
+    extra = []
+    if isinstance(schema, dict):
+        if not isinstance(obj, dict):
+            return [path or "root"], []  # Missing entire dict structure
+
+        # Check for missing keys
+        for key, sub_schema in schema.items():
+            if key not in obj:
+                missing.append(f"{path + '.' if path else ''}{key}")
+            else:
+                # Recursively check sub-objects
+                sub_missing, sub_extra = check_schema(sub_schema, obj[key], f"{path + '.' if path else ''}{key}")
+                missing.extend(sub_missing)
+                extra.extend(sub_extra)
+
+        # Check for extra keys
+        for key in obj:
+            if key not in schema:
+                extra.append(f"{path + '.' if path else ''}{key}")
+
+    elif isinstance(schema, list):
+        if not isinstance(obj, list):
+            return [path or "root"], []  # Expected a list but got something else
+
+        # Check list elements (assuming all elements should match the first schema item)
+        for i, item in enumerate(obj):
+            sub_missing, sub_extra = check_schema(schema[0], item, f"{path}[{i}]")
+            missing.extend(sub_missing)
+            extra.extend(sub_extra)
+
+    else:
+        # Check for type mismatch
+        if not isinstance(obj, schema):
+            missing.append(path)
+
+    return missing, extra
+
+
 # automatic retries because I am tired of openai timing out.
 # todo: pass a pre bound function rather than the function and its parameters
-def try_gpt(call, *args, **kwargs):
+def try_gpt(call, *args, expected_schema=None, **kwargs):
     total_attempts = 10
     output = None
     success = False
@@ -226,11 +275,20 @@ def try_gpt(call, *args, **kwargs):
         try:
             time.sleep(1)
             output = call(*args, **kwargs)
+            # quickly check the schema if needed
+            if expected_schema is not None:
+                missing, extra = check_schema(expected_schema, json.loads(extract_code_block(output["choices"][-1]["message"]["content"])))
+                assert len(missing) == 0 and len(extra) == 0
             success = True
             break
-        except (openai.error.ServiceUnavailableError, openai.error.APIError, openai.error.Timeout) as err:
-            print(f"\n---===>>> Could not connect, waiting 10 seconds and trying again... ({attempt_num+1}/{total_attempts}) <<<===---")
+        except (openai.error.ServiceUnavailableError, openai.error.APIError, openai.error.Timeout) as err1:
+            err = err1
+            print(f"\n---===>>> Could not complete, waiting 10 seconds and trying again... ({attempt_num+1}/{total_attempts}) <<<===---")
             time.sleep(10)
+            continue
+        except AssertionError as err1:
+            err = err1
+            print(f"\n---===>>> Did not follow required json schema, trying again... ({attempt_num+1}/{total_attempts}) <<<===---")
             continue
     if not success:
         raise err

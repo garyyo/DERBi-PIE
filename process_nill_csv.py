@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 from dataclasses import dataclass
 
+import pandas as pd
 import pyperclip
 from tqdm import tqdm
 
@@ -607,7 +608,7 @@ def process_other_continuation(item, first_indent, current_entry):
 def process_footnotes(item, current_entry):
     global num_parts
     num_parts["box7"] += 1
-    current_entry["footnotes"].append(item.text)
+    current_entry["footnotes"].append(markup_paragraph(item))
     pass
 
 
@@ -825,8 +826,28 @@ def reflex_prompt(stem, info):
         "}",
         "```",
     ])
+    expected_schema = {
+        'stem': str,
+        'stem_questionable': bool,
+        'stem_footnote_num': (str, type(None)),
+        'stem_gender': (str, type(None)),
+        'reflexes': [
+            {
+                'language_abbreviation': str,
+                'reflex': str,
+                'questionable': bool,
+                'gloss': (str, type(None)),
+                'gender': (str, type(None)),
+                'first_attested': (str, type(None)),
+                'attested_info': (str, type(None)),
+                'footnote_num': (str, type(None)),
+                'other_abbr': (str, type(None)),
+                'unknown_text': (str, type(None))
+            }
+        ]
+    }
 
-    return prompt
+    return prompt, expected_schema
 
 
 def gpt_entries(all_entries):
@@ -841,34 +862,83 @@ def gpt_entries(all_entries):
                 num_gpt_skipped += 1
                 # continue
 
-            prompt = reflex_prompt(descendants["stem"]["stem"], info)
-            print(info, descendants["stem"]["stem"], sep=" | ")
-            breakpoint()
+            prompt, expected_schema = reflex_prompt(descendants["stem"]["stem"], info)
 
-            # messages, response = gpt_functions.query_gpt(
-            #     [prompt],
-            #     model="gpt-4o-mini",
-            #     json_mode=True,
-            #     note=f"{descendant_count+1}/{total_descendants} -> {entry_count+1}/{total_entries}"
-            # )
-            #
-            # json_text = gpt_functions.extract_code_block(response['content'])
-            # reflexes = json.loads(json_text)
-            #
-            # # sanity check to make sure that the stems match
-            # if not reflexes["stem"] == descendants["stem"]["stem"]:
-            #     # breakpoint()
-            #     pass
-            # descendants["reflexes"] = reflexes["reflexes"]
+            messages, response = gpt_functions.query_gpt(
+                [prompt],
+                model="gpt-4o-mini",
+                json_mode=True,
+                note=f"{descendant_count+1}/{total_descendants} -> {entry_count+1}/{total_entries}",
+                expected_schema=expected_schema
+            )
+
+            json_text = gpt_functions.extract_code_block(response['content'])
+            reflexes = json.loads(json_text)
+
+            # missing, extra = gpt_functions.check_schema(expected_schema, reflexes)
+            # if not (len(missing) == 0 and len(extra) == 0):
+            #     digest, prompt_string = gpt_functions.get_proper_digest("gpt-4o-mini", None, [prompt])
+            #     breakpoint()
+            #     gpt_functions.delete_response_digest(digest)
+            #     # exit()
+
+            # sanity check to make sure that the stems match
+            if not reflexes["stem"] == descendants["stem"]["stem"]:
+                # breakpoint()
+                pass
+
+            descendants["reflexes"] = reflexes["reflexes"]
+            descendants["gpt_stem"] = {k: v for k, v in reflexes.items() if "stem" in k}
     gpt_functions.print_cost()
     pass
+
+
+def csv_nil():
+    with open("nil_gpt_attempt2.pkl", 'rb') as f:
+        all_entries = pickle.load(f)
+    # unroll everything into a flat list of entries (with no sub lists)
+    csv_entries = []
+    for entry in all_entries:
+        descendants = entry["descendants"]
+        for descendant in descendants:
+            stem = descendant["stem"]
+            gpt_stem = descendant["gpt_stem"]
+            reflexes = descendant["reflexes"]
+            for reflex in reflexes:
+                csv_entry = {
+                    # root info
+                    "root": ("?" if entry["questionable"] and entry["questionable"] is not None else "") + entry["root"],
+                    "gloss": entry["gloss"],
+                    # stem info
+                    "stem": ("?" if (stem["questionable"] or False) else "") + (stem["stem"] or "Not Found"),
+                    "stem_gender": stem["gender"],
+                    "stem_cite": stem["cite"],
+                    "stem_gender_cite": stem["gender_cite"],
+                    "gpt_stem": ("?" if (gpt_stem["stem_questionable"] or False) else "") + (gpt_stem["stem"] or "Not Found"),
+                    "gpt_stem_gender": gpt_stem["stem_gender"],
+                    # reflex info
+                    "reflex": reflex["reflex"],
+                    "reflex_gloss": reflex["gloss"],
+                    "reflex_gender": reflex["gender"] or "",
+                    "reflex_lang": reflex['language_abbreviation'] or "",
+                    "first_attested": reflex["first_attested"] or "",
+                    "other_attested_info": reflex["attested_info"] or "",
+                    "footnote_num": reflex["footnote_num"] or "",
+                    "other_abbreviations": reflex["other_abbr"],
+                    "other_unknown_text": reflex["unknown_text"],
+                    "footnote": "\n".join(entry["numbered_footnotes"].get(reflex["footnote_num"], "")),
+                }
+                csv_entries.append(csv_entry)
+    df = pd.DataFrame(csv_entries)
+    df.to_csv("data_nil/gpt_corrections/NIL - GPT Organized.csv")
+    # breakpoint()
 
 
 def main():
     document = Document('data_nil/NIL (edited).docx')
 
-    all_entries = run_or_load("temp.pkl", match_nil_parts, document=document)
-    # all_entries = run_or_load("temp.pkl", match_nil_parts, rerun=True, document=document)
+    # all_entries = run_or_load("temp.pkl", match_nil_parts, document=document)
+    all_entries = run_or_load("temp.pkl", match_nil_parts, rerun=True, document=document)
     # all_entries = match_nil_parts(document)
     for entry in all_entries:
         categorize_footnotes(entry)
@@ -877,11 +947,13 @@ def main():
     # 4 special cases for headers
     # 5935 different reflexes (number of lines in either the box 4 or 6 in the chart).
     gpt_entries(all_entries)
-
-    breakpoint()
+    with open("nil_gpt_attempt2.pkl", 'wb') as f:
+        pickle.dump(all_entries, f)
+    # breakpoint()
     pass
 
 
 if __name__ == '__main__':
     main()
+    csv_nil()
     pass
