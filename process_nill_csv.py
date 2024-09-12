@@ -471,6 +471,7 @@ def make_new_entry():
         "descendant_info": [],
         "other": [],
         "footnotes": [],
+        "footnotes_marked": []
     }
 
 
@@ -608,7 +609,8 @@ def process_other_continuation(item, first_indent, current_entry):
 def process_footnotes(item, current_entry):
     global num_parts
     num_parts["box7"] += 1
-    current_entry["footnotes"].append(markup_paragraph(item))
+    current_entry["footnotes"].append(item.text)
+    current_entry["footnotes_marked"].append(markup_paragraph(item))
     pass
 
 
@@ -716,8 +718,6 @@ def match_nil_parts(document):
                 continue
 
         # format for footnotes.
-        # anton: I do not currently try to do anything with these but eventually should figure out what number they start with (something that is persistent
-        #  across several lines) and associate then with that number.
         if style == "Literatur2":
             process_footnotes(item, current_entry)
             continue
@@ -739,8 +739,9 @@ def extract_number_and_text(s):
 def categorize_footnotes(entry):
     # for each footnote
     numbered_footnotes = defaultdict(list)
+    marked_numbered_footnotes = defaultdict(list)
     latest_number = None
-    for footnote in entry["footnotes"]:
+    for footnote, marked_footnote in zip(entry["footnotes"], entry["footnotes_marked"]):
         number, text = extract_number_and_text(footnote)
         if number in numbered_footnotes:
             # this should never happen
@@ -748,14 +749,17 @@ def categorize_footnotes(entry):
         # if the footnote starts with a number it makes a new set of footnotes
         if number is not None:
             numbered_footnotes[number].append(text)
+            marked_numbered_footnotes[number].append(marked_footnote)
             latest_number = number
         # otherwise it adds to the last set of footnotes
         elif latest_number is not None:
             numbered_footnotes[latest_number].append(text)
+            marked_numbered_footnotes[latest_number].append(marked_footnote)
         # if this happens before a new set of footnotes is added, then something went really wrong
         else:
             breakpoint()
     entry["numbered_footnotes"] = dict(numbered_footnotes)
+    entry["marked_numbered_footnotes"] = dict(marked_numbered_footnotes)
     # in the very last footnote (if it exists) look for a bunch of tabs. whatever is after that is the abbreviation of the author(s) that wrote that entry
 
     entry["footnote_attribution"] = None
@@ -937,8 +941,8 @@ def csv_nil():
 def main():
     document = Document('data_nil/NIL (edited).docx')
 
-    # all_entries = run_or_load("temp.pkl", match_nil_parts, document=document)
-    all_entries = run_or_load("temp.pkl", match_nil_parts, rerun=True, document=document)
+    all_entries = run_or_load("temp.pkl", match_nil_parts, document=document)
+    # all_entries = run_or_load("temp.pkl", match_nil_parts, rerun=True, document=document)
     # all_entries = match_nil_parts(document)
     for entry in all_entries:
         categorize_footnotes(entry)
