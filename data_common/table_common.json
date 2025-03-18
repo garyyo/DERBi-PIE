@@ -3887,10 +3887,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "escape, get free"
-        ],
-        "common_id": "2294"
+        "meaning": "escape, get free",
+        "common_id": "2242"
     },
     {
         "root": "2. b\u02b0eug-, b\u02b0eug\u02b0-",
@@ -4539,10 +4537,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to be restless"
-        ],
-        "common_id": "2288"
+        "meaning": "to be restless",
+        "common_id": "2256"
     },
     {
         "root": "b\u02b0ren-",
@@ -4700,10 +4696,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "bubble, fizz, gush"
-        ],
-        "common_id": "2256"
+        "meaning": "bubble, fizz, gush",
+        "common_id": "2250"
     },
     {
         "root": "b\u02b0reu-\u1e31-",
@@ -5301,10 +5295,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "give"
-        ],
-        "common_id": "2233"
+        "meaning": "give",
+        "common_id": "2298"
     },
     {
         "root": "1. dei-, dei\u032f\u0259-, d\u012b-, di\u032f\u0101-",
@@ -5385,10 +5377,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to throw"
-        ],
-        "common_id": "2278"
+        "meaning": "to throw",
+        "common_id": "2230"
     },
     {
         "root": "1. de\u1e31-",
@@ -6076,10 +6066,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "sharpen, hone"
-        ],
-        "common_id": "2268"
+        "meaning": "sharpen, hone",
+        "common_id": "2265"
     },
     {
         "root": "d\u02b0\u0113(i)-, also d\u02b0-ei-?",
@@ -7183,10 +7171,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "run/walk"
-        ],
-        "common_id": "2235"
+        "meaning": "run/walk",
+        "common_id": "2300"
     },
     {
         "root": "3d. u\u032fer-, u\u032fer-g-",
@@ -9625,10 +9611,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to cut out, to split"
-        ],
-        "common_id": "2260"
+        "meaning": "to cut out, to split",
+        "common_id": "2254"
     },
     {
         "root": "g\u02b0ab\u02b0-",
@@ -10574,10 +10558,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to be angry"
-        ],
-        "common_id": "2289"
+        "meaning": "to be angry",
+        "common_id": "2244"
     },
     {
         "root": "2. g\u02b0ers-",
@@ -10856,10 +10838,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to be ashamed"
-        ],
-        "common_id": "2311"
+        "meaning": "to be ashamed",
+        "common_id": "2264"
     },
     {
         "root": "\u01f5\u02b0\u014d",
@@ -11097,10 +11077,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to curl one's lips, to be embarrassed"
-        ],
-        "common_id": "2249"
+        "meaning": "to curl one's lips, to be embarrassed",
+        "common_id": "2261"
     },
     {
         "root": "1. g\u02b0rem-",
@@ -12295,10 +12273,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to drip"
-        ],
-        "common_id": "2291"
+        "meaning": "to drip",
+        "common_id": "2227"
     },
     {
         "root": "?2.*g(\u02b7)\u02b0es-{1}",
@@ -12312,10 +12288,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "laugh"
-        ],
-        "common_id": "2283"
+        "meaning": "laugh",
+        "common_id": "2275"
     },
     {
         "root": "g\u02b7\u02b0r\u0113-",
@@ -12571,10 +12545,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to say"
-        ],
-        "common_id": "2297"
+        "meaning": "to say",
+        "common_id": "2246"
     },
     {
         "root": "*h\u2082ed\u02b0g/g\u0311\u02b0-{1}",
@@ -12588,10 +12560,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "press"
-        ],
-        "common_id": "2308"
+        "meaning": "press",
+        "common_id": "2224"
     },
     {
         "root": "*h\u2081eg\u02b7\u02b0-{1}",
@@ -12605,27 +12575,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "drink"
-        ],
-        "common_id": "2257"
-    },
-    {
-        "root": "*h\u2082eh\u2081-{1}",
-        "dictionary": [
-            {
-                "pokorny_entries": []
-            },
-            {
-                "liv_entries": [
-                    "*h\u2082eh\u2081-{1}"
-                ]
-            }
-        ],
-        "meaning": [
-            "to be hot"
-        ],
-        "common_id": "2229"
+        "meaning": "drink",
+        "common_id": "2233"
     },
     {
         "root": "?*h\u2082eh\u2083-{1}",
@@ -12639,10 +12590,23 @@
                 ]
             }
         ],
-        "meaning": [
-            "believe, trust"
+        "meaning": "believe, trust",
+        "common_id": "2255"
+    },
+    {
+        "root": "*h\u2082eh\u2081-{1}",
+        "dictionary": [
+            {
+                "pokorny_entries": []
+            },
+            {
+                "liv_entries": [
+                    "*h\u2082eh\u2081-{1}"
+                ]
+            }
         ],
-        "common_id": "2244"
+        "meaning": "to be hot",
+        "common_id": "2276"
     },
     {
         "root": "?*h\u2081ek/k\u0311-{1}",
@@ -12656,10 +12620,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "die"
-        ],
-        "common_id": "2247"
+        "meaning": "die",
+        "common_id": "2306"
     },
     {
         "root": "*h\u2082ens-{1}",
@@ -12673,10 +12635,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "procreate, give birth"
-        ],
-        "common_id": "2228"
+        "meaning": "procreate, give birth",
+        "common_id": "2263"
     },
     {
         "root": "*h\u2083erg-{1}",
@@ -12690,10 +12650,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to perish"
-        ],
-        "common_id": "2245"
+        "meaning": "to perish",
+        "common_id": "2288"
     },
     {
         "root": "?*h\u2081erh\u2082-{1}",
@@ -12707,10 +12665,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to love"
-        ],
-        "common_id": "2246"
+        "meaning": "to love",
+        "common_id": "2283"
     },
     {
         "root": "?*h\u2081erk-{1}",
@@ -12724,27 +12680,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to cut into pieces"
-        ],
-        "common_id": "2286"
-    },
-    {
-        "root": "*h\u2082es-{1}",
-        "dictionary": [
-            {
-                "pokorny_entries": []
-            },
-            {
-                "liv_entries": [
-                    "*h\u2082es-{1}"
-                ]
-            }
-        ],
-        "meaning": [
-            "to be satisfied"
-        ],
-        "common_id": "2262"
+        "meaning": "to cut into pieces",
+        "common_id": "2289"
     },
     {
         "root": "2.*h\u2081es-{0}",
@@ -12758,10 +12695,23 @@
                 ]
             }
         ],
-        "meaning": [
-            "throw, shoot"
+        "meaning": "throw, shoot",
+        "common_id": "2247"
+    },
+    {
+        "root": "*h\u2082es-{1}",
+        "dictionary": [
+            {
+                "pokorny_entries": []
+            },
+            {
+                "liv_entries": [
+                    "*h\u2082es-{1}"
+                ]
+            }
         ],
-        "common_id": "2264"
+        "meaning": "to be satisfied",
+        "common_id": "2287"
     },
     {
         "root": "?2.*h\u2082et-{1}",
@@ -12775,10 +12725,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "make a hole, stab"
-        ],
-        "common_id": "2276"
+        "meaning": "make a hole, stab",
+        "common_id": "2284"
     },
     {
         "root": "*h\u2081rei\u032f-{1}",
@@ -12792,10 +12740,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to rise up"
-        ],
-        "common_id": "2238"
+        "meaning": "to rise up",
+        "common_id": "2294"
     },
     {
         "root": "*h\u2082teu\u032fg/g\u0311-{1}",
@@ -12809,10 +12755,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "Spread terror"
-        ],
-        "common_id": "2252"
+        "meaning": "Spread terror",
+        "common_id": "2238"
     },
     {
         "root": "*h\u2082u\u032feg-",
@@ -12826,10 +12770,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "sting, stab, poke"
-        ],
-        "common_id": "2307"
+        "meaning": "sting, stab, poke",
+        "common_id": "2268"
     },
     {
         "root": "*h\u2082u\u032fei\u032f-",
@@ -12843,10 +12785,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "run/walk"
-        ],
-        "common_id": "2296"
+        "meaning": "run/walk",
+        "common_id": "2232"
     },
     {
         "root": "3\u02b0. u\u032fer-, u\u032fer-t-",
@@ -12877,10 +12817,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "pull, lead"
-        ],
-        "common_id": "2273"
+        "meaning": "pull, lead",
+        "common_id": "2234"
     },
     {
         "root": "i\u032f\u0101-",
@@ -13084,10 +13022,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "speak"
-        ],
-        "common_id": "2241"
+        "meaning": "speak",
+        "common_id": "2226"
     },
     {
         "root": "i\u032f\u0113k- : i\u032f\u0259k-",
@@ -13274,10 +13210,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "(sich) fernhalten; weichen"
-        ],
-        "common_id": "2285"
+        "meaning": "(sich) fernhalten; weichen",
+        "common_id": "2286"
     },
     {
         "root": "i\u032feu-d\u02b0-",
@@ -14591,10 +14525,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "fallen [UNKNOWN]"
-        ],
-        "common_id": "2227"
+        "meaning": "fallen [UNKNOWN]",
+        "common_id": "2290"
     },
     {
         "root": "\u1e31\u0113i-b\u02b0-",
@@ -14715,10 +14647,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "leave behind"
-        ],
-        "common_id": "2250"
+        "meaning": "leave behind",
+        "common_id": "2231"
     },
     {
         "root": "ke\u1e31-",
@@ -15296,10 +15226,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "rise"
-        ],
-        "common_id": "2261"
+        "meaning": "rise",
+        "common_id": "2236"
     },
     {
         "root": "keng-, kenk-",
@@ -15458,10 +15386,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "(to) curse, (to) swear"
-        ],
-        "common_id": "2263"
+        "meaning": "(to) curse, (to) swear",
+        "common_id": "2281"
     },
     {
         "root": "2. ker-",
@@ -16170,9 +16096,7 @@
                 ]
             }
         ],
-        "meaning": [
-            "freeze"
-        ],
+        "meaning": "freeze",
         "common_id": "2279"
     },
     {
@@ -16187,10 +16111,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to rot"
-        ],
-        "common_id": "2302"
+        "meaning": "to rot",
+        "common_id": "2273"
     },
     {
         "root": "kik-",
@@ -16407,10 +16329,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "sticking, adhering"
-        ],
-        "common_id": "2234"
+        "meaning": "sticking, adhering",
+        "common_id": "2259"
     },
     {
         "root": "klem-, kl\u0113m-, kl<sub>e</sub>m-",
@@ -16603,10 +16523,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "push, stab"
-        ],
-        "common_id": "2281"
+        "meaning": "push, stab",
+        "common_id": "2269"
     },
     {
         "root": "kneug-",
@@ -17458,10 +17376,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "pile up, cover"
-        ],
-        "common_id": "2239"
+        "meaning": "pile up, cover",
+        "common_id": "2266"
     },
     {
         "root": "1. kreu-, kreu\u0259- : kr\u016b-, kreus-, krus-",
@@ -17612,10 +17528,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "'zerlegen' \u2192 'auftischen' [UNKNOWN]"
-        ],
-        "common_id": "2292"
+        "meaning": "'zerlegen' \u2192 'auftischen' [UNKNOWN]",
+        "common_id": "2257"
     },
     {
         "root": "kseip-, kseib-",
@@ -17849,10 +17763,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to throw"
-        ],
-        "common_id": "2305"
+        "meaning": "to throw",
+        "common_id": "2291"
     },
     {
         "root": "2. \u1e31u\u032fei-",
@@ -18260,10 +18172,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "dig"
-        ],
-        "common_id": "2258"
+        "meaning": "dig",
+        "common_id": "2307"
     },
     {
         "root": "?*k(\u02b7)eh\u2082d-{1}",
@@ -18277,10 +18187,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "tear, press"
-        ],
-        "common_id": "2267"
+        "meaning": "tear, press",
+        "common_id": "2252"
     },
     {
         "root": "2. k\u02b7ei-",
@@ -18509,10 +18417,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "escape"
-        ],
-        "common_id": "2266"
+        "meaning": "escape",
+        "common_id": "2249"
     },
     {
         "root": "k\u02b7etu\u032fer-, k\u02b7etu\u032f\u014d\u0306r-, k\u02b7<sub>e</sub>tur- (masc.), k\u02b7etes(o)r- (fem.)",
@@ -18541,10 +18447,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "(to) squish, crush"
-        ],
-        "common_id": "2301"
+        "meaning": "(to) squish, crush",
+        "common_id": "2303"
     },
     {
         "root": "?*k(\u02b7)h\u2082eg\u0311-{1}",
@@ -18558,10 +18462,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "consume"
-        ],
-        "common_id": "2248"
+        "meaning": "consume",
+        "common_id": "2253"
     },
     {
         "root": "k\u02b7o-, k\u02b7e-, fem. k\u02b7\u0101, k\u02b7ei-",
@@ -18607,10 +18509,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "take a step"
-        ],
-        "common_id": "2272"
+        "meaning": "take a step",
+        "common_id": "2243"
     },
     {
         "root": "k\u02b7r\u0325mi-",
@@ -19968,10 +19868,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "hinder, impede"
-        ],
-        "common_id": "2299"
+        "meaning": "hinder, impede",
+        "common_id": "2293"
     },
     {
         "root": "1. leug-",
@@ -22059,10 +21957,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to settle (at/on/in)"
-        ],
-        "common_id": "2290"
+        "meaning": "to settle (at/on/in)",
+        "common_id": "2274"
     },
     {
         "root": "mizd\u02b0\u00f3-",
@@ -22091,10 +21987,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "speak"
-        ],
-        "common_id": "2300"
+        "meaning": "speak",
+        "common_id": "2305"
     },
     {
         "root": "mod\u02b0ro-, or mad\u02b0ro-",
@@ -22805,10 +22699,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to rise up"
-        ],
-        "common_id": "2269"
+        "meaning": "to rise up",
+        "common_id": "2241"
     },
     {
         "root": "n\u0113ik- : n\u012bk- : nik-",
@@ -24284,10 +24176,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to move"
-        ],
-        "common_id": "2309"
+        "meaning": "to move",
+        "common_id": "2295"
     },
     {
         "root": "?*peHs-{1}",
@@ -24301,10 +24191,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "see"
-        ],
-        "common_id": "2223"
+        "meaning": "see",
+        "common_id": "2272"
     },
     {
         "root": "pei\u032f(\u0259)-, p\u012b\u0306-",
@@ -24370,10 +24258,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "sing"
-        ],
-        "common_id": "2240"
+        "meaning": "sing",
+        "common_id": "2278"
     },
     {
         "root": "pei-m(i)-",
@@ -24723,10 +24609,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "equalize, balance"
-        ],
-        "common_id": "2270"
+        "meaning": "equalize, balance",
+        "common_id": "2304"
     },
     {
         "root": "perd-",
@@ -25283,10 +25167,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to hit"
-        ],
-        "common_id": "2224"
+        "meaning": "to hit",
+        "common_id": "2292"
     },
     {
         "root": "pik(\u02b0)o-",
@@ -26375,10 +26257,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "count, calculate"
-        ],
-        "common_id": "2255"
+        "meaning": "count, calculate",
+        "common_id": "2270"
     },
     {
         "root": "*reh\u2081d\u02b0-{1}",
@@ -26392,10 +26272,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "successfully carry out"
-        ],
-        "common_id": "2222"
+        "meaning": "successfully carry out",
+        "common_id": "2225"
     },
     {
         "root": "1. rei-",
@@ -26510,10 +26388,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "(to) stretch, extend"
-        ],
-        "common_id": "2231"
+        "meaning": "(to) stretch, extend",
+        "common_id": "2237"
     },
     {
         "root": "reig-, or rei\u01f5-",
@@ -27463,10 +27339,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "salves"
-        ],
-        "common_id": "2242"
+        "meaning": "salves",
+        "common_id": "2267"
     },
     {
         "root": "se\u01f5\u02b0-, se\u01f5\u02b0i-, se\u01f5\u02b0u-",
@@ -28235,10 +28109,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "rest, sleep"
-        ],
-        "common_id": "2295"
+        "meaning": "rest, sleep",
+        "common_id": "2301"
     },
     {
         "root": "seu\u032f\u0259-, s\u016b-",
@@ -28284,10 +28156,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to be/become full"
-        ],
-        "common_id": "2280"
+        "meaning": "to be/become full",
+        "common_id": "2277"
     },
     {
         "root": "seu\u032fi\u032fo-",
@@ -28387,10 +28257,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "stumble, misstep"
-        ],
-        "common_id": "2275"
+        "meaning": "stumble, misstep",
+        "common_id": "2271"
     },
     {
         "root": "si\u032f\u0113[u]-ro- : si\u032f\u0259-ur(i\u032fo)-",
@@ -28685,23 +28553,6 @@
         "common_id": "1733"
     },
     {
-        "root": "?*sk\u0311end-{1}",
-        "dictionary": [
-            {
-                "pokorny_entries": []
-            },
-            {
-                "liv_entries": [
-                    "?*sk\u0311end-{1}"
-                ]
-            }
-        ],
-        "meaning": [
-            "(to) appear"
-        ],
-        "common_id": "2232"
-    },
-    {
         "root": "1.*skend-{1}",
         "dictionary": [
             {
@@ -28713,10 +28564,23 @@
                 ]
             }
         ],
-        "meaning": [
-            "(los)springen, to jump (away)"
+        "meaning": "(los)springen, to jump (away)",
+        "common_id": "2262"
+    },
+    {
+        "root": "?*sk\u0311end-{1}",
+        "dictionary": [
+            {
+                "pokorny_entries": []
+            },
+            {
+                "liv_entries": [
+                    "?*sk\u0311end-{1}"
+                ]
+            }
         ],
-        "common_id": "2254"
+        "meaning": "(to) appear",
+        "common_id": "2297"
     },
     {
         "root": "skend\u02b0-",
@@ -28881,10 +28745,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to eject"
-        ],
-        "common_id": "2304"
+        "meaning": "to eject",
+        "common_id": "2239"
     },
     {
         "root": "(s)ker-d\u02b0-, (s)k<sub>o</sub>r-d\u02b0-",
@@ -30314,10 +30176,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "split; divide"
-        ],
-        "common_id": "2253"
+        "meaning": "split; divide",
+        "common_id": "2296"
     },
     {
         "root": "1. (s)pen(-d)-",
@@ -31182,10 +31042,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to crown, to encircle"
-        ],
-        "common_id": "2282"
+        "meaning": "to crown, to encircle",
+        "common_id": "2302"
     },
     {
         "root": "(s)tei-",
@@ -31328,10 +31186,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "smooth out"
-        ],
-        "common_id": "2306"
+        "meaning": "smooth out",
+        "common_id": "2308"
     },
     {
         "root": "2. stel-, stel\u0259-",
@@ -31967,10 +31823,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to swell"
-        ],
-        "common_id": "2251"
+        "meaning": "to swell",
+        "common_id": "2223"
     },
     {
         "root": "1. su\u032fel(-k)-",
@@ -32896,10 +32750,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "reach"
-        ],
-        "common_id": "2237"
+        "meaning": "reach",
+        "common_id": "2282"
     },
     {
         "root": "tem(\u0259)-",
@@ -33155,10 +33007,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "smear; stick"
-        ],
-        "common_id": "2271"
+        "meaning": "smear; stick",
+        "common_id": "2285"
     },
     {
         "root": "1. ter-",
@@ -33541,10 +33391,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to deliver a blow, to injure"
-        ],
-        "common_id": "2243"
+        "meaning": "to deliver a blow, to injure",
+        "common_id": "2248"
     },
     {
         "root": "2. to-",
@@ -33870,10 +33718,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "(tremble) from fear"
-        ],
-        "common_id": "2236"
+        "meaning": "(tremble) from fear",
+        "common_id": "2280"
     },
     {
         "root": "tres-, ters-, *teres-",
@@ -33936,10 +33782,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to become dry"
-        ],
-        "common_id": "2274"
+        "meaning": "to become dry",
+        "common_id": "2222"
     },
     {
         "root": "trii\u032f\u0259to-, tr\u012bto-",
@@ -34136,10 +33980,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "be visible"
-        ],
-        "common_id": "2265"
+        "meaning": "be visible",
+        "common_id": "2299"
     },
     {
         "root": "tu\u032fen-",
@@ -34851,10 +34693,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "turn, turn oneself"
-        ],
-        "common_id": "2284"
+        "meaning": "turn, turn oneself",
+        "common_id": "2258"
     },
     {
         "root": "?*u\u032feHg\u0311\u02b0-{1}",
@@ -34868,10 +34708,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "acknowledge, respect"
-        ],
-        "common_id": "2230"
+        "meaning": "acknowledge, respect",
+        "common_id": "2310"
     },
     {
         "root": "u\u032feib-",
@@ -35101,10 +34939,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "execute, accomplish"
-        ],
-        "common_id": "2303"
+        "meaning": "execute, accomplish",
+        "common_id": "2228"
     },
     {
         "root": "1. u\u032fei-, u\u032fei\u032f\u0259- : u\u032f\u012b\u0306-",
@@ -35317,10 +35153,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "confuse (through puzzles)"
-        ],
-        "common_id": "2226"
+        "meaning": "confuse (through puzzles)",
+        "common_id": "2229"
     },
     {
         "root": "1. u\u032felk-",
@@ -35563,10 +35397,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "set, place, lay"
-        ],
-        "common_id": "2259"
+        "meaning": "set, place, lay",
+        "common_id": "2235"
     },
     {
         "root": "u\u032fe-n-k-",
@@ -35595,10 +35427,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to sleep over"
-        ],
-        "common_id": "2277"
+        "meaning": "to sleep over",
+        "common_id": "2240"
     },
     {
         "root": "1. u\u032fen-, u\u032fen\u0259-",
@@ -35845,10 +35675,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "run/walk"
-        ],
-        "common_id": "2310"
+        "meaning": "run/walk",
+        "common_id": "2311"
     },
     {
         "root": "u\u032f(e)r\u0101d-, u\u032f<sub>e</sub>r\u0259d-, u\u032fr\u0259d-",
@@ -36256,10 +36084,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "to say"
-        ],
-        "common_id": "2225"
+        "meaning": "to say",
+        "common_id": "2309"
     },
     {
         "root": "3. u\u032f\u0113-, u\u032f\u0259-",
@@ -36485,10 +36311,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "moisten"
-        ],
-        "common_id": "2298"
+        "meaning": "moisten",
+        "common_id": "2251"
     },
     {
         "root": "u\u032flek-, u\u032fl\u0325k-",
@@ -36716,10 +36540,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "take away"
-        ],
-        "common_id": "2293"
+        "meaning": "take away",
+        "common_id": "2245"
     },
     {
         "root": "?*u\u032fRei\u032fH-{1}",
@@ -36733,10 +36555,8 @@
                 ]
             }
         ],
-        "meaning": [
-            "compress"
-        ],
-        "common_id": "2287"
+        "meaning": "compress",
+        "common_id": "2260"
     },
     {
         "root": "u\u032freik-, u\u032fereik-",
