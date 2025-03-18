@@ -96,7 +96,7 @@ def main():
     root_groups = df.groupby("lemma")
     liv_entries = []
     for root, group in tqdm(list(root_groups), ncols=150):
-        gloss = group[group.category == "root"].iloc[0].english_meaning,
+        gloss = group[group.category == "root"].iloc[0].english_meaning
 
         # todo: make this actually match the entry_id that exists in the common version. I have no clue how to do this.
         entry_id = f'{root}_{gloss}'
