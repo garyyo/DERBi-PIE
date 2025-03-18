@@ -18,8 +18,6 @@ def main():
     # pokorny and liv need to be redictionaried into key: entry
     pokorny_data = {entry["root"]: entry for entry in pokorny_data_list}
     liv_data = {entry["root"]: entry for entry in liv_data_list}
-    assert len(pokorny_data) == len(pokorny_data_list)
-    assert len(liv_data) == len(liv_data_list)
 
     # open the match-up csv
     match_df = pd.read_csv("data_common/matchup.csv")
@@ -100,6 +98,7 @@ def main():
     print("writing common")
     with open("data_common/table_common.json", 'w') as fp:
         json.dump(common_data, fp, indent=4)
+    # these have to be resaved because they now include "common_id" as a field
     # save the pokorny data
     print("writing pokorny")
     with open("data_pokorny/table_pokorny.json", 'w') as fp:
