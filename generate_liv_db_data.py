@@ -98,9 +98,6 @@ def main():
     for root, group in tqdm(list(root_groups), ncols=150):
         gloss = group[group.category == "root"].iloc[0].english_meaning
 
-        if type(gloss) != str:
-            breakpoint()
-
         # todo: make this actually match the entry_id that exists in the common version. I have no clue how to do this.
         entry_id = f'{root}_{gloss}'
 
