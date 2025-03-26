@@ -5,6 +5,7 @@ import pandas as pd
 import tqdm
 
 from generate_pokorny_scraped_data_OLD import remove_non_english_chars
+from concepticon import add_concepticon_data
 
 
 def main():
@@ -124,6 +125,8 @@ def main():
             liv_data_list, fp,
             # indent=4
         )
+
+    add_concepticon_data()
     pass
 
 
