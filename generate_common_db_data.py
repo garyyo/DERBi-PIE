@@ -17,7 +17,9 @@ def main():
         liv_data_list = json.load(fp)
     # pokorny and liv need to be redictionaried into key: entry
     pokorny_data = {entry["root"]: entry for entry in pokorny_data_list}
+    pokorny_data_by_id = {entry["entry_id"]: entry for entry in pokorny_data_list}
     liv_data = {entry["root"]: entry for entry in liv_data_list}
+    liv_data_by_id = {entry["entry_id"]: entry for entry in liv_data_list}
 
     # open the match-up csv
     match_df = pd.read_csv("data_common/matchup.csv")
@@ -84,12 +86,21 @@ def main():
         common_entry = common_data_dict[root]
         entry["common_id"] = common_entry["common_id"]
 
+    for entry in pokorny_data.values():
+        for cross_entry in entry["cross"]:
+            cross_entry["common_id"] = pokorny_data_by_id[cross_entry["id"]]["common_id"]
+
     for entry in liv_data.values():
         root = entry["root"]
         if root in liv_to_pokorny:
             root = liv_to_pokorny[root]
         common_entry = common_data_dict[root]
         entry["common_id"] = common_entry["common_id"]
+
+    for entry in liv_data.values():
+        if "cross" in entry:
+            for cross_entry in entry["cross"]:
+                cross_entry["common_id"] = liv_data_by_id[cross_entry["id"]]["common_id"]
 
     # sort the common by root
     common_data = sorted(common_data, key=lambda x: remove_non_english_chars(x["root"]).lower())
@@ -102,11 +113,17 @@ def main():
     # save the pokorny data
     print("writing pokorny")
     with open("data_pokorny/table_pokorny.json", 'w') as fp:
-        json.dump(pokorny_data_list, fp, indent=4)
+        json.dump(
+            pokorny_data_list, fp,
+            # indent=4
+        )
     # save the liv data
     print("writing liv")
     with open("data_liv/table_liv.json", 'w') as fp:
-        json.dump(liv_data_list, fp, indent=4)
+        json.dump(
+            liv_data_list, fp,
+            # indent=4
+        )
     pass
 
 
