@@ -1,6 +1,7 @@
 import json
 import re
 import Levenshtein
+import pandas as pd
 from nltk.stem import WordNetLemmatizer
 import csv
 
@@ -17,6 +18,11 @@ relevant_concept_set_keys = [
 ]
 
 
+def split_excluding_parentheses(s):
+    # Regular expression to match commas outside parentheses
+    return
+
+
 def add_concepticon_data():
     api = Concepticon('concepticon-concepticon-data-e4dd288')
 
@@ -28,10 +34,19 @@ def add_concepticon_data():
     with open("data_common/table_common.json", "r") as fp:
         common_table = json.load(fp)
 
+    manually_linked_df = pd.read_csv("data_common/concepticon_now_linked.csv", encoding="utf-8")
+
     concepticon_glosses_set = set(concepticon_glosses)
     for entry in common_table:
         common_table_glosses = set(remove_html_tags_from_text(word).lower().strip(" './-{}()[]\\/!@#$%^&*=.,;:\"") for word in entry["meaning"].split(" "))
+
         match = concepticon_glosses_set.intersection(common_table_glosses)
+
+        # if we have a manual override do that instead
+        if entry["root"] in manually_linked_df.Root.values:
+            row = manually_linked_df[manually_linked_df.Root == entry["root"]].iloc[0]
+            if not pd.isna(row["Suggested Match"]):
+                match = {word.strip().lower() for word in re.split(r',(?=(?:[^()]*\([^()]*\))*[^()]*$)', row["Suggested Match"])}
 
         # If we do not find a match then we try again on a lemmatized version of the word
         if not match:
@@ -113,7 +128,7 @@ def main():
 
     print(f"{len(unmatched)}/{len(common_table)} = {len(unmatched)/len(common_table) * 100:.02f}%")
 
-    with open("concepticon_unlinked.csv", mode='w', newline='', encoding='utf-8') as file:
+    with open("data_common/concepticon_unlinked.csv", mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(['Root', 'Meaning', 'Closest Concepticon Match (unreliable)'])
 
@@ -129,5 +144,7 @@ def main():
     pass
 
 
+# do not run this manually to get the additional data added to common, instead run generate_common_db_data.py which should run the necessary portion of this script.
 if __name__ == '__main__':
+    # add_concepticon_data()
     main()
